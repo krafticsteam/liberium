@@ -1,0 +1,16 @@
+plugins {
+    id 'java'
+}
+
+group 'eu.kraftics'
+version '0.1.0'
+libsDirName = 'C:/Users/fireg/Documents/Minecraft/Testing Server/plugins'
+
+repositories {
+    mavenCentral()
+    maven { url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/' }
+}
+
+dependencies {
+    compileOnly 'org.spigotmc:spigot-api:1.16.1-R0.1-SNAPSHOT'
+}
