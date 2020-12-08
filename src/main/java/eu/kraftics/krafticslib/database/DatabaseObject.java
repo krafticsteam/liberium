@@ -12,11 +12,39 @@ public interface DatabaseObject extends DatabaseSerializable {
 
     Object get(String name);
     DatabaseObject getObject(String name);
-    String getString(String name);
-    Integer getInteger(String name);
-    Long getLong(String name);
-    Short getShort(String name);
-    Double getDouble(String name);
-    Float getFloat(String name);
-    Byte getByte(String name);
+
+    default String getString(String name) {
+        Object o = get(name);
+        return o != null ? o.toString() : null;
+    }
+
+    default Integer getInteger(String name) {
+        Object o = get(name);
+        return o instanceof Integer ? (int) o : null;
+    }
+
+    default Long getLong(String name) {
+        Object o = get(name);
+        return o instanceof Long ? (long) o : null;
+    }
+
+    default Short getShort(String name) {
+        Object o = get(name);
+        return o instanceof Short ? (short) o : null;
+    }
+
+    default Double getDouble(String name) {
+        Object o = get(name);
+        return o instanceof Double ? (double) o : null;
+    }
+
+    default Float getFloat(String name) {
+        Object o = get(name);
+        return o instanceof Float ? (float) o : null;
+    }
+
+    default Byte getByte(String name) {
+        Object o = get(name);
+        return o instanceof Byte ? (byte) o : null;
+    }
 }
