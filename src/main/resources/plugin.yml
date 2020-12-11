@@ -1,0 +1,7 @@
+name: KrafticsLib
+version: 0.1.0
+main: eu.kraftics.krafticslib.KrafticsLibPlugin
+description: Library for kraftics plugins
+author: Kraftics
+load: STARTUP
+website: http://kraftics.eu
