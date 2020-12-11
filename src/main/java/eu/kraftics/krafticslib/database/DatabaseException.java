@@ -1,5 +1,11 @@
 package eu.kraftics.krafticslib.database;
 
+/**
+ * Exception using <code>Database</code>
+ *
+ * @see Database
+ * @author Panda885
+ */
 public class DatabaseException extends Exception {
 
     public DatabaseException() {

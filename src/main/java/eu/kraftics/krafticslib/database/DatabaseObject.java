@@ -1,5 +1,12 @@
 package eu.kraftics.krafticslib.database;
 
+/**
+ * Object containing a map of items
+ *
+ * @see Database
+ * @see Collection
+ * @author Panda885
+ */
 public interface DatabaseObject extends DatabaseSerializable {
     void put(String name, String s);
     void put(String name, int i);
