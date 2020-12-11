@@ -11,6 +11,12 @@ repositories {
     maven { url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/' }
 }
 
+jar {
+    from {
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
+
 dependencies {
     compileOnly 'org.spigotmc:spigot-api:1.16.1-R0.1-SNAPSHOT'
     compile group:'org.xerial', name:'sqlite-jdbc', version:'3.8.11.2'
