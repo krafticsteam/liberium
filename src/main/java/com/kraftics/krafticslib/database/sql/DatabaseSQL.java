@@ -197,7 +197,7 @@ public class DatabaseSQL {
      * @throws SQLException If could not close the connection
      */
     public void close() throws SQLException {
-        if (connection.isClosed()) return;
+        if (connection == null || connection.isClosed()) return;
         connection.close();
     }
 
@@ -206,7 +206,7 @@ public class DatabaseSQL {
      * @throws SQLException If could not create the connection
      */
     public void connect() throws SQLException {
-        if (!connection.isClosed()) return;
+        if (connection != null && !connection.isClosed()) return;
         connection = DriverManager.getConnection(url, username, password);
     }
 }
