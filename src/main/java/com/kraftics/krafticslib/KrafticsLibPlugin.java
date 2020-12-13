@@ -1,4 +1,4 @@
-package eu.kraftics.krafticslib;
+package com.kraftics.krafticslib;
 
 import org.bukkit.plugin.java.JavaPlugin;
 

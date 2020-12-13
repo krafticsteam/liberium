@@ -1,4 +1,4 @@
-package eu.kraftics.krafticslib.database.sql;
+package com.kraftics.krafticslib.database.sql;
 
 import java.io.File;
 import java.sql.*;

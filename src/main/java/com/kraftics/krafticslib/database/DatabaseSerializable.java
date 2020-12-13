@@ -1,4 +1,4 @@
-package eu.kraftics.krafticslib.database;
+package com.kraftics.krafticslib.database;
 
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 

@@ -1,4 +1,4 @@
-package eu.kraftics.krafticslib.config;
+package com.kraftics.krafticslib.config;
 
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;

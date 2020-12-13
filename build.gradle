@@ -6,15 +6,15 @@ group 'eu.kraftics'
 version '0.1.0'
 libsDirName = 'C:/Users/fireg/Documents/Minecraft/Testing Server/plugins'
 
-repositories {
-    mavenCentral()
-    maven { url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/' }
-}
-
 jar {
     from {
         configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
     }
+}
+
+repositories {
+    mavenCentral()
+    maven { url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/' }
 }
 
 dependencies {
