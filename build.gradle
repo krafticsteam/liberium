@@ -19,5 +19,6 @@ repositories {
 
 dependencies {
     compileOnly 'org.spigotmc:spigot-api:1.16.1-R0.1-SNAPSHOT'
-    compile group:'org.xerial', name:'sqlite-jdbc', version:'3.8.11.2'
+    compile 'org.xerial:sqlite-jdbc:3.8.11.2'
+    compile 'com.google.code.findbugs:jsr305:3.0.2'
 }

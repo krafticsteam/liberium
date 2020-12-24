@@ -8,17 +8,50 @@ package com.kraftics.krafticslib.database;
  * @author Panda885
  */
 public interface DatabaseObject extends DatabaseSerializable {
-    void put(String name, String s);
-    void put(String name, int i);
-    void put(String name, long l);
-    void put(String name, short s);
-    void put(String name, double d);
-    void put(String name, float f);
-    void put(String name, byte b);
-    void put(String name, DatabaseSerializable o);
+
+    default DatabaseObject put(String name, String s) {
+        put(name, (Object) s);
+        return this;
+    }
+
+    default DatabaseObject put(String name, int i) {
+        put(name, (Object) i);
+        return this;
+    }
+
+    default DatabaseObject put(String name, long l) {
+        put(name, (Object) l);
+        return this;
+    }
+
+    default DatabaseObject put(String name, short s) {
+        put(name, (Object) s);
+        return this;
+    }
+
+    default DatabaseObject put(String name, double d) {
+        put(name, (Object) d);
+        return this;
+    }
+
+    default DatabaseObject put(String name, float f) {
+        put(name, (Object) f);
+        return this;
+    }
+
+    default DatabaseObject put(String name, byte b) {
+        put(name, (Object) b);
+        return this;
+    }
+
+    DatabaseObject put(String name, Object o);
 
     Object get(String name);
-    DatabaseObject getObject(String name);
+
+    default DatabaseObject getObject(String name) {
+        Object o = get(name);
+        return o instanceof DatabaseObject ? (DatabaseObject) o : null;
+    }
 
     default String getString(String name) {
         Object o = get(name);

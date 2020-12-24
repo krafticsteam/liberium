@@ -48,7 +48,7 @@ public interface Database<T extends Collection> {
     void removeCollection(String name);
 
     /**
-     * Pushes collcetions to the database
+     * Pushes collections to the database
      */
     void push();
 

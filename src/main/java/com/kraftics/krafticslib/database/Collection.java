@@ -24,4 +24,9 @@ public interface Collection {
      * @return Hmmm... I don't know.
      */
     List<DatabaseObject> getObjects();
+
+    void addObject(DatabaseObject object);
+
+    void removeObject(DatabaseObject object);
+
 }

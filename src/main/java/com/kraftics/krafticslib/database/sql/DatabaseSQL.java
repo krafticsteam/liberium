@@ -1,212 +1,173 @@
 package com.kraftics.krafticslib.database.sql;
 
+import com.kraftics.krafticslib.database.Database;
+import com.kraftics.krafticslib.database.DatabaseException;
+import com.kraftics.krafticslib.database.DatabaseObject;
+import com.kraftics.krafticslib.utils.Tuple;
+//import org.apache.commons.lang.Validate;
+
+import javax.annotation.Nonnull;
 import java.io.File;
-import java.sql.*;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * SQL database
  *
  * @author Panda885
  */
-public class DatabaseSQL {
-    private String url;
-    private String username;
-    private String password;
-    private Connection connection;
+public class DatabaseSQL implements Database<CollectionSQL> {
+    private ConnectionSQL connection;
 
-    /**
-     * Constructs sqlite database by file
-     *
-     * @param file The file.
-     * @throws SQLException If could not connect to the database
-     */
-    public DatabaseSQL(File file) throws SQLException {
-        this("jdbc:sqlite:" + file.getPath(), null, null);
+    public DatabaseSQL(@Nonnull ConnectionSQL connection) {
+//        Validate.notNull(connection, "Connection cannot be null");
+
+        this.connection = connection;
     }
 
-    /**
-     * Constructs mysql database by host, port, databaseName, username and password
-     *
-     * @param host Host of the database
-     * @param port Port of the database
-     * @param databaseName Name of the database
-     * @param username Username for the database
-     * @param password Password for the database
-     * @throws SQLException If could not connect to the database
-     */
-    public DatabaseSQL(String host, int port, String databaseName, String username, String password) throws SQLException {
-        this("jdbc:mysql://" + host + ":" + port + "/" + databaseName, username, password);
-    }
+    @Override
+    public CollectionSQL getCollection(String name) {
+        ResultSet set = connection.query(String.format("SELECT * FROM `%s`", name));
+        if (set == null) return null;
 
-    /**
-     * Constructs mysql database by url, username and password
-     *
-     * @param url Url to the database
-     * @param username Username for the database
-     * @param password Password for the database
-     * @throws SQLException If could not connect to the database
-     */
-    public DatabaseSQL(String url, String username, String password) throws SQLException {
-        if (url == null) throw new NullPointerException("Url cannot be null");
-
-        this.url = url;
-        this.username = username;
-        this.password = password;
-
-        connect();
-        close();
-    }
-
-    /**
-     * Executes query from the statement
-     * Returns null if could not query
-     *
-     * @param statement The statement
-     * @param args Replaces with the ? character
-     * @return Result from the query
-     */
-    public ResultSet query(String statement, String... args) {
-        PreparedStatement ps = null;
         try {
-            connect();
-
-            ps = connection.prepareStatement(statement);
-            for (int i = 0; i < args.length; i++) {
-                String arg = args[i];
-                ps.setString(i+1, arg);
-            }
-            return ps.executeQuery();
-        } catch (SQLException e) {
+            return collectionFrom(name, set);
+        } catch (DatabaseException e) {
             e.printStackTrace();
             return null;
-        } finally {
-            if (ps != null) {
-                try {
-                    ps.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            try {
-                close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
         }
     }
 
-    /**
-     * Executes update from the statement
-     * Returns null if could not update
-     *
-     * @param statement The statement
-     * @param args Replaces with the ? character
-     * @return Row count or 0
-     */
-    public Integer update(String statement, String... args) {
-        PreparedStatement ps = null;
-        try {
-            connect();
+    @Override
+    public List<CollectionSQL> getCollections() {
+        throw new UnsupportedOperationException();
+    }
 
-            ps = connection.prepareStatement(statement);
-            for (int i = 0; i < args.length; i++) {
-                String arg = args[i];
-                ps.setString(i+1, arg);
-            }
+    @Override
+    public CollectionSQL createCollection(String name) {
+        return createCollection(name, new ArrayList<>());
+    }
 
-            return ps.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
-        } finally {
-            if (ps != null) {
-                try {
-                    ps.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
+    public CollectionSQL createCollection(String name, Attribute... attributes) {
+        return createCollection(name, Arrays.asList(attributes));
+    }
 
-            try {
-                close();
-            } catch (SQLException e) {
-                e.printStackTrace();
+    public CollectionSQL createCollection(String name, List<Attribute> attributes) {
+        List<Attribute> newAttributes = new ArrayList<>(attributes);
+
+        Integer result = connection.update(String.format("CREATE TABLE `%s` (%s)", name, toString(attributes)));
+        if (result == null) return null;
+        return new CollectionSQL(name, new ArrayList<>(), newAttributes);
+    }
+
+    @Override
+    public void removeCollection(String name) {
+        connection.update(String.format("DROP TABLE `%s`", name));
+    }
+
+    public void updateCollection(CollectionSQL collection) {
+        connection.update(String.format("DELETE FROM `%s`", collection.getName()));
+        for (DatabaseObject object : collection.getObjects()) {
+            Map<String, Object> map = object.serialize();
+            if (map == null) continue;
+            Tuple<String, List<String>> tuple = toString(map);
+            System.out.println(tuple.getFirst());
+            for (String s : tuple.getSecond()) {
+                System.out.println(" - " + s);
             }
+            connection.update(String.format("INSERT INTO `%s` %s", collection.getName(), tuple.getFirst()), tuple.getSecond().toArray(new String[0]));
         }
     }
 
-    /**
-     * Sets the url (doesn't need to reconnect)
-     * @param url The url
-     */
-    public void setUrl(String url) {
-        this.url = url;
+    @Override
+    public void push() {
+
     }
 
-    /**
-     * Sets the username (doesn't need to reconnect)
-     * @param username The username
-     */
-    public void setUsername(String username) {
-        this.username = username;
+    @Override
+    public void pull() {
+
     }
 
-    /**
-     * Sets the password (doesn't need to reconnect)
-     * @param password The password
-     */
-    public void setPassword(String password) {
-        this.password = password;
+    private String toString(List<Attribute> attributes) {
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < attributes.size(); i++) {
+            Attribute attribute = attributes.get(i);
+            builder.append(attribute.getName()).append(" ").append(attribute.getType());
+            if (i < attributes.size() - 1) builder.append(",");
+        }
+        return builder.toString();
     }
 
-    /**
-     * Gets the url
-     * @return The url
-     */
-    public String getUrl() {
-        return url;
+    private Tuple<String, List<String>> toString(Map<String, Object> map) {
+        StringBuilder names = new StringBuilder("(");
+        StringBuilder values = new StringBuilder("(");
+        List<String> valueList = new ArrayList<>();
+
+        AtomicInteger i = new AtomicInteger();
+        map.forEach((name, object) -> {
+            names.append(name);
+            values.append("?");
+            valueList.add(object.toString());
+
+            if (i.incrementAndGet() < map.size() - 1) {
+                names.append(", ");
+                values.append(", ");
+            }
+        });
+        names.append(")");
+        values.append(")");
+
+        return new Tuple<>(names.toString() + " VALUES " + values.toString(), valueList);
     }
 
-    /**
-     * Gets the username
-     * @return The username
-     */
-    public String getUsername() {
-        return username;
+    private CollectionSQL collectionFrom(String name, ResultSet set) throws DatabaseException {
+        try {
+            set.first();
+
+            ResultSetMetaData meta = set.getMetaData();
+            int columnCount = meta.getColumnCount();
+
+            List<Attribute> attributes = new ArrayList<>();
+            for (int column = 1; column <= columnCount; column++) {
+                String columnName = meta.getColumnName(column);
+                String columnType = meta.getColumnTypeName(column);
+                attributes.add(new Attribute(columnName, columnType));
+            }
+
+            List<DatabaseObject> objects = new ArrayList<>();
+            while (set.next()) {
+                DatabaseObject object = new ObjectSQL();
+
+                for (Attribute attribute : attributes) {
+                    try {
+                        Object o = set.getObject(attribute.getName());
+                        object.put(attribute.getName(), o);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                objects.add(object);
+            }
+
+            return new CollectionSQL(name, objects, attributes);
+        } catch (Exception e) {
+            throw new DatabaseException("Could not create Collection from ResultSet", e);
+        }
     }
 
-    /**
-     * Gets the password
-     * @return The password
-     */
-    public String getPassword() {
-        return password;
-    }
-
-    /**
-     * Gets the connection (could be closed)
-     * @return The connection
-     */
-    public Connection getConnection() {
-        return connection;
-    }
-
-    /**
-     * Closes the connection
-     * @throws SQLException If could not close the connection
-     */
-    public void close() throws SQLException {
-        if (connection == null || connection.isClosed()) return;
-        connection.close();
-    }
-
-    /**
-     * Creates the connection
-     * @throws SQLException If could not create the connection
-     */
-    public void connect() throws SQLException {
-        if (connection != null && !connection.isClosed()) return;
-        connection = DriverManager.getConnection(url, username, password);
+    public static void main(String[] args) throws SQLException {
+        DatabaseSQL database = new DatabaseSQL(new ConnectionSQL(new File("test.db")));
+        CollectionSQL table = database.getCollection("test");
+        for (DatabaseObject object : table.getObjects()) {
+            System.out.println(object.get("name"));
+        }
     }
 }
