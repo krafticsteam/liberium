@@ -10,22 +10,16 @@ import java.util.List;
 import java.util.function.Function;
 
 public class CollectionSQL implements Collection {
-    private final List<Attribute> attributes;
     private final List<DatabaseObject> objects;
     private final String name;
 
-    public CollectionSQL(String name, List<DatabaseObject> objects, List<Attribute> attributes) {
+    public CollectionSQL(String name, List<DatabaseObject> objects) {
         this.name = name;
         this.objects = objects;
-        this.attributes = attributes;
     }
 
-    public CollectionSQL(String name, List<DatabaseObject> objects, Attribute... attributes) {
-        this(name, objects, Arrays.asList(attributes));
-    }
-
-    public CollectionSQL(String name, Attribute... attributes) {
-        this(name, new ArrayList<>(), Arrays.asList(attributes));
+    public CollectionSQL(String name, DatabaseObject... objects) {
+        this(name, new ArrayList<>(Arrays.asList(objects)));
     }
 
     @Override
@@ -65,9 +59,5 @@ public class CollectionSQL implements Collection {
             }
         }
         return list;
-    }
-
-    public List<Attribute> getAttributes() {
-        return new ArrayList<>(attributes);
     }
 }

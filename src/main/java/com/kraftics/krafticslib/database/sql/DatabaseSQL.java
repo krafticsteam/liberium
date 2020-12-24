@@ -63,7 +63,7 @@ public class DatabaseSQL implements Database<CollectionSQL> {
 
         Integer result = connection.update(String.format("CREATE TABLE `%s` (%s)", name, toString(attributes)));
         if (result == null) return null;
-        return new CollectionSQL(name, new ArrayList<>(), newAttributes);
+        return new CollectionSQL(name, new ArrayList<>());
     }
 
     @Override
@@ -129,45 +129,40 @@ public class DatabaseSQL implements Database<CollectionSQL> {
 
     private CollectionSQL collectionFrom(String name, ResultSet set) throws DatabaseException {
         try {
-            set.first();
-
             ResultSetMetaData meta = set.getMetaData();
             int columnCount = meta.getColumnCount();
-
-            List<Attribute> attributes = new ArrayList<>();
-            for (int column = 1; column <= columnCount; column++) {
-                String columnName = meta.getColumnName(column);
-                String columnType = meta.getColumnTypeName(column);
-                attributes.add(new Attribute(columnName, columnType));
-            }
 
             List<DatabaseObject> objects = new ArrayList<>();
             while (set.next()) {
                 DatabaseObject object = new ObjectSQL();
 
-                for (Attribute attribute : attributes) {
-                    try {
-                        Object o = set.getObject(attribute.getName());
-                        object.put(attribute.getName(), o);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+                for (int i = 1; i <= columnCount; i++) {
+                    object.put(meta.getColumnName(i), set.getObject(i));
                 }
 
                 objects.add(object);
             }
 
-            return new CollectionSQL(name, objects, attributes);
+            return new CollectionSQL(name, objects);
         } catch (Exception e) {
             throw new DatabaseException("Could not create Collection from ResultSet", e);
         }
     }
 
+    public ConnectionSQL getConnection() {
+        return connection;
+    }
+
     public static void main(String[] args) throws SQLException {
         DatabaseSQL database = new DatabaseSQL(new ConnectionSQL(new File("test.db")));
-        CollectionSQL table = database.getCollection("test");
-        for (DatabaseObject object : table.getObjects()) {
-            System.out.println(object.get("name"));
+        ResultSet rs = database.getConnection().query("SELECT * FROM test");
+        if (rs == null) {
+            System.out.println("oh no");
+            return;
         }
+
+        ResultSetMetaData rsmd = rs.getMetaData();
+        int columnCount = rsmd.getColumnCount();
+        System.out.println(columnCount);
     }
 }

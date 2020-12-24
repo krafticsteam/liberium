@@ -4,7 +4,6 @@ plugins {
 
 group 'eu.kraftics'
 version '0.1.1'
-libsDirName = 'C:/Users/fireg/Documents/Minecraft/Testing Server/plugins'
 
 jar {
     from {

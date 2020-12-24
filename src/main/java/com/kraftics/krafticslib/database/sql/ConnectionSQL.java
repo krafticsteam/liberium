@@ -76,7 +76,7 @@ public class ConnectionSQL {
         try {
             connect();
 
-            ps = connection.prepareStatement(statement, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            ps = connection.prepareStatement(statement);
             for (int i = 0; i < args.length; i++) {
                 String arg = args[i];
                 ps.setString(i+1, arg);
