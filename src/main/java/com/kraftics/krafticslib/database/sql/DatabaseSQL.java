@@ -155,14 +155,10 @@ public class DatabaseSQL implements Database<CollectionSQL> {
 
     public static void main(String[] args) throws SQLException {
         DatabaseSQL database = new DatabaseSQL(new ConnectionSQL(new File("test.db")));
-        ResultSet rs = database.getConnection().query("SELECT * FROM test");
-        if (rs == null) {
-            System.out.println("oh no");
-            return;
-        }
+        CollectionSQL col = database.getCollection("test");
 
-        ResultSetMetaData rsmd = rs.getMetaData();
-        int columnCount = rsmd.getColumnCount();
-        System.out.println(columnCount);
+        for (DatabaseObject o : col.getObjects()) {
+            System.out.println(o.get("name"));
+        }
     }
 }

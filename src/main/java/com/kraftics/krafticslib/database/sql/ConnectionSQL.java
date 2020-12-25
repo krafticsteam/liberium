@@ -72,11 +72,10 @@ public class ConnectionSQL {
      */
     @Nullable
     public ResultSet query(String statement, String... args) {
-        PreparedStatement ps = null;
         try {
             connect();
 
-            ps = connection.prepareStatement(statement);
+            PreparedStatement ps = connection.prepareStatement(statement);
             for (int i = 0; i < args.length; i++) {
                 String arg = args[i];
                 ps.setString(i+1, arg);
@@ -86,14 +85,6 @@ public class ConnectionSQL {
             e.printStackTrace();
             return null;
         } finally {
-            if (ps != null) {
-                try {
-                    ps.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-
             try {
                 close();
             } catch (SQLException e) {
@@ -114,11 +105,10 @@ public class ConnectionSQL {
     public Integer update(@Nonnull String statement, String... args) {
 //        Validate.notNull(statement, "Statement cannot be null");
 
-        PreparedStatement ps = null;
         try {
             connect();
 
-            ps = connection.prepareStatement(statement);
+            PreparedStatement ps = connection.prepareStatement(statement);
             for (int i = 0; i < args.length; i++) {
                 String arg = args[i];
                 ps.setString(i+1, arg);
@@ -129,14 +119,6 @@ public class ConnectionSQL {
             e.printStackTrace();
             return null;
         } finally {
-            if (ps != null) {
-                try {
-                    ps.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-
             try {
                 close();
             } catch (SQLException e) {
