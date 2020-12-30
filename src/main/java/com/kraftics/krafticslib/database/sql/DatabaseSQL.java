@@ -3,14 +3,11 @@ package com.kraftics.krafticslib.database.sql;
 import com.kraftics.krafticslib.database.Database;
 import com.kraftics.krafticslib.database.DatabaseException;
 import com.kraftics.krafticslib.database.DatabaseObject;
+import com.kraftics.krafticslib.utils.SQLUtils;
 import com.kraftics.krafticslib.utils.Tuple;
-//import org.apache.commons.lang.Validate;
+import org.apache.commons.lang.Validate;
 
 import javax.annotation.Nonnull;
-import java.io.File;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -26,18 +23,15 @@ public class DatabaseSQL implements Database<CollectionSQL> {
     private ConnectionSQL connection;
 
     public DatabaseSQL(@Nonnull ConnectionSQL connection) {
-//        Validate.notNull(connection, "Connection cannot be null");
+        Validate.notNull(connection, "Connection cannot be null");
 
         this.connection = connection;
     }
 
     @Override
     public CollectionSQL getCollection(String name) {
-        ResultSet set = connection.query(String.format("SELECT * FROM `%s`", name));
-        if (set == null) return null;
-
         try {
-            return collectionFrom(name, set);
+            return SQLUtils.createCollection(name, connection);
         } catch (DatabaseException e) {
             e.printStackTrace();
             return null;
@@ -59,11 +53,9 @@ public class DatabaseSQL implements Database<CollectionSQL> {
     }
 
     public CollectionSQL createCollection(String name, List<Attribute> attributes) {
-        List<Attribute> newAttributes = new ArrayList<>(attributes);
-
-        Integer result = connection.update(String.format("CREATE TABLE `%s` (%s)", name, toString(attributes)));
+        Integer result = connection.update(String.format("CREATE TABLE `%s` (%s)", name, toString(new ArrayList<>(attributes))));
         if (result == null) return null;
-        return new CollectionSQL(name, new ArrayList<>());
+        return new CollectionSQL(name);
     }
 
     @Override
@@ -116,7 +108,7 @@ public class DatabaseSQL implements Database<CollectionSQL> {
             values.append("?");
             valueList.add(object.toString());
 
-            if (i.incrementAndGet() < map.size() - 1) {
+            if (i.getAndIncrement() < map.size() - 1) {
                 names.append(", ");
                 values.append(", ");
             }
@@ -127,38 +119,7 @@ public class DatabaseSQL implements Database<CollectionSQL> {
         return new Tuple<>(names.toString() + " VALUES " + values.toString(), valueList);
     }
 
-    private CollectionSQL collectionFrom(String name, ResultSet set) throws DatabaseException {
-        try {
-            ResultSetMetaData meta = set.getMetaData();
-            int columnCount = meta.getColumnCount();
-
-            List<DatabaseObject> objects = new ArrayList<>();
-            while (set.next()) {
-                DatabaseObject object = new ObjectSQL();
-
-                for (int i = 1; i <= columnCount; i++) {
-                    object.put(meta.getColumnName(i), set.getObject(i));
-                }
-
-                objects.add(object);
-            }
-
-            return new CollectionSQL(name, objects);
-        } catch (Exception e) {
-            throw new DatabaseException("Could not create Collection from ResultSet", e);
-        }
-    }
-
     public ConnectionSQL getConnection() {
         return connection;
-    }
-
-    public static void main(String[] args) throws SQLException {
-        DatabaseSQL database = new DatabaseSQL(new ConnectionSQL(new File("test.db")));
-        CollectionSQL col = database.getCollection("test");
-
-        for (DatabaseObject o : col.getObjects()) {
-            System.out.println(o.get("name"));
-        }
     }
 }

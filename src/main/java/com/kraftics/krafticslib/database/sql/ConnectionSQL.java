@@ -1,11 +1,13 @@
 package com.kraftics.krafticslib.database.sql;
 
-//import org.apache.commons.lang.Validate;
+import com.kraftics.krafticslib.database.DatabaseException;
+import org.apache.commons.lang.Validate;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.File;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -18,6 +20,7 @@ public class ConnectionSQL {
     private String username;
     private String password;
     private Connection connection;
+    private List<AutoCloseable> closing = new ArrayList<>();
 
     /**
      * Constructs mysql database by url, username and password
@@ -28,7 +31,7 @@ public class ConnectionSQL {
      * @throws SQLException If could not connect to the database
      */
     public ConnectionSQL(@Nonnull String url, @Nullable String username, @Nullable String password) throws SQLException {
-//        Validate.notNull(url, "URL cannot be null");
+        Validate.notNull(url, "URL cannot be null");
 
         this.url = url;
         this.username = username;
@@ -72,24 +75,27 @@ public class ConnectionSQL {
      */
     @Nullable
     public ResultSet query(String statement, String... args) {
+        PreparedStatement ps = null;
         try {
             connect();
 
-            PreparedStatement ps = connection.prepareStatement(statement);
+            ps = connection.prepareStatement(statement);
             for (int i = 0; i < args.length; i++) {
                 String arg = args[i];
                 ps.setString(i+1, arg);
             }
-            return ps.executeQuery();
+
+            ResultSet rs = ps.executeQuery();
+            closing.add(ps);
+            closing.add(rs);
+            return rs;
         } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
-        } finally {
             try {
-                close();
-            } catch (SQLException e) {
-                e.printStackTrace();
+                ps.close();
+            } catch (SQLException e2) {
+                e2.printStackTrace();
             }
+            return null;
         }
     }
 
@@ -103,12 +109,13 @@ public class ConnectionSQL {
      */
     @Nullable
     public Integer update(@Nonnull String statement, String... args) {
-//        Validate.notNull(statement, "Statement cannot be null");
+        Validate.notNull(statement, "Statement cannot be null");
 
+        PreparedStatement ps = null;
         try {
             connect();
 
-            PreparedStatement ps = connection.prepareStatement(statement);
+            ps = connection.prepareStatement(statement);
             for (int i = 0; i < args.length; i++) {
                 String arg = args[i];
                 ps.setString(i+1, arg);
@@ -116,13 +123,14 @@ public class ConnectionSQL {
 
             return ps.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
             return null;
         } finally {
-            try {
-                close();
-            } catch (SQLException e) {
-                e.printStackTrace();
+            if (ps != null) {
+                try {
+                    ps.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
@@ -141,7 +149,7 @@ public class ConnectionSQL {
      * @param url The url
      */
     public void setUrl(@Nonnull String url) {
-//        Validate.notNull(url, "URL cannot be null");
+        Validate.notNull(url, "URL cannot be null");
 
         this.url = url;
     }
@@ -195,6 +203,15 @@ public class ConnectionSQL {
      */
     public void close() throws SQLException {
         if (connection == null || connection.isClosed()) return;
+
+        for (AutoCloseable c : closing) {
+            try {
+                c.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
         connection.close();
         connection = null;
     }
