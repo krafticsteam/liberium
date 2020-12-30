@@ -31,10 +31,15 @@ public class DatabaseSQL implements Database<CollectionSQL> {
     @Override
     public CollectionSQL getCollection(String name) {
         try {
-            return SQLUtils.createCollection(name, connection);
+            return SQLUtils.buildCollection(name, connection);
         } catch (DatabaseException e) {
-            e.printStackTrace();
             return null;
+        } finally {
+            try {
+                connection.close();
+            } catch (DatabaseException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -53,27 +58,51 @@ public class DatabaseSQL implements Database<CollectionSQL> {
     }
 
     public CollectionSQL createCollection(String name, List<Attribute> attributes) {
-        Integer result = connection.update(String.format("CREATE TABLE `%s` (%s)", name, toString(new ArrayList<>(attributes))));
-        if (result == null) return null;
-        return new CollectionSQL(name);
+        try {
+            connection.update(String.format("CREATE TABLE `%s` (%s)", name, toString(new ArrayList<>(attributes))));
+            return new CollectionSQL(name);
+        } catch (DatabaseException e) {
+            return null;
+        } finally {
+            try {
+                connection.close();
+            } catch (DatabaseException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override
     public void removeCollection(String name) {
-        connection.update(String.format("DROP TABLE `%s`", name));
+        try {
+            connection.update(String.format("DROP TABLE `%s`", name));
+        } catch (DatabaseException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                connection.close();
+            } catch (DatabaseException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public void updateCollection(CollectionSQL collection) {
-        connection.update(String.format("DELETE FROM `%s`", collection.getName()));
-        for (DatabaseObject object : collection.getObjects()) {
-            Map<String, Object> map = object.serialize();
-            if (map == null) continue;
-            Tuple<String, List<String>> tuple = toString(map);
-            System.out.println(tuple.getFirst());
-            for (String s : tuple.getSecond()) {
-                System.out.println(" - " + s);
+        try {
+            String name = collection.getName();
+            connection.update(String.format("DELETE FROM `%s`", name));
+
+            for (DatabaseObject object : collection.getObjects()) {
+                SQLUtils.insertInto(name, object, connection);
             }
-            connection.update(String.format("INSERT INTO `%s` %s", collection.getName(), tuple.getFirst()), tuple.getSecond().toArray(new String[0]));
+        } catch (DatabaseException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                connection.close();
+            } catch (DatabaseException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -95,28 +124,6 @@ public class DatabaseSQL implements Database<CollectionSQL> {
             if (i < attributes.size() - 1) builder.append(",");
         }
         return builder.toString();
-    }
-
-    private Tuple<String, List<String>> toString(Map<String, Object> map) {
-        StringBuilder names = new StringBuilder("(");
-        StringBuilder values = new StringBuilder("(");
-        List<String> valueList = new ArrayList<>();
-
-        AtomicInteger i = new AtomicInteger();
-        map.forEach((name, object) -> {
-            names.append(name);
-            values.append("?");
-            valueList.add(object.toString());
-
-            if (i.getAndIncrement() < map.size() - 1) {
-                names.append(", ");
-                values.append(", ");
-            }
-        });
-        names.append(")");
-        values.append(")");
-
-        return new Tuple<>(names.toString() + " VALUES " + values.toString(), valueList);
     }
 
     public ConnectionSQL getConnection() {

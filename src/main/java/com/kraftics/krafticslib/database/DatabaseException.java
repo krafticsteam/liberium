@@ -1,7 +1,7 @@
 package com.kraftics.krafticslib.database;
 
 /**
- * Exception using <code>Database</code>
+ * Exception using when {@link Database} error occurs
  *
  * @see Database
  * @author Panda885

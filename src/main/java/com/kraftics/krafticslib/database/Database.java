@@ -4,17 +4,17 @@ import java.util.List;
 
 /**
  * Database make by JSON like collections.
- * By using <code>pull()</code>, you receive the collections from the remote database. You can get the collections by <code>getCollections()</code>
- * or designated collection with <code>getCollection(name)</code>.
- * You can use <code>createCollection(name)</code> to create a collection by name.
- * To delete a collection use <code>removeCollection(name)</code> with the collection name.
- * Use <code>push()</code> to write the collections to the remote database.
+ * By using {@link #pull()}, you receive the collections from the remote database. You can get the collections by {@link #getCollections()}
+ * or designated collection with {@link #getCollection(String)}.
+ * You can use {@link #createCollection(String)} to create a collection by name.
+ * To delete a collection use {@link #removeCollection(String)} with the collection name.
+ * Use {@link #push()} to write the collections to the remote database.
  *
  * @see Collection
  * @see DatabaseObject
  * @see DatabaseSerializable
  * @param <T> Collection type using the database
- * @author Panda885s
+ * @author Panda885
  */
 public interface Database<T extends Collection> {
     /**

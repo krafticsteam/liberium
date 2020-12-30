@@ -1,6 +1,7 @@
 package com.kraftics.krafticslib.database.sql;
 
 import com.kraftics.krafticslib.database.DatabaseException;
+import com.kraftics.krafticslib.utils.ConsumerSQL;
 import org.apache.commons.lang.Validate;
 
 import javax.annotation.Nonnull;
@@ -9,6 +10,7 @@ import java.io.File;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * SQL connection
@@ -23,14 +25,14 @@ public class ConnectionSQL {
     private List<AutoCloseable> closing = new ArrayList<>();
 
     /**
-     * Constructs mysql database by url, username and password
+     * Constructs connection by url, username and password
      *
      * @param url Url to the database
      * @param username Username for the database
      * @param password Password for the database
-     * @throws SQLException If could not connect to the database
+     * @throws DatabaseException If could not connect to the database
      */
-    public ConnectionSQL(@Nonnull String url, @Nullable String username, @Nullable String password) throws SQLException {
+    public ConnectionSQL(@Nonnull String url, @Nullable String username, @Nullable String password) throws DatabaseException {
         Validate.notNull(url, "URL cannot be null");
 
         this.url = url;
@@ -42,96 +44,113 @@ public class ConnectionSQL {
     }
 
     /**
-     * Constructs mysql database by host, port, databaseName, username and password
+     * Constructs mysql connection by host, port, databaseName, username and password
      *
      * @param host Host of the database
      * @param port Port of the database
      * @param databaseName Name of the database
      * @param username Username for the database
      * @param password Password for the database
-     * @throws SQLException If could not connect to the database
+     * @throws DatabaseException If could not connect to the database
      */
-    public ConnectionSQL(@Nonnull String host, int port, @Nonnull String databaseName, @Nullable String username, @Nullable String password) throws SQLException {
+    public ConnectionSQL(@Nonnull String host, int port, @Nonnull String databaseName, @Nullable String username, @Nullable String password) throws DatabaseException {
         this("jdbc:mysql://" + host + ":" + port + "/" + databaseName, username, password);
     }
 
     /**
-     * Constructs sqlite database by file
+     * Constructs sqlite connection by file
      *
      * @param file The file.
-     * @throws SQLException If could not connect to the database
+     * @throws DatabaseException If could not connect to the database
      */
-    public ConnectionSQL(@Nonnull File file) throws SQLException {
+    public ConnectionSQL(@Nonnull File file) throws DatabaseException {
         this("jdbc:sqlite:" + file.getPath(), null, null);
     }
 
     /**
-     * Executes query from the statement
-     * Returns null if could not query
+     * Prepares an update statement and executes it.
+     * Remember to {@link #close()} the connection!
      *
-     * @param statement The statement
-     * @param args Replaces with the ? character
-     * @return Result from the query
+     * @param sql The SQL statement
+     * @param args Arguments replacing the ? character
+     * @throws DatabaseException If something went wrong
      */
-    @Nullable
-    public ResultSet query(String statement, String... args) {
-        PreparedStatement ps = null;
+    public void update(String sql, Object... args) throws DatabaseException {
+        connect();
+
         try {
-            connect();
-
-            ps = connection.prepareStatement(statement);
+            PreparedStatement ps = connection.prepareStatement(sql);
             for (int i = 0; i < args.length; i++) {
-                String arg = args[i];
-                ps.setString(i+1, arg);
+                ps.setObject(i + 1, args[i]);
             }
 
-            ResultSet rs = ps.executeQuery();
             closing.add(ps);
-            closing.add(rs);
-            return rs;
+            ps.executeUpdate();
         } catch (SQLException e) {
-            try {
-                ps.close();
-            } catch (SQLException e2) {
-                e2.printStackTrace();
-            }
-            return null;
+            throw new DatabaseException(e);
         }
     }
 
     /**
-     * Executes update from the statement
-     * Returns null if could not update
+     * Prepares an update statement and executes it.
+     * At the end it automatically closes
      *
-     * @param statement The statement
-     * @param args Replaces with the ? character
-     * @return Row count or 0
+     * @param sql The SQL statement
+     * @param args Arguments replacing the ? character
+     * @throws DatabaseException If something went wrong
      */
-    @Nullable
-    public Integer update(@Nonnull String statement, String... args) {
-        Validate.notNull(statement, "Statement cannot be null");
-
-        PreparedStatement ps = null;
+    public void updateAndClose(String sql, Object... args) throws DatabaseException {
         try {
-            connect();
-
-            ps = connection.prepareStatement(statement);
-            for (int i = 0; i < args.length; i++) {
-                String arg = args[i];
-                ps.setString(i+1, arg);
-            }
-
-            return ps.executeUpdate();
-        } catch (SQLException e) {
-            return null;
+            update(sql, args);
         } finally {
-            if (ps != null) {
-                try {
-                    ps.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
+            close();
+        }
+    }
+
+    /**
+     * Prepares a query statement and executes it.
+     * Remember to {@link #close()} the connection!
+     *
+     * @param sql The SQL statement
+     * @param args Arguments replacing the ? character
+     * @throws DatabaseException If something went wrong
+     */
+    @Nonnull
+    public ResultSet query(String sql, Object... args) throws DatabaseException {
+        connect();
+
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            for (int i = 0; i < args.length; i++) {
+                ps.setObject(i + 1, args[i]);
             }
+
+            closing.add(ps);
+            ResultSet rs = ps.executeQuery();
+            closing.add(rs);
+
+            return rs;
+        } catch (SQLException e) {
+            throw new DatabaseException(e);
+        }
+    }
+
+    /**
+     * Prepares a query statement and executes it.
+     * At the end it automatically closes
+     *
+     * @param sql The SQL statement
+     * @param args Arguments replacing the ? character
+     * @throws DatabaseException If something went wrong
+     */
+    public void queryAndClose(ConsumerSQL<ResultSet> run, String sql, Object... args) throws DatabaseException {
+        try {
+            ResultSet rs = query(sql, args);
+            run.accept(rs);
+        } catch (SQLException e) {
+            throw new DatabaseException(e);
+        } finally {
+            close();
         }
     }
 
@@ -139,7 +158,7 @@ public class ConnectionSQL {
      * Gets the connection (could be closed)
      * @return The connection
      */
-    @Nullable
+    @Nonnull
     public Connection getConnection() {
         return connection;
     }
@@ -198,30 +217,42 @@ public class ConnectionSQL {
     }
 
     /**
-     * Closes the connection
-     * @throws SQLException If could not close the connection
+     * Closes the connection and other objects that
+     * are needed to close
+     *
+     * @throws DatabaseException If could not close the connection
      */
-    public void close() throws SQLException {
-        if (connection == null || connection.isClosed()) return;
+    public void close() throws DatabaseException {
+        try {
+            if (connection == null || connection.isClosed()) return;
 
-        for (AutoCloseable c : closing) {
-            try {
-                c.close();
-            } catch (Exception e) {
-                e.printStackTrace();
+            for (AutoCloseable c : closing) {
+                try {
+                    c.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
-        }
+            closing.clear();
 
-        connection.close();
-        connection = null;
+            connection.close();
+        } catch (SQLException e) {
+            throw new DatabaseException(e);
+        }
     }
 
     /**
      * Creates the connection
-     * @throws SQLException If could not create the connection
+     *
+     * @throws DatabaseException If could not create the connection
      */
-    public void connect() throws SQLException {
-        if (connection != null && !connection.isClosed()) return;
-        connection = DriverManager.getConnection(url, username, password);
+    public void connect() throws DatabaseException {
+        try {
+            if (connection != null && !connection.isClosed()) return;
+
+            connection = DriverManager.getConnection(url, username, password);
+        } catch (SQLException e) {
+            throw new DatabaseException(e);
+        }
     }
 }
