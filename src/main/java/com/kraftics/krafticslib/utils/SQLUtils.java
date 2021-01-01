@@ -2,6 +2,7 @@ package com.kraftics.krafticslib.utils;
 
 import com.kraftics.krafticslib.database.DatabaseException;
 import com.kraftics.krafticslib.database.DatabaseObject;
+import com.kraftics.krafticslib.database.sql.Attribute;
 import com.kraftics.krafticslib.database.sql.CollectionSQL;
 import com.kraftics.krafticslib.database.sql.ConnectionSQL;
 import com.kraftics.krafticslib.database.sql.ObjectSQL;
@@ -20,7 +21,28 @@ public final class SQLUtils {
         throw new UnsupportedOperationException();
     }
 
-    public static void insertInto(String name, DatabaseObject o, ConnectionSQL con) throws DatabaseException {
+    public static void checkForDrivers() throws DatabaseException {
+        try {
+            Class.forName("org.sqlite.JDBC");
+            Class.forName("java.sql.DriverManager");
+        } catch (ClassNotFoundException e) {
+            throw new DatabaseException("Could not find drivers", e);
+        }
+    }
+
+    public static String toString(List<Attribute> attributes) {
+        StringBuilder sb = new StringBuilder("(");
+
+        for (int i = 0; i < attributes.size(); i++) {
+            Attribute attribute = attributes.get(i);
+            sb.append('`').append(attribute.getName().replace(' ', '_')).append("` ").append(attribute.getType());
+            if (i < attributes.size() - 1) sb.append(", ");
+        }
+
+        return sb.append(")").toString();
+    }
+
+    public static void insert(String name, DatabaseObject o, ConnectionSQL con) throws DatabaseException {
         Map<String, Object> map = o.serialize();
         List<Object> values = new ArrayList<>();
 
@@ -30,8 +52,8 @@ public final class SQLUtils {
         Set<Map.Entry<String, Object>> entries = map.entrySet();
         int i = 0;
         for (Map.Entry<String, Object> entry : entries) {
-            values.add(entry.getKey());
-            sbNames.append(entry.getValue());
+            values.add(entry.getValue());
+            sbNames.append('`').append(entry.getKey()).append('`');
             sbValues.append("?");
 
             if (i++ < entries.size() - 1) {
@@ -40,6 +62,7 @@ public final class SQLUtils {
             }
         }
         sbValues.append(")");
+
         con.update(sbNames.append(sbValues).toString(), values.toArray(new Object[0]));
     }
 
