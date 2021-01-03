@@ -2,14 +2,13 @@ package com.kraftics.krafticslib.utils;
 
 import com.kraftics.krafticslib.database.DatabaseException;
 import com.kraftics.krafticslib.database.DatabaseObject;
-import com.kraftics.krafticslib.database.sql.Attribute;
+import com.kraftics.krafticslib.database.sql.Column;
 import com.kraftics.krafticslib.database.sql.CollectionSQL;
 import com.kraftics.krafticslib.database.sql.ConnectionSQL;
 import com.kraftics.krafticslib.database.sql.ObjectSQL;
 
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -21,6 +20,11 @@ public final class SQLUtils {
         throw new UnsupportedOperationException();
     }
 
+    /**
+     * Checks if the JDBC and DriverManager drivers exists
+     *
+     * @throws DatabaseException If can't fine one of the drivers
+     */
     public static void checkForDrivers() throws DatabaseException {
         try {
             Class.forName("org.sqlite.JDBC");
@@ -30,13 +34,19 @@ public final class SQLUtils {
         }
     }
 
-    public static String toString(List<Attribute> attributes) {
+    /**
+     * Makes a string f
+     *
+     * @param columns
+     * @return
+     */
+    public static String toString(List<Column> columns) {
         StringBuilder sb = new StringBuilder("(");
 
-        for (int i = 0; i < attributes.size(); i++) {
-            Attribute attribute = attributes.get(i);
-            sb.append('`').append(attribute.getName().replace(' ', '_')).append("` ").append(attribute.getType());
-            if (i < attributes.size() - 1) sb.append(", ");
+        for (int i = 0; i < columns.size(); i++) {
+            Column column = columns.get(i);
+            sb.append('`').append(column.getName().replace(' ', '_')).append("` ").append(column.getType());
+            if (i < columns.size() - 1) sb.append(", ");
         }
 
         return sb.append(")").toString();

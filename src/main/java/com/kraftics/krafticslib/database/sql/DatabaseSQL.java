@@ -12,7 +12,10 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * SQL database
+ * Here the collections are not saved in memory
+ * so you don't need to use {@link #push()} and {@link #pull()} methods.
+ * When getting, creating, updating or removing a collection it will
+ * execute one or more statements.
  *
  * @author Panda885
  */
@@ -25,6 +28,12 @@ public class DatabaseSQL implements Database<CollectionSQL> {
         this.connection = connection;
     }
 
+    /**
+     * Gets collection by name
+     *
+     * @param name Name of the collection
+     * @return The collection
+     */
     @Override
     public CollectionSQL getCollection(String name) {
         try {
@@ -40,23 +49,49 @@ public class DatabaseSQL implements Database<CollectionSQL> {
         }
     }
 
+    /**
+     * Gets all collections. NOT SUPPORTED IN SQL DATABASE!
+     *
+     * @throws UnsupportedOperationException NOT SUPPORTED
+     * @return collections
+     */
     @Override
     public List<CollectionSQL> getCollections() {
         throw new UnsupportedOperationException();
     }
 
+    /**
+     * Creates collection by name
+     *
+     * @param name Name of the collection
+     * @return The collection
+     */
     @Override
     public CollectionSQL createCollection(String name) {
         return createCollection(name, new ArrayList<>());
     }
 
-    public CollectionSQL createCollection(String name, Attribute... attributes) {
-        return createCollection(name, Arrays.asList(attributes));
+    /**
+     * Creates collection by name and attributes
+     *
+     * @param name Name of the collection
+     * @param columns Attributes of the collection
+     * @return The collection
+     */
+    public CollectionSQL createCollection(String name, Column... columns) {
+        return createCollection(name, Arrays.asList(columns));
     }
 
-    public CollectionSQL createCollection(String name, List<Attribute> attributes) {
+    /**
+     * Creates collection by name and attributes
+     *
+     * @param name Name of the collection
+     * @param columns Attributes of the collection
+     * @return The collection
+     */
+    public CollectionSQL createCollection(String name, List<Column> columns) {
         try {
-            connection.update(String.format("CREATE TABLE `%s` %s", name, SQLUtils.toString(attributes)));
+            connection.update(String.format("CREATE TABLE `%s` %s", name, SQLUtils.toString(columns)));
             return new CollectionSQL(name);
         } catch (DatabaseException e) {
             return null;
@@ -69,6 +104,11 @@ public class DatabaseSQL implements Database<CollectionSQL> {
         }
     }
 
+    /**
+     * Removes collection by name
+     *
+     * @param name Name of the collection
+     */
     @Override
     public void removeCollection(String name) {
         try {
@@ -84,6 +124,11 @@ public class DatabaseSQL implements Database<CollectionSQL> {
         }
     }
 
+    /**
+     * Updates the collection
+     *
+     * @param collection The collection to update
+     */
     public void updateCollection(CollectionSQL collection) {
         try {
             String name = collection.getName();
@@ -113,6 +158,11 @@ public class DatabaseSQL implements Database<CollectionSQL> {
 
     }
 
+    /**
+     * Gets the connection using the database
+     *
+     * @return The connection
+     */
     public ConnectionSQL getConnection() {
         return connection;
     }

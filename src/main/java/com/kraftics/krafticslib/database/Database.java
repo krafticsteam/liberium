@@ -3,7 +3,6 @@ package com.kraftics.krafticslib.database;
 import java.util.List;
 
 /**
- * Database make by JSON like collections.
  * By using {@link #pull()}, you receive the collections from the remote database. You can get the collections by {@link #getCollections()}
  * or designated collection with {@link #getCollection(String)}.
  * You can use {@link #createCollection(String)} to create a collection by name.
