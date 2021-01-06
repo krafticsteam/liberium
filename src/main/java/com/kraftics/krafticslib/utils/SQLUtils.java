@@ -5,7 +5,6 @@ import com.kraftics.krafticslib.database.DatabaseObject;
 import com.kraftics.krafticslib.database.sql.Column;
 import com.kraftics.krafticslib.database.sql.CollectionSQL;
 import com.kraftics.krafticslib.database.sql.ConnectionSQL;
-import com.kraftics.krafticslib.database.sql.ObjectSQL;
 
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -35,10 +34,10 @@ public final class SQLUtils {
     }
 
     /**
-     * Makes a string f
+     * Makes a string from list of columns
      *
-     * @param columns
-     * @return
+     * @param columns The columns
+     * @return The string
      */
     public static String toString(List<Column> columns) {
         StringBuilder sb = new StringBuilder("(");
@@ -84,7 +83,7 @@ public final class SQLUtils {
             int columnCount = rsmd.getColumnCount();
 
             while (rs.next()) {
-                DatabaseObject o = new ObjectSQL();
+                DatabaseObject o = new DatabaseObject();
                 for (int i = 1; i <= columnCount; i++) {
                     o.put(rsmd.getColumnName(i), rs.getObject(i));
                 }

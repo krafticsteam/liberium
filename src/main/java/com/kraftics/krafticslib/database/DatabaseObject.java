@@ -1,5 +1,9 @@
 package com.kraftics.krafticslib.database;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+
 /**
  * Object containing a map of items
  *
@@ -7,84 +11,86 @@ package com.kraftics.krafticslib.database;
  * @see Collection
  * @author Panda885
  */
-public interface DatabaseObject extends DatabaseSerializable {
+public class DatabaseObject implements DatabaseSerializable {
+    private final Map<String, Object> map = new HashMap<>();
 
-    default DatabaseObject put(String name, String s) {
-        put(name, (Object) s);
+    public DatabaseObject put(String name, Object o) {
+        map.put(name, o);
         return this;
     }
 
-    default DatabaseObject put(String name, int i) {
-        put(name, (Object) i);
+    public DatabaseObject clear() {
+        map.clear();
         return this;
     }
 
-    default DatabaseObject put(String name, long l) {
-        put(name, (Object) l);
-        return this;
+    public int size() {
+        return map.size();
     }
 
-    default DatabaseObject put(String name, short s) {
-        put(name, (Object) s);
-        return this;
+    public boolean contains(String name) {
+        return map.containsKey(name);
     }
 
-    default DatabaseObject put(String name, double d) {
-        put(name, (Object) d);
-        return this;
+    public Object get(String name) {
+        return map.get(name);
     }
 
-    default DatabaseObject put(String name, float f) {
-        put(name, (Object) f);
-        return this;
-    }
-
-    default DatabaseObject put(String name, byte b) {
-        put(name, (Object) b);
-        return this;
-    }
-
-    DatabaseObject put(String name, Object o);
-
-    Object get(String name);
-
-    default DatabaseObject getObject(String name) {
+    public DatabaseObject getObject(String name) {
         Object o = get(name);
         return o instanceof DatabaseObject ? (DatabaseObject) o : null;
     }
 
-    default String getString(String name) {
+    public String getString(String name) {
         Object o = get(name);
         return o != null ? o.toString() : null;
     }
 
-    default Integer getInteger(String name) {
+    public Integer getInteger(String name) {
         Object o = get(name);
         return o instanceof Integer ? (int) o : null;
     }
 
-    default Long getLong(String name) {
+    public Long getLong(String name) {
         Object o = get(name);
         return o instanceof Long ? (long) o : null;
     }
 
-    default Short getShort(String name) {
+    public Short getShort(String name) {
         Object o = get(name);
         return o instanceof Short ? (short) o : null;
     }
 
-    default Double getDouble(String name) {
+    public Double getDouble(String name) {
         Object o = get(name);
         return o instanceof Double ? (double) o : null;
     }
 
-    default Float getFloat(String name) {
+    public Float getFloat(String name) {
         Object o = get(name);
         return o instanceof Float ? (float) o : null;
     }
 
-    default Byte getByte(String name) {
+    public Byte getByte(String name) {
         Object o = get(name);
         return o instanceof Byte ? (byte) o : null;
+    }
+
+    @Override
+    public Map<String, Object> serialize() {
+        return new HashMap<>(map);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof DatabaseObject)) return false;
+        DatabaseObject object = (DatabaseObject) o;
+        return map.equals(object.map);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(map);
     }
 }

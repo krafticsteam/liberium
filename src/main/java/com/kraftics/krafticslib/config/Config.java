@@ -6,6 +6,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.logging.Level;
 
 /**
@@ -18,17 +20,34 @@ public class Config extends YamlConfiguration {
     private JavaPlugin plugin;
     private File file;
 
+    private boolean log;
+    private boolean defaults;
+
     /**
-     * Constructs the config
+     * Constructs the configuration
      *
-     * @param plugin plugin instance using the config
-     * @param file config file
+     * @param plugin Plugin instance using the configuration
+     * @param file Configuration file
+     * @param log If errors should be logged thought the plugin logger
+     * @param defaults If should load defaults from the resource class loader
      */
-    public Config(JavaPlugin plugin, File file) {
+    public Config(JavaPlugin plugin, File file, boolean log, boolean defaults) {
         this.plugin = plugin;
         this.file = file;
+        this.log = log;
+        this.defaults = defaults;
 
         load();
+    }
+
+    /**
+     * Constructs the configuration
+     *
+     * @param plugin Plugin instance using the configuration
+     * @param file Configuration file
+     */
+    public Config(JavaPlugin plugin, File file) {
+        this(plugin, file, true, true);
     }
 
     /**
@@ -40,8 +59,8 @@ public class Config extends YamlConfiguration {
         try {
             save(file);
             return true;
-        } catch (IOException e) {
-            plugin.getLogger().log(Level.SEVERE, "Could not save config " + file.getName());
+        } catch (Exception e) {
+            if (log) plugin.getLogger().log(Level.SEVERE, "Could not save config " + file.getName(), e);
             return false;
         }
     }
@@ -54,9 +73,18 @@ public class Config extends YamlConfiguration {
     public boolean load() {
         try {
             load(file);
+
+            try {
+                InputStream resource = plugin.getResource(file.getName());
+                if (resource != null) setDefaults(YamlConfiguration.loadConfiguration(new InputStreamReader(resource)));
+            } catch (Exception e) {
+                if (log) plugin.getLogger().log(Level.SEVERE, "Could not load defaults from config " + file.getName(), e);
+                return false;
+            }
+
             return true;
-        } catch (IOException | InvalidConfigurationException e) {
-            plugin.getLogger().log(Level.SEVERE, "Could not load config " + file.getName());
+        } catch (Exception e) {
+            if (log) plugin.getLogger().log(Level.SEVERE, "Could not load config " + file.getName(), e);
             return false;
         }
     }
