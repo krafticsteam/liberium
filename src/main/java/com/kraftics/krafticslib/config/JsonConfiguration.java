@@ -13,20 +13,40 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.io.File;
-import java.io.IOException;
 import java.io.Reader;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.logging.Level;
 
 public class JsonConfiguration extends FileConfiguration {
     private Gson gson = new Gson();
 
+    @Nonnull
+    protected Map<String, Object> getMappedValues(@Nonnull ConfigurationSection section, boolean deep) {
+        Map<String, Object> def = section.getValues(deep);
+        Map<String, Object> mapped = new LinkedHashMap<>();
+
+        for (Map.Entry<String, Object> entry : def.entrySet()) {
+            String key = entry.getKey();
+            Object value = entry.getValue();
+
+            if (value instanceof ConfigurationSection) {
+                ConfigurationSection second = section.getConfigurationSection(key);
+                if (second == null) continue;
+                mapped.put(key, getMappedValues(second, deep));
+            } else {
+                mapped.put(key, value);
+            }
+        }
+
+        return mapped;
+    }
+
     @Override
     @Nonnull
     public String saveToString() {
-        return gson.toJson(getValues(false));
+        return gson.toJson(getMappedValues(this, false));
     }
 
     @Override
