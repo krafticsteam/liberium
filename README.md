@@ -3,6 +3,7 @@
 
 ![](https://img.shields.io/badge/Spigot-1.16.4--R0.1--SNAPSHOT-orange?style=for-the-badge)
 [![](https://img.shields.io/jenkins/build?jobUrl=http%3A%2F%2Fkraftics.com%3A8080%2Fjob%2FKrafticsLib%2F&style=for-the-badge)](http://kraftics.com:8080/job/KrafticsLib/)
+[![](https://img.shields.io/github/v/release/KrafticsTeam/KrafticsLib?style=for-the-badge)](https://github.com/KrafticsTeam/KrafticsLib/releases/latest)
 </div>
 
 ## About
@@ -39,7 +40,7 @@ Or you can use one of these build tools:
   <dependency>
     <groupId>com.kraftics</groupId>
     <artifactId>krafticslib</artifactId>
-    <version>0.2.0-beta</version>
+    <version>0.2.0</version>
     <scope>provided</scope>
   </dependency>
 </dependencies>
@@ -52,7 +53,7 @@ repositories {
 }
 
 dependencies {
-  compileOnly 'com.kraftics:krafticslib:0.2.0-beta'
+  compileOnly 'com.kraftics:krafticslib:0.2.0'
 }
 ```
 Now you have KrafticsLib in your plugin.
