@@ -1,5 +1,5 @@
 name: KrafticsLib
-version: 0.2.0
+version: v0.3.0-alpha
 main: com.kraftics.krafticslib.KrafticsLibPlugin
 description: Library for kraftics plugins
 author: Kraftics

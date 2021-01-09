@@ -1,4 +1,5 @@
 {
+  // This is a comment
   "name": "KrafticsLib",
   "version": "latest",
   "build": {

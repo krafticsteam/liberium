@@ -3,7 +3,7 @@ plugins {
 }
 
 group 'eu.kraftics'
-version '0.2.0'
+version 'v0.3.0-alpha'
 
 jar {
     from {
