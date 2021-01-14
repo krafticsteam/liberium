@@ -1,0 +1,27 @@
+plugins {
+    id 'java'
+}
+
+group 'eu.kraftics'
+version 'v0.3.0-beta'
+
+jar {
+    from {
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
+
+repositories {
+    mavenCentral()
+    maven { url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/' }
+}
+
+dependencies {
+    compileOnly 'org.spigotmc:spigot-api:1.16.4-R0.1-SNAPSHOT'
+    compile 'org.xerial:sqlite-jdbc:3.8.11.2'
+    compile 'com.google.code.findbugs:jsr305:3.0.2'
+
+    // Tests
+    testCompile 'junit:junit:4.12'
+    testCompile 'org.spigotmc:spigot-api:1.16.4-R0.1-SNAPSHOT'
+}
