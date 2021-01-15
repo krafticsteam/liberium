@@ -1,0 +1,118 @@
+package com.kraftics.krafticslib.config;
+
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.plugin.java.JavaPlugin;
+
+import java.io.File;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.logging.Level;
+
+/**
+ * Custom json configuration
+ *
+ * @see JsonConfiguration
+ * @author Panda885
+ */
+public class JsonConfig extends JsonConfiguration {
+    private JavaPlugin plugin;
+    private File file;
+
+    private boolean log;
+    private boolean defaults;
+
+    /**
+     * Constructs the configuration
+     *
+     * @param plugin Plugin instance using the configuration
+     * @param file Configuration file
+     * @param log If errors should be logged thought the plugin logger
+     * @param defaults If should load defaults from the resource class loader
+     */
+    public JsonConfig(JavaPlugin plugin, File file, boolean log, boolean defaults) {
+        this.plugin = plugin;
+        this.file = file;
+        this.log = log;
+        this.defaults = defaults;
+
+        load();
+    }
+
+    /**
+     * Constructs the configuration
+     *
+     * @param plugin Plugin instance using the configuration
+     * @param file Configuration file
+     */
+    public JsonConfig(JavaPlugin plugin, File file) {
+        this(plugin, file, true, true);
+    }
+
+    /**
+     * Saves the config to the file
+     *
+     * @return true if it successfully saved
+     */
+    public boolean save() {
+        try {
+            save(file);
+            return true;
+        } catch (Exception e) {
+            if (log) plugin.getLogger().log(Level.SEVERE, "Could not save config " + file.getName(), e);
+            return false;
+        }
+    }
+
+    /**
+     * Loads the config from the file
+     *
+     * @return true if it successfully loaded
+     */
+    public boolean load() {
+        try {
+            load(file);
+
+            if (!defaults) return true;
+
+            try {
+                InputStream resource = plugin.getResource(file.getName());
+                if (resource != null)
+                    setDefaults(JsonConfiguration.loadConfiguration(new InputStreamReader(resource)));
+                return true;
+            } catch (Exception e) {
+                if (log)
+                    plugin.getLogger().log(Level.SEVERE, "Could not load defaults from config " + file.getName(), e);
+                return false;
+            }
+        } catch (Exception e) {
+            if (log) plugin.getLogger().log(Level.SEVERE, "Could not load config " + file.getName(), e);
+            return false;
+        }
+    }
+
+    /**
+     * Gets the plugin using the config
+     *
+     * @return the plugin
+     */
+    public JavaPlugin getPlugin() {
+        return plugin;
+    }
+
+    /**
+     * Gets the config file
+     *
+     * @return the file
+     */
+    public File getFile() {
+        return file;
+    }
+
+    public boolean isLogEnabled() {
+        return log;
+    }
+
+    public boolean areDefaultsEnabled() {
+        return defaults;
+    }
+}

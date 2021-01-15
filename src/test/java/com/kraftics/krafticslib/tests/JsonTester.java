@@ -18,6 +18,8 @@ public class JsonTester {
 
         config.set("build.id", 217);
 
+        System.out.println(config.saveToString());
+
         assertEquals("{\"name\":\"KrafticsLib\",\"version\":\"latest\",\"build\":{\"id\":217}}", config.saveToString());
     }
 }

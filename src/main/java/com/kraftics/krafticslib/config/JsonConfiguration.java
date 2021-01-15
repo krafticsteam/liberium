@@ -22,7 +22,7 @@ import java.util.logging.Level;
 public class JsonConfiguration extends FileConfiguration {
     private Gson gson = new Gson();
 
-//    Extended methods
+//    Loading & Saving
 
     @Override
     @Nonnull
@@ -87,15 +87,20 @@ public class JsonConfiguration extends FileConfiguration {
         StringBuilder builder = new StringBuilder();
         String[] lines = s.split("\r?\n", -1);
 
-        for (String line : lines) {
+        for (int i = 0; i < lines.length; i++) {
+            String line = lines[i];
+
             if (line.isEmpty()) continue;
 
             if (line.startsWith("//")) {
-                builder.append(line.substring(line.charAt(2) == ' ' ? 3 : 2)).append("\n");
+                builder.append(line.substring(line.charAt(2) == ' ' ? 3 : 2));
+                if (i < lines.length - 1) builder.append('\n');
             } else {
                 break;
             }
         }
+
+        System.out.println('\\' + builder.toString().charAt(builder.length() - 1));
 
         options().header(builder.toString());
     }
@@ -109,13 +114,14 @@ public class JsonConfiguration extends FileConfiguration {
         String[] lines = header.split("\r?\n", -1);
 
         for (String line : lines) {
+            System.out.println("line: " + line);
             builder.append("// ").append(line).append('\n');
         }
 
         return builder.toString();
     }
 
-//    Loaders
+//    Static Loaders
 
     @Nonnull
     public static JsonConfiguration loadConfiguration(@Nonnull Reader reader) {
