@@ -1,9 +1,6 @@
 package com.kraftics.krafticslib.config;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonSerializer;
-import com.google.gson.JsonSyntaxException;
+import com.google.gson.*;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
@@ -20,7 +17,7 @@ import java.util.Map;
 import java.util.logging.Level;
 
 public class JsonConfiguration extends FileConfiguration {
-    private Gson gson = new Gson();
+    private Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
 //    Loading & Saving
 
@@ -94,15 +91,15 @@ public class JsonConfiguration extends FileConfiguration {
 
             if (line.startsWith("//")) {
                 builder.append(line.substring(line.charAt(2) == ' ' ? 3 : 2));
-                if (i < lines.length - 1) builder.append('\n');
+                if (i < lines.length - 1) {
+                    builder.append('\n');
+                }
             } else {
                 break;
             }
         }
 
-        System.out.println('\\' + builder.toString().charAt(builder.length() - 1));
-
-        options().header(builder.toString());
+        options().header(builder.substring(0, builder.length() - 1));
     }
 
     @Override
@@ -114,7 +111,6 @@ public class JsonConfiguration extends FileConfiguration {
         String[] lines = header.split("\r?\n", -1);
 
         for (String line : lines) {
-            System.out.println("line: " + line);
             builder.append("// ").append(line).append('\n');
         }
 

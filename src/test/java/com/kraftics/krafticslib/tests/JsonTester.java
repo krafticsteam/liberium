@@ -3,11 +3,24 @@ package com.kraftics.krafticslib.tests;
 import com.kraftics.krafticslib.config.JsonConfiguration;
 import org.junit.Test;
 
+import java.io.File;
+import java.io.IOException;
 import java.io.InputStreamReader;
 
 import static org.junit.Assert.*;
 
 public class JsonTester {
+    final String validOutput =
+            "// This is a start of a header\n" +
+            "// Hi\n" +
+            "// This is an end of a header\n" +
+            "{\n" +
+            "  \"name\": \"KrafticsLib\",\n" +
+            "  \"version\": \"latest\",\n" +
+            "  \"build\": {\n" +
+            "    \"id\": 217\n" +
+            "  }\n" +
+            "}";
 
     @Test
     public void testJsonConfiguration() {
@@ -18,8 +31,6 @@ public class JsonTester {
 
         config.set("build.id", 217);
 
-        System.out.println(config.saveToString());
-
-        assertEquals("{\"name\":\"KrafticsLib\",\"version\":\"latest\",\"build\":{\"id\":217}}", config.saveToString());
+        assertEquals(validOutput, config.saveToString());
     }
 }
