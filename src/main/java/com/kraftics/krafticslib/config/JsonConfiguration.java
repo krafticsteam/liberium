@@ -5,9 +5,7 @@ import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
-import org.bukkit.configuration.MemorySection;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 
 import javax.annotation.Nonnull;
 import java.io.File;
@@ -16,6 +14,13 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.logging.Level;
 
+/**
+ * Json configuration
+ *
+ * @since v0.3.0-beta
+ * @see FileConfiguration
+ * @author Panda885
+ */
 public class JsonConfiguration extends FileConfiguration {
     private Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
