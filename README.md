@@ -2,7 +2,7 @@
 <img src="https://i.imgur.com/aBDylq5.png" alt="KrafticsLib">
 
 ![](https://img.shields.io/badge/Spigot-1.16.4--R0.1--SNAPSHOT-orange?style=for-the-badge)
-[![](https://img.shields.io/jenkins/build?jobUrl=http%3A%2F%2Fkraftics.com%3A8080%2Fjob%2FKrafticsLib%2F&style=for-the-badge)](http://kraftics.com:8080/job/KrafticsLib/)
+[![](https://img.shields.io/jenkins/build?jobUrl=http%3A%2F%2Fkraftics.com%3A8080%2Fjob%2FKrafticsLib%2F&style=for-the-badge)](http://kraftics.com:8080/blue/organizations/jenkins/KrafticsLib/activity)
 [![](https://img.shields.io/github/v/release/KrafticsTeam/KrafticsLib?style=for-the-badge)](https://github.com/KrafticsTeam/KrafticsLib/releases/latest)
 </div>
 

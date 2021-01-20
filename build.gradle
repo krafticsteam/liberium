@@ -5,12 +5,6 @@ plugins {
 group 'eu.kraftics'
 version 'v0.3.0'
 
-jar {
-    from {
-        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
-    }
-}
-
 repositories {
     mavenCentral()
     maven { url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/' }
@@ -22,6 +16,17 @@ dependencies {
     compile 'com.google.code.findbugs:jsr305:3.0.2'
 
     // Tests
-    testCompile 'junit:junit:4.12'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
     testCompile 'org.spigotmc:spigot-api:1.16.4-R0.1-SNAPSHOT'
+}
+
+jar {
+    from {
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
+
+test {
+    useJUnitPlatform()
 }
