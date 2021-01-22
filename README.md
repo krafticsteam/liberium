@@ -1,29 +1,34 @@
 <div align="center">
 <img src="https://i.imgur.com/aBDylq5.png" alt="KrafticsLib">
 
-![](https://img.shields.io/badge/Spigot-1.16.4--R0.1--SNAPSHOT-orange?style=for-the-badge)
+![](https://img.shields.io/badge/Spigot-1.16.5--R0.1--SNAPSHOT-orange?style=for-the-badge)
 [![](https://img.shields.io/jenkins/build?jobUrl=http%3A%2F%2Fkraftics.com%3A8080%2Fjob%2FKrafticsLib%2F&style=for-the-badge)](http://kraftics.com:8080/blue/organizations/jenkins/KrafticsLib/activity)
 [![](https://img.shields.io/github/v/release/KrafticsTeam/KrafticsLib?style=for-the-badge)](https://github.com/KrafticsTeam/KrafticsLib/releases/latest)
 </div>
 
 ## About
 
-KrafticsLib is a library originally made for plugins created by Kraftics.
+The main goal of this project is to make spigot plugin coding a lot easier.
+It can help you in different ways!
 
-The main goal of this project is to make plugin coding a lot easier.
-For now, it only contains easier database and config management.
-But that will change in the future.
+## Download
 
-## Installation
+KrafticsLib can be downloaded for free.<br>
+There are two distinct versions of KrafticsLib, development and stable.<br>
+Here are the differences:
 
-1. Download the latest build from the [releases page](https://github.com/KrafticsTeam/KrafticsLib/releases)
-2. Move the jar that you downloaded into plugins folder in your server
-3. Run the server
+| | development | stable |
+| --- | --- | --- |
+| Frequent updates | ✅ | ❌ |
+| Latest features | ✅ | ❌ |
+| Priority Support | ✅ | ❌ |
+| Testing | ❌ | ✅ |
+| Download | [Latest Build](http://kraftics.com:8080/job/KrafticsLib/lastStableBuild/) | [Latest Release](https://github.com/KrafticsTeam/KrafticsLib/releases/latest) |
 
 ## Development
 
-First of all, you need to add Kraftics Library to your project.
-You can download jar from the [releases page](https://github.com/KrafticsTeam/KrafticsLib/releases)
+First, you need to add Kraftics Library to your project.
+You can download it and add it as dependency using [section above](#Download).
 
 Or you can use one of these build tools:
 
@@ -56,7 +61,6 @@ dependencies {
   compileOnly 'com.kraftics:krafticslib:0.2.0'
 }
 ```
-Now you have KrafticsLib in your plugin.
 
 Read more:
   * [Creating a SQL Database](https://github.com/KrafticsTeam/KrafticsLib/wiki/Getting-Started#creating-a-sql-database)

@@ -5,7 +5,7 @@ pipeline {
         stage('Setup') {
             steps {
                 sh 'chmod +x gradlew'
-                sh 'echo "\nversion \'SNAPSHOT-$BUILD_NUMBER\'" >> build.gradle'
+                sh 'echo "\nversion \'$BUILD_NUMBER-SNAPSHOT\'" >> build.gradle'
             }
         }
 
