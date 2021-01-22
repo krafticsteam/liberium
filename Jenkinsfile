@@ -4,7 +4,9 @@ pipeline {
     stages {
         stage('Setup') {
             steps {
-                sh 'sudo rm -r build'
+                dir ('build') {
+                    deleteDir()
+                }
                 sh 'chmod +x gradlew'
             }
         }
