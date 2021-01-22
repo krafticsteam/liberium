@@ -5,6 +5,7 @@ pipeline {
         stage('Setup') {
             steps {
                 sh 'chmod +x gradlew'
+                sh 'echo "version \'${currentBuild.number}\'"'
             }
         }
 
@@ -23,12 +24,6 @@ pipeline {
         stage('Test') {
             steps {
                 sh './gradlew check'
-            }
-        }
-
-        stage('Deployment') {
-            steps {
-                nexusPublisher nexusInstanceId: '1', nexusRepositoryId: 'maven-releases', packages: [[$class: 'MavenPackage', mavenAssetList: [[classifier: '', extension: '', filePath: 'build/libs/*.jar']], mavenCoordinate: [artifactId: 'krafticslib-snapshot', groupId: 'com.kraftics', packaging: 'jar', version: currentBuild.number]]]
             }
         }
     }
