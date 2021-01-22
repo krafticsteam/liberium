@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('Setup') {
             steps {
-                sh 'rm -r build'
+                sh 'sudo rm -r build'
                 sh 'chmod +x gradlew'
             }
         }
