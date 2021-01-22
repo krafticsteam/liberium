@@ -2,9 +2,15 @@ pipeline {
     agent any
 
     stages {
+        stage('Setup') {
+            steps {
+                sh 'rm -r build'
+                sh 'chmod +x gradlew'
+            }
+        }
+
         stage('Build') {
             steps {
-                sh 'chmod +x gradlew'
                 sh './gradlew assemble'
             }
 
@@ -18,12 +24,6 @@ pipeline {
         stage('Test') {
             steps {
                 sh './gradlew check'
-            }
-
-            post {
-                always {
-                    junit 'build/test-results/test/*.xml'
-                }
             }
         }
 
