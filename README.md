@@ -45,7 +45,7 @@ Or you can use one of these build tools:
   <dependency>
     <groupId>com.kraftics</groupId>
     <artifactId>krafticslib</artifactId>
-    <version>0.2.0</version>
+    <version>0.3.0</version>
     <scope>provided</scope>
   </dependency>
 </dependencies>
@@ -58,7 +58,7 @@ repositories {
 }
 
 dependencies {
-  compileOnly 'com.kraftics:krafticslib:0.2.0'
+  compileOnly 'com.kraftics:krafticslib:0.3.0'
 }
 ```
 
