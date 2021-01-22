@@ -5,7 +5,7 @@ pipeline {
         stage('Setup') {
             steps {
                 sh 'chmod +x gradlew'
-                sh 'echo "version \'12\'"'
+                sh 'echo "version \'12\'" >> build.gradle'
             }
         }
 
