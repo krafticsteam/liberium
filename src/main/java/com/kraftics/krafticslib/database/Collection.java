@@ -1,22 +1,22 @@
 package com.kraftics.krafticslib.database;
 
+import org.bson.Document;
+
 import java.util.List;
 
-/**
- * Collection containing list of {@link DatabaseObject} and a name
- *
- * @see Database
- * @see DatabaseObject
- * @author Panda885
- */
 public interface Collection {
 
     String getName();
 
-    List<DatabaseObject> getObjects();
+    List<Document> find();
 
-    void addObject(DatabaseObject object);
+    List<Document> find(Document filter);
 
-    void removeObject(DatabaseObject object);
+    void insertOne(Document document);
 
+    void insertAll(List<Document> document);
+
+    void removeOne(Document filter);
+
+    void removeAll(Document filter);
 }

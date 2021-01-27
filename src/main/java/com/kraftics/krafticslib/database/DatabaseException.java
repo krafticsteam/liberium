@@ -1,15 +1,8 @@
 package com.kraftics.krafticslib.database;
 
-/**
- * Exception using when {@link Database} error occurs
- *
- * @see Database
- * @author Panda885
- */
-public class DatabaseException extends Exception {
+public class DatabaseException extends RuntimeException {
 
     public DatabaseException() {
-        super();
     }
 
     public DatabaseException(String message) {

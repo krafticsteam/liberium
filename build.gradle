@@ -17,6 +17,8 @@ dependencies {
     compile 'org.xerial:sqlite-jdbc:3.8.11.2'
     compile 'com.google.code.findbugs:jsr305:3.0.2'
 
+    compile 'org.mongodb:mongodb-driver-sync:4.1.1'
+
     // Tests
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
