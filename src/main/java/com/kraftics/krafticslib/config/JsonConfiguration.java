@@ -104,7 +104,8 @@ public class JsonConfiguration extends FileConfiguration {
             }
         }
 
-        options().header(builder.substring(0, builder.length() - 1));
+        String header = builder.length() == 0 ? "" : builder.substring(0, builder.length() - 1);
+        options().header(header.isEmpty() ? null : header);
     }
 
     @Override

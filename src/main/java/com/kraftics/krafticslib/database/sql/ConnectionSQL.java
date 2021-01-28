@@ -2,7 +2,6 @@ package com.kraftics.krafticslib.database.sql;
 
 import com.kraftics.krafticslib.database.DatabaseException;
 import com.kraftics.krafticslib.utils.ConsumerSQL;
-import com.kraftics.krafticslib.utils.SQLUtils;
 import org.apache.commons.lang.Validate;
 
 import javax.annotation.Nonnull;
@@ -34,8 +33,6 @@ public class ConnectionSQL {
      */
     public ConnectionSQL(@Nonnull String url, @Nullable String username, @Nullable String password) throws DatabaseException {
         Validate.notNull(url, "URL cannot be null");
-
-        SQLUtils.checkForDrivers();
 
         this.url = url;
         this.username = username;
