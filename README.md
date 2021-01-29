@@ -13,17 +13,7 @@ It can help you in different ways!
 
 ## Download
 
-KrafticsLib can be downloaded for free.<br>
-There are two distinct versions of KrafticsLib, development and stable.<br>
-Here are the differences:
-
-| | development | stable |
-| --- | --- | --- |
-| Frequent updates | ✅ | ❌ |
-| Latest features | ✅ | ❌ |
-| Priority Support | ✅ | ❌ |
-| Testing | ❌ | ✅ |
-| Download | [Latest Build](http://kraftics.com:8080/job/KrafticsLib/lastStableBuild/) | [Latest Release](https://github.com/KrafticsTeam/KrafticsLib/releases/latest) |
+You can download KrafticsLib from the [release page](https://github.com/KrafticsTeam/KrafticsLib/releases).
 
 ## Development
 
