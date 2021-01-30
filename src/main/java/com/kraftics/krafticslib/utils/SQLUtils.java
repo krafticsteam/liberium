@@ -14,6 +14,20 @@ import java.util.Set;
 public class SQLUtils {
 
     /**
+     * Checks if the JDBC and DriverManager drivers exists
+     *
+     * @throws DatabaseException If can't find one of the drivers
+     */
+    public static void checkForDrivers() throws DatabaseException {
+        try {
+            Class.forName("org.sqlite.JDBC");
+            Class.forName("java.sql.DriverManager");
+        } catch (ClassNotFoundException e) {
+            throw new DatabaseException("Could not find drivers", e);
+        }
+    }
+
+    /**
      * Builds list of documents from a ResultSet
      *
      * @param rs the ResultSet

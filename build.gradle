@@ -19,10 +19,9 @@ dependencies {
     compile 'com.google.code.findbugs:jsr305:3.0.2'
     compile 'org.mongodb:bson:4.2.0'
 
-    // Tests
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
+    testImplementation 'org.spigotmc:spigot-api:1.16.5-R0.1-SNAPSHOT'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
-    testCompile 'org.spigotmc:spigot-api:1.16.5-R0.1-SNAPSHOT'
 }
 
 test {
