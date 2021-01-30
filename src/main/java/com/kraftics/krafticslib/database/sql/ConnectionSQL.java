@@ -113,6 +113,7 @@ public class ConnectionSQL {
      * @param sql The SQL statement
      * @param args Arguments replacing the ? character
      * @throws DatabaseException If something went wrong
+     * @return The output from the query
      */
     @Nonnull
     public ResultSet query(String sql, Object... args) throws DatabaseException {
@@ -138,6 +139,7 @@ public class ConnectionSQL {
      * Prepares a query statement and executes it.
      * At the end it automatically closes
      *
+     * @param run What do you want to do with the ResultSet?
      * @param sql The SQL statement
      * @param args Arguments replacing the ? character
      * @throws DatabaseException If something went wrong
