@@ -1,6 +1,6 @@
 name: KrafticsLib
 version: 0.4.0
-main: com.kraftics.krafticslib.KrafticsLibPlugin
+main: com.kraftics.krafticslib.KrafticsLib
 description: Library for kraftics plugins
 author: Kraftics
 load: STARTUP

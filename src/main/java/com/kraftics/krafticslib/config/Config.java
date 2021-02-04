@@ -1,7 +1,11 @@
 package com.kraftics.krafticslib.config;
 
+import org.bukkit.configuration.Configuration;
+import org.bukkit.configuration.ConfigurationOptions;
 import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.configuration.MemoryConfigurationOptions;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.FileConfigurationOptions;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -11,7 +15,8 @@ import java.util.function.Supplier;
 import java.util.logging.Level;
 
 /**
- * Custom configuration
+ * Custom configuration containing file with the configuration
+ * and some useful settings/methods.
  *
  * @since v0.3.0
  * @see FileConfiguration
@@ -22,7 +27,6 @@ public abstract class Config extends FileConfiguration {
     protected File file;
 
     protected boolean log;
-    protected boolean defaults;
 
     protected FileConfiguration original;
 
@@ -35,13 +39,14 @@ public abstract class Config extends FileConfiguration {
      * @param defaults If should load defaults from class-path
      * @param supp A supplier generating the original {@link FileConfiguration}
      */
-    public Config(@Nonnull JavaPlugin plugin, @Nonnull File file, boolean log, boolean defaults,
-                  @Nonnull Supplier<FileConfiguration> supp) {
+    public Config(@Nonnull JavaPlugin plugin, @Nonnull File file, boolean log, boolean defaults, @Nonnull Supplier<FileConfiguration> supp) {
         this.plugin = plugin;
         this.file = file;
         this.log = log;
-        this.defaults = defaults;
         this.original = supp.get();
+
+        options().copyDefaults(defaults);
+        options().copyHeader(true);
     }
 
     /**
@@ -69,8 +74,8 @@ public abstract class Config extends FileConfiguration {
     }
 
     /**
-     * Loads data from the file
-     * Also loads defaults if they are enabled
+     * Loads data from the file.
+     * Also loads defaults if they are enabled.
      *
      * @return True if loading was successful
      */
@@ -78,16 +83,14 @@ public abstract class Config extends FileConfiguration {
         try {
             load(file);
 
-            if (!defaults) return true;
+            if (!options().copyDefaults()) return true;
 
             try {
                 InputStream resource = plugin.getResource(file.getName());
-                if (resource != null)
-                    setDefaults(createDefaults(resource));
+                if (resource != null) setDefaults(createDefaults(resource));
                 return true;
             } catch (Exception e) {
-                if (log)
-                    plugin.getLogger().log(Level.SEVERE, "Could not load defaults from config " + file.getName(), e);
+                if (log) plugin.getLogger().log(Level.SEVERE, "Could not load defaults from config " + file.getName(), e);
                 return false;
             }
         } catch (Exception e) {
@@ -96,12 +99,41 @@ public abstract class Config extends FileConfiguration {
         }
     }
 
+    /**
+     * Copies options from one configuration options to another.
+     *
+     * @param from From configration
+     * @param to To configuration
+     */
+    protected void copyOptions(FileConfiguration from, FileConfiguration to) {
+        to.options().copyDefaults(from.options().copyDefaults());
+        to.options().copyHeader(from.options().copyHeader());
+        to.options().header(from.options().header());
+        to.options().pathSeparator(from.options().pathSeparator());
+
+        Configuration defaults = from.getDefaults();
+        if (defaults == null) return;
+        to.setDefaults(defaults);
+    }
+
+    /**
+     * Saves data to string
+     *
+     * @return the data
+     */
     @Override
     @Nonnull
     public String saveToString() {
+        copyOptions(this, original);
         return original.saveToString();
     }
 
+    /**
+     * Loads data from string
+     *
+     * @param contents String containing the data
+     * @throws InvalidConfigurationException If could not load the data
+     */
     @Override
     public void loadFromString(@Nonnull String contents) throws InvalidConfigurationException {
         original.loadFromString(contents);
@@ -109,7 +141,6 @@ public abstract class Config extends FileConfiguration {
 
     /**
      * <strong>UNSUPPORTED</strong>,
-     * use {@link Config#original()}.{@link FileConfiguration#buildHeader() buildHeader()}
      */
     @Override
     @Nonnull
@@ -150,7 +181,7 @@ public abstract class Config extends FileConfiguration {
      * @return If defaults are enabled
      */
     public boolean defaults() {
-        return defaults;
+        return options().copyDefaults();
     }
 
     /**
@@ -164,6 +195,21 @@ public abstract class Config extends FileConfiguration {
      * @param defaults If defaults should be enabled
      */
     public void defaults(boolean defaults) {
-        this.defaults = defaults;
+        options().copyDefaults(defaults);
+    }
+
+    public boolean createFile() {
+        try {
+            File parent = file.getParentFile();
+            if (parent != null && !parent.exists()) {
+                parent.mkdirs();
+            }
+
+            file.createNewFile();
+            return true;
+        } catch (IOException e) {
+            if (log) plugin.getLogger().log(Level.SEVERE, "Could not create file " + file.getName(), e);
+            return false;
+        }
     }
 }
