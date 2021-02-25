@@ -1,0 +1,4 @@
+dependencies {
+    compile project(':command')
+    compile project(':packet')
+}

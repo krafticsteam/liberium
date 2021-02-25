@@ -1,0 +1,8 @@
+name: 'KrafticsLib'
+version: '1.0.0'
+main: 'com.kraftics.krafticslib.KrafticsLibPlugin'
+
+description: 'Spigot library to make plugin coding fun and easier'
+load: 'STARTUP'
+author: 'Kraftics Team'
+website: 'https://kraftics.com/krafticslib'
