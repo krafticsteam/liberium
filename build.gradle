@@ -11,9 +11,9 @@ ext {
     project_url = 'https://kraftics.com/krafticslib'
     project_jdk = '1.8'
 
-    artifact_group = 'com.kraftics'
+    project_group = 'com.kraftics'
 
-    isRelease = !project_version.toString().endsWith('-SNAPSHOT')
+    isRelease = !project_version.toString().contains('SNAPSHOT')
 }
 
 allprojects {
@@ -21,7 +21,7 @@ allprojects {
     apply plugin: 'maven-publish'
     apply plugin: 'signing'
 
-    group = artifact_group
+    group = project_group
     version = project_version
     description = project_description
 
@@ -38,11 +38,11 @@ allprojects {
         compileOnly 'org.spigotmc:spigot-api:1.16.5-R0.1-SNAPSHOT'
     }
 
+    // Configuring jars
+
     jar {
         from {
-            if (configurations.compile.canBeResolved) {
-                configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
-            }
+            configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
         }
     }
 
@@ -62,82 +62,10 @@ allprojects {
 
 subprojects {
     archivesBaseName = "krafticslib-$project.name"
-
-    publishing {
-        publications {
-            mavenJava(MavenPublication) {
-                from components.java
-
-                groupId = artifact_group
-                artifactId = archivesBaseName
-                version = project_version
-
-                pom {
-                    name = project_name
-                    description = project_description
-                    url = project_url
-
-                    organization {
-                        name = 'Kraftics'
-                        url = 'http://kraftics.com'
-                    }
-
-                    licenses {
-                        license {
-                            name = 'MIT'
-                            url = 'https://raw.githubusercontent.com/KrafticsTeam/KrafticsLib/master/LICENSE'
-                            distribution = 'repo'
-                        }
-                    }
-
-                    scm {
-                        url = 'https://github.com/KrafticsTeam/KrafticsLib'
-                        connection = 'scm:git:git://github.com/KrafticsTeam/KrafticsLib.git'
-                        developerConnection = 'scm:git:ssh://git@github.com:KrafticsTeam/KrafticsLib.git'
-                    }
-
-                    developers {
-                        developer {
-                            name = 'Kraftics Team'
-                        }
-                    }
-                }
-
-            }
-        }
-
-        repositories {
-            maven {
-                if (isRelease) {
-                    url 'https://oss.sonatype.org/service/local/staging/deploy/maven2'
-                } else {
-                    url 'https://oss.sonatype.org/content/repositories/snapshots/'
-                }
-
-                def sonatypeUsername = findProperty('sonatypeUsername')
-                def sonatypePassword = findProperty('sonatypePassword')
-                if (sonatypeUsername != null && sonatypePassword != null) {
-                    credentials {
-                        username = sonatypeUsername
-                        password = sonatypePassword
-                    }
-                }
-            }
-        }
-    }
-
-    if (isRelease) {
-        signing {
-            def signingKey = findProperty('signingKey')
-            def signingPassword = findProperty('signingPassword')
-            if (signingKey != null && signingPassword != null) {
-                useInMemoryPgpKeys(signingKey as String, signingPassword as String)
-            }
-            sign publishing.publications.mavenJava
-        }
-    }
 }
 
-gradle.buildFinished {
-    project.buildDir.deleteDir()
+build {
+    doLast {
+        buildDir.deleteDir()
+    }
 }
