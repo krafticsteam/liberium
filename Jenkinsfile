@@ -23,6 +23,7 @@ pipeline {
         stage('Test') {
             steps {
                 sh './gradlew check'
+
                 junit '*/build/test-results/test/*.xml'
             }
         }
