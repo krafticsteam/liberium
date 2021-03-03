@@ -24,7 +24,9 @@ pipeline {
             steps {
                 sh './gradlew check'
 
-                junit '*/build/test-results/test/*.xml'
+                withChecks('Tests') {
+                    junit '*/build/test-results/test/*.xml'
+                }
             }
         }
     }
