@@ -1,22 +1,25 @@
 <div align="center">
-<img src="https://i.imgur.com/aBDylq5.png" alt="KrafticsLib">
+<img width="100px" src="https://i.imgur.com/89WxGsY.png" alt="KrafticsLib">
+<h2>KrafticsLib</h2>
 
-![](https://img.shields.io/badge/Spigot-1.16.5--R0.1--SNAPSHOT-orange?style=for-the-badge)
-[![](https://img.shields.io/jenkins/build?jobUrl=http%3A%2F%2Fkraftics.com%3A8080%2Fjob%2FKrafticsTeam%2Fjob%2FKrafticsLib%2Fjob%2Fmaster%2F&style=for-the-badge)](http://kraftics.com:8080/blue/organizations/jenkins/KrafticsTeam%2FKrafticsLib/branches)
-[![](https://img.shields.io/github/v/release/KrafticsTeam/KrafticsLib?style=for-the-badge)](https://github.com/KrafticsTeam/KrafticsLib/releases/latest)
+<p align="center">
+Make your spigot plugin coding easier
+</p>
+
+[![Spigot](https://img.shields.io/badge/spigot-1.16.5-orange?style=flat-square)](https://www.spigotmc.org/resources/krafticslib.87566/)
+[![Build](https://img.shields.io/jenkins/build?jobUrl=http%3A%2F%2Fkraftics.com%3A8080%2Fjob%2FKrafticsTeam%2Fjob%2FKrafticsLib%2Fjob%2Fmaster%2F&style=flat-square)](http://kraftics.com:8080/blue/organizations/jenkins/KrafticsTeam%2FKrafticsLib/branches)
+[![Code Quality](https://img.shields.io/codacy/grade/044caacce18f4352953380ecdf0e868b?style=flat-square)](https://app.codacy.com/gh/KrafticsTeam/KrafticsLib/dashboard)
+[![Release](https://img.shields.io/github/v/release/KrafticsTeam/KrafticsLib?style=flat-square)](https://github.com/KrafticsTeam/KrafticsLib/releases/latest)
+[![Servers](https://img.shields.io/bstats/servers/9916?style=flat-square)](https://bstats.org/plugin/bukkit/KrafticsLib/9916)
 </div>
 
-## About
-
-The main goal of this project is to make spigot plugin coding fun and easier.
-
-## Installation
+# Installation
 
 1.  Download KrafticsLib from the [release page](https://github.com/KrafticsTeam/KrafticsLib/releases)
 2.  Put the downloaded jar into plugins folder in your's server
 3.  Run the server
 
-## Development
+# Development
 
 You can download KrafticsLib from the [release page](https://github.com/KrafticsTeam/KrafticsLib/releases),
 or use one of these build tools (replace `(latest_version)` with latest version):
@@ -36,7 +39,7 @@ or use one of these build tools (replace `(latest_version)` with latest version)
 compileOnly 'com.kraftics:krafticslib-core:(latest_version)'
 ```
 
-## Contributing
+# Contributing
 
 Do you like this project and want to contribute?<br>
 You can post ideas, bug reports and pull request at the [issue tracker](https://github.com/KrafticsTeam/KrafticsLib/issues)
