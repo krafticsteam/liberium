@@ -24,7 +24,8 @@ public class TabContext {
     }
 
     public static TabContext create(CommandSender sender, String input) {
-        String[] split = input.split(" ");
+        String[] split = input.split(" ", -1);
+        if (split.length <= 1) return new TabContext(sender, input, null, -1, new ArrayList<>());
         List<String> arguments = Arrays.asList(split).subList(1, split.length);
         int index = arguments.size() - 1;
         return new TabContext(sender, input, arguments.get(index), index, arguments);

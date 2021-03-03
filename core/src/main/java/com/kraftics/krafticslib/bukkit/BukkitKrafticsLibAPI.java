@@ -4,7 +4,12 @@ import com.kraftics.krafticslib.KrafticsLibAPI;
 import com.kraftics.krafticslib.command.CommandDispatcher;
 import com.kraftics.krafticslib.packet.PacketProcessor;
 import com.kraftics.krafticslib.packet.Reflection;
+import org.bukkit.Bukkit;
+import org.bukkit.command.CommandMap;
 import org.bukkit.plugin.Plugin;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 public class BukkitKrafticsLibAPI implements KrafticsLibAPI {
     private final Plugin plugin;
@@ -16,7 +21,7 @@ public class BukkitKrafticsLibAPI implements KrafticsLibAPI {
         this.plugin = plugin;
         this.reflection = new Reflection();
         this.packetProcessor = new PacketProcessor(this.reflection);
-        this.commandDispatcher = new CommandDispatcher();
+        this.commandDispatcher = new CommandDispatcher(getCommandMap());
     }
 
     @Override
@@ -32,5 +37,17 @@ public class BukkitKrafticsLibAPI implements KrafticsLibAPI {
     @Override
     public CommandDispatcher getCommandDispatcher() {
         return commandDispatcher;
+    }
+
+    private CommandMap getCommandMap() {
+        try {
+            Class<?> craftServerClass = reflection.getCraftClass("CraftServer");
+            if (craftServerClass == null) throw new IllegalStateException("Could not get craft server");
+            Object craftServer = craftServerClass.cast(Bukkit.getServer());
+            Method method = craftServerClass.getMethod("getCommandMap");
+            return (CommandMap) method.invoke(craftServer);
+        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+            throw new IllegalStateException("Could not get command map", e);
+        }
     }
 }

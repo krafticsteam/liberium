@@ -10,6 +10,8 @@ public class LibCommand extends org.bukkit.command.Command {
 
     protected LibCommand(Command command) {
         super(command.getName(), command.getDescription(), "/" + command.getName(), command.getAliases());
+        setPermission(command.getPermission());
+        setPermissionMessage(command.getPermissionMessage());
 
         this.command = command;
     }

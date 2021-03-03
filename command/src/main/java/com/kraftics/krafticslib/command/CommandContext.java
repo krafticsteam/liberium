@@ -21,7 +21,7 @@ public class CommandContext {
     }
 
     public static CommandContext create(CommandSender sender, String message) {
-        String[] split = message.split(" ");
+        String[] split = message.split(" ", -1);
 
         if (split.length <= 1) return new CommandContext(sender, message, Collections.emptyList(), Collections.emptyList());
 
