@@ -13,13 +13,13 @@ Make your spigot plugin coding easier
 [![Servers](https://img.shields.io/bstats/servers/9916?style=flat-square)](https://bstats.org/plugin/bukkit/KrafticsLib/9916)
 </div>
 
-# Installation
+## Installation
 
 1.  Download KrafticsLib from the [release page](https://github.com/KrafticsTeam/KrafticsLib/releases)
 2.  Put the downloaded jar into plugins folder in your's server
 3.  Run the server
 
-# Development
+## Development
 
 You can download KrafticsLib from the [release page](https://github.com/KrafticsTeam/KrafticsLib/releases),
 or use one of these build tools (replace `(latest_version)` with latest version):
@@ -39,7 +39,7 @@ or use one of these build tools (replace `(latest_version)` with latest version)
 compileOnly 'com.kraftics:krafticslib-core:(latest_version)'
 ```
 
-# Contributing
+## Contributing
 
 Do you like this project and want to contribute?<br>
 You can post ideas, bug reports and pull request at the [issue tracker](https://github.com/KrafticsTeam/KrafticsLib/issues)
