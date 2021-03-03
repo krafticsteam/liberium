@@ -2,6 +2,7 @@
 <img src="https://i.imgur.com/aBDylq5.png" alt="KrafticsLib">
 
 ![](https://img.shields.io/badge/Spigot-1.16.5--R0.1--SNAPSHOT-orange?style=for-the-badge)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/53d0ebba5cb648c6aafbb355939b054c)](https://app.codacy.com/gh/KrafticsTeam/KrafticsLib?utm_source=github.com&utm_medium=referral&utm_content=KrafticsTeam/KrafticsLib&utm_campaign=Badge_Grade_Settings)
 [![](https://img.shields.io/jenkins/build?jobUrl=http%3A%2F%2Fkraftics.com%3A8080%2Fjob%2FKrafticsTeam%2Fjob%2FKrafticsLib%2Fjob%2Fmaster%2F&style=for-the-badge)](http://kraftics.com:8080/blue/organizations/jenkins/KrafticsTeam%2FKrafticsLib/branches)
 [![](https://img.shields.io/github/v/release/KrafticsTeam/KrafticsLib?style=for-the-badge)](https://github.com/KrafticsTeam/KrafticsLib/releases/latest)
 </div>
