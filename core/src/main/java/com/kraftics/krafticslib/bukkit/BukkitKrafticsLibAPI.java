@@ -50,4 +50,8 @@ public class BukkitKrafticsLibAPI implements KrafticsLibAPI {
             throw new IllegalStateException("Could not get command map", e);
         }
     }
+
+    public Plugin getPlugin() {
+        return plugin;
+    }
 }

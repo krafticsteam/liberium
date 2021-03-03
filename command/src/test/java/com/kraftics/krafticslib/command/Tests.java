@@ -8,6 +8,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 public class Tests {
     private CommandDispatcher dispatcher;
     private TestCommand testCommand;
@@ -22,13 +25,13 @@ public class Tests {
         dispatcher.register(testCommand);
 
         commandMap.dispatch(null, "test");
-        Assertions.assertTrue(testCommand.isExecuted());
+        assertTrue(testCommand.isExecuted());
         List<String> list = commandMap.tabComplete(null, "test ");
-        Assertions.assertEquals(Arrays.asList("test", "test2"), list);
+        assertEquals(Arrays.asList("test", "test2"), list);
         list = commandMap.tabComplete(null, "test test ");
-        Assertions.assertEquals(new ArrayList<>(), list);
+        assertEquals(new ArrayList<>(), list);
         list = commandMap.tabComplete(null, "test");
-        Assertions.assertEquals(new ArrayList<>(), list);
+        assertEquals(new ArrayList<>(), list);
     }
 }
 

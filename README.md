@@ -12,9 +12,9 @@ The main goal of this project is to make spigot plugin coding fun and easier.
 
 ## Installation
 
-1. Download KrafticsLib from the [release page](https://github.com/KrafticsTeam/KrafticsLib/releases)
-2. Put the downloaded jar into plugins folder in your's server
-3. Run the server
+1.  Download KrafticsLib from the [release page](https://github.com/KrafticsTeam/KrafticsLib/releases)
+2.  Put the downloaded jar into plugins folder in your's server
+3.  Run the server
 
 ## Development
 
