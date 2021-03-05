@@ -1,7 +1,6 @@
 <div align="center">
 <img width="100px" src="https://i.imgur.com/89WxGsY.png" alt="KrafticsLib">
-<h2>KrafticsLib</h2>
-
+<h1>KrafticsLib</h1>
 <p align="center">
 Make your spigot plugin coding easier
 </p>

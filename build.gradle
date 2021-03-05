@@ -4,9 +4,11 @@ plugins {
     id 'signing'
 }
 
+// Constants
 ext {
     project_name = 'KrafticsLib'
-    project_version = System.properties['version'] != null ? System.properties['version'].toString() : "1.0.0"
+    project_version_suffix = System.properties['versionsuf'] != null ? System.properties['versionsuf'].toString() : ""
+    project_version = (System.properties['version'] != null ? System.properties['version'].toString() : "1.0.0-SNAPSHOT.1") + project_version_suffix
     project_description = 'Spigot library to make plugin coding fun and easier'
     project_url = 'https://kraftics.com/krafticslib'
     project_jdk = '1.8'
@@ -70,7 +72,68 @@ allprojects {
 
 subprojects {
     archivesBaseName = "krafticslib-$project.name"
+
+    // Maven central publishing
+
+    publishing {
+        publications {
+            mavenJava(MavenPublication) {
+                from components.java
+                artifactId = archivesBaseName
+                groupId = 'com.kraftics'
+                version = project_version
+
+                pom {
+                    name = 'KrafticsLib'
+                    description = project_description
+                    url = 'https://github.com/KrafticsTeam/KrafticsLib'
+
+                    organization {
+                        name = 'KrafticsTeam'
+                        url = 'https://kraftics.com'
+                    }
+
+                    licenses {
+                        license {
+                            name = 'MIT'
+                            url = 'https://github.com/KrafticsTeam/KrafticsLib/blob/master/LICENSE'
+                            distribution = 'repo'
+                        }
+                    }
+
+                    scm {
+                        url = 'https://github.com/KrafticsTeam/KrafticsLib'
+                        connection = 'scm:git:git://github.com/KrafticsTeam/KrafticsLib.git'
+                        developerConnection = 'scm:git:ssh://git@github.com:KrafticsTeam/KrafticsLib.git'
+                    }
+
+                    developers {
+                        developer {
+                            name = 'KrafticsTeam'
+                        }
+                    }
+                }
+            }
+        }
+
+        repositories {
+            maven {
+                url 'https://oss.sonatype.org/content/repositories/snapshots/'
+                def sonatypeUsername = findProperty('sonatypeUsername')
+                def sonatypePassword = findProperty('sonatypePassword')
+
+                if (sonatypeUsername != null && sonatypePassword != null) {
+                    credentials {
+                        username = sonatypeUsername
+                        password = sonatypePassword
+                    }
+                }
+            }
+        }
+    }
 }
+
+// Removing the parent build dir
 
 build {
     doLast {
