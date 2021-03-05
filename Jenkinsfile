@@ -10,7 +10,7 @@ pipeline {
 
         stage('Build') {
             steps {
-                sh "./gradlew assemble testClasses -Dversionsuf=+{$currentBuild.number}"
+                sh "./gradlew assemble testClasses -Dversionsuf=+$currentBuild.number"
             }
 
             post {
@@ -22,7 +22,7 @@ pipeline {
 
         stage('Test') {
             steps {
-                sh "./gradlew check -Dversionsuf=+{$currentBuild.number}"
+                sh "./gradlew check -Dversionsuf=+$currentBuild.number"
 
                 withChecks('Tests') {
                     junit '*/build/test-results/test/*.xml'
