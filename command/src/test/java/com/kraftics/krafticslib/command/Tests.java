@@ -22,7 +22,7 @@ public class Tests {
 
         commandMap.dispatch(new FakeCommandSender(), "test");
         assertTrue(testCommand.isExecuted());
-        List<String> list = commandMap.tabComplete(null, "test ");
+        List<String> list = commandMap.tabComplete(new FakeCommandSender(), "test ");
         assertEquals(Arrays.asList("test", "test2"), list);
         list = commandMap.tabComplete(new FakeCommandSender(), "test test ");
         assertEquals(new ArrayList<>(), list);
