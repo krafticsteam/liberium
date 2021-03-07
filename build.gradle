@@ -47,6 +47,8 @@ allprojects {
 
     test {
         useJUnitPlatform()
+
+        ignoreFailures true
     }
 
     // Configuring jars
@@ -119,7 +121,12 @@ subprojects {
 
         repositories {
             maven {
-                url 'https://oss.sonatype.org/content/repositories/snapshots/'
+                if (isRelease) {
+                    url 'https://oss.sonatype.org/service/local/staging/deploy/maven2'
+                } else {
+                    url 'https://oss.sonatype.org/content/repositories/snapshots/'
+                }
+
                 def sonatypeUsername = findProperty('sonatypeUsername')
                 def sonatypePassword = findProperty('sonatypePassword')
 
@@ -130,6 +137,12 @@ subprojects {
                     }
                 }
             }
+        }
+    }
+
+    if (isRelease) {
+        signing {
+            sign publishing.publications.mavenJava
         }
     }
 }

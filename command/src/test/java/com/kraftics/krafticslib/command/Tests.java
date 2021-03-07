@@ -20,13 +20,13 @@ public class Tests {
 
         dispatcher.register(testCommand);
 
-        commandMap.dispatch(null, "test");
+        commandMap.dispatch(new FakeCommandSender(), "test");
         assertTrue(testCommand.isExecuted());
         List<String> list = commandMap.tabComplete(null, "test ");
         assertEquals(Arrays.asList("test", "test2"), list);
-        list = commandMap.tabComplete(null, "test test ");
+        list = commandMap.tabComplete(new FakeCommandSender(), "test test ");
         assertEquals(new ArrayList<>(), list);
-        list = commandMap.tabComplete(null, "test");
+        list = commandMap.tabComplete(new FakeCommandSender(), "test");
         assertEquals(new ArrayList<>(), list);
     }
 }
