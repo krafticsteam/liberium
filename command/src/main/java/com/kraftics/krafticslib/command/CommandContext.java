@@ -29,7 +29,7 @@ public class CommandContext {
         List<String> args = new ArrayList<>();
 
         for (int i = 1; i < split.length; i++) {
-            String argument = split[0];
+            String argument = split[i];
             if (argument.startsWith("-")) {
                 flags.add(argument.substring(1));
             } else {
