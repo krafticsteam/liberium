@@ -15,7 +15,7 @@ public class Tests {
     @Test
     public void test() {
         CommandMap commandMap = new FakeCommandMap();
-        CommandDispatcher dispatcher = new CommandDispatcher(commandMap);
+        CommandDispatcher dispatcher = new CommandDispatcher("test", commandMap);
         TestCommand testCommand = new TestCommand();
 
         dispatcher.register(testCommand);

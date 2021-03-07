@@ -7,9 +7,11 @@ import com.kraftics.krafticslib.packet.Reflection;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandMap;
 import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Locale;
 
 public class BukkitKrafticsLibAPI implements KrafticsLibAPI {
     private final Plugin plugin;
@@ -21,20 +23,23 @@ public class BukkitKrafticsLibAPI implements KrafticsLibAPI {
         this.plugin = plugin;
         this.reflection = new Reflection();
         this.packetProcessor = new PacketProcessor(this.reflection);
-        this.commandDispatcher = new CommandDispatcher(getCommandMap());
+        this.commandDispatcher = new CommandDispatcher(plugin.getName().toLowerCase(Locale.ROOT), getCommandMap());
     }
 
     @Override
+    @NotNull
     public Reflection getReflection() {
         return reflection;
     }
 
     @Override
+    @NotNull
     public PacketProcessor getPacketProcessor() {
         return packetProcessor;
     }
 
     @Override
+    @NotNull
     public CommandDispatcher getCommandDispatcher() {
         return commandDispatcher;
     }

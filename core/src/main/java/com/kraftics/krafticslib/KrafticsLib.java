@@ -2,12 +2,15 @@ package com.kraftics.krafticslib;
 
 import com.kraftics.krafticslib.bukkit.BukkitKrafticsLibAPI;
 import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashSet;
 import java.util.Set;
 
 /**
  * This class is used to create or manage apis
+ *
+ * @author Panda885
  */
 public class KrafticsLib {
     private static Set<KrafticsLibAPI> apis = new HashSet<>();
@@ -18,6 +21,7 @@ public class KrafticsLib {
      * @param plugin The plugin using this api
      * @return The api
      */
+    @NotNull
     public static KrafticsLibAPI create(Plugin plugin) {
         KrafticsLibAPI api = new BukkitKrafticsLibAPI(plugin);
         apis.add(api);

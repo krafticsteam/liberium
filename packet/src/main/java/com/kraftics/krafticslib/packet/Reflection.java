@@ -1,6 +1,9 @@
 package com.kraftics.krafticslib.packet;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Reflection handler for NMS and CraftBukkit.
@@ -13,7 +16,7 @@ import org.bukkit.Bukkit;
  * @since 1.0.0
  */
 public class Reflection {
-    private String version;
+    private final String version;
 
     /**
      * Creates an instance with the entered version
@@ -39,6 +42,7 @@ public class Reflection {
      * @throws IllegalStateException if the version could not be detected
      * @return the detected version
      */
+    @NotNull
     public static String detectVersion() throws IllegalStateException {
         try {
             return Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
@@ -53,7 +57,10 @@ public class Reflection {
      * @param path path (name) of the class
      * @return the NMS class, null if not found
      */
-    public Class<?> getNMSClass(String path) {
+    @Nullable
+    public Class<?> getNMSClass(@NotNull String path) {
+        Validate.notNull(path, "Path cannot be null");
+
         try {
             return Class.forName("net.minecraft.server." + version + '.' + path);
         } catch (ClassNotFoundException e) {
@@ -67,7 +74,10 @@ public class Reflection {
      * @param path path (name) of the class
      * @return the CraftBukkit class, null if not found
      */
-    public Class<?> getCraftClass(String path) {
+    @Nullable
+    public Class<?> getCraftClass(@NotNull String path) {
+        Validate.notNull(path, "Path cannot be null");
+
         try {
             return Class.forName("org.bukkit.craftbukkit." + version + '.' + path);
         } catch (ClassNotFoundException e) {

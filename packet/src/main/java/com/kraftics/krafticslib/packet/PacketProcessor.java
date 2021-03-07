@@ -1,6 +1,8 @@
 package com.kraftics.krafticslib.packet;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
@@ -30,7 +32,9 @@ public class PacketProcessor {
      * @param reflection Reflection this packet processor should use.
      * @throws IllegalArgumentException If the reflection is invalid.
      */
-    public PacketProcessor(Reflection reflection) throws IllegalArgumentException {
+    public PacketProcessor(@NotNull Reflection reflection) throws IllegalArgumentException {
+        Validate.notNull(reflection, "Reflection cannot be null");
+
         this.reflection = reflection;
 
         try {
@@ -56,7 +60,10 @@ public class PacketProcessor {
      * @param packet the packet
      * @return if the packet was successfully sent
      */
-    public boolean sendPacket(Player player, Object packet) {
+    public boolean sendPacket(@NotNull Player player, @NotNull Object packet) {
+        Validate.notNull(player, "Player cannot be null");
+        Validate.notNull(packet, "Packet cannot be null");
+
         try {
             Object connection = getPlayerConnection(player);
             if (connection == null) return false;
@@ -75,7 +82,9 @@ public class PacketProcessor {
      * @param player the player
      * @return the connection, possibly null
      */
-    public Object getPlayerConnection(Player player) throws IllegalStateException {
+    public Object getPlayerConnection(@NotNull Player player) throws IllegalStateException {
+        Validate.notNull(player, "Player cannot be null");
+
         try {
             Object handle = getHandle.invoke(player);
             return playerConnection.invoke(handle);
@@ -91,7 +100,9 @@ public class PacketProcessor {
      * @param player the player
      * @return the ping
      */
-    public int getPing(Player player) {
+    public int getPing(@NotNull Player player) {
+        Validate.notNull(player, "Player cannot be null");
+
         try {
             Object handle = getHandle.invoke(player);
             return (int) ping.invoke(handle);
