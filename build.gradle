@@ -15,7 +15,7 @@ ext {
 
     project_group = 'com.kraftics'
 
-    isRelease = !project_version.toString().contains('SNAPSHOT')
+    isRelease = !project_version.toString().contains('snapshot')
 }
 
 allprojects {
@@ -33,7 +33,6 @@ allprojects {
     repositories {
         mavenCentral()
         maven { url 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/' }
-        maven { url "https://libraries.minecraft.net" }
     }
 
     dependencies {

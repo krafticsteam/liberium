@@ -13,24 +13,34 @@ import java.util.Set;
 import java.util.UUID;
 
 public class FakeCommandSender implements CommandSender {
+    public String name;
+    public boolean op;
+
+    public FakeCommandSender(String name) {
+        this.name = name;
+        this.op = false;
+    }
+
     @Override
     public void sendMessage(@NotNull String message) {
-
+        System.out.println("send message: '" + message + "'");
     }
 
     @Override
     public void sendMessage(@NotNull String[] messages) {
-
+        for (String message : messages) {
+            sendMessage(message);
+        }
     }
 
     @Override
     public void sendMessage(@Nullable UUID sender, @NotNull String message) {
-
+        sendMessage(message);
     }
 
     @Override
     public void sendMessage(@Nullable UUID sender, @NotNull String[] messages) {
-
+        sendMessage(messages);
     }
 
     @NotNull
@@ -42,7 +52,7 @@ public class FakeCommandSender implements CommandSender {
     @NotNull
     @Override
     public String getName() {
-        return null;
+        return name;
     }
 
     @NotNull
@@ -97,12 +107,12 @@ public class FakeCommandSender implements CommandSender {
 
     @Override
     public void removeAttachment(@NotNull PermissionAttachment attachment) {
-
+        System.out.println("remove attachment");
     }
 
     @Override
     public void recalculatePermissions() {
-
+        System.out.println("recalculate permissions");
     }
 
     @NotNull
@@ -113,11 +123,11 @@ public class FakeCommandSender implements CommandSender {
 
     @Override
     public boolean isOp() {
-        return false;
+        return op;
     }
 
     @Override
     public void setOp(boolean value) {
-
+        this.op = value;
     }
 }
