@@ -1,6 +1,7 @@
 package com.kraftics.krafticslib.command;
 
 import org.bukkit.command.CommandSender;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
 import java.util.List;
@@ -30,7 +31,7 @@ public class LibCommand extends org.bukkit.command.Command {
     }
 
     @Override
-    public List<String> tabComplete(CommandSender sender, String alias, String[] args) throws IllegalArgumentException {
+    public @NotNull List<String> tabComplete(CommandSender sender, String alias, String[] args) throws IllegalArgumentException {
         StringJoiner joiner = new StringJoiner(" ");
         joiner.add(alias);
         for (String arg : args) {

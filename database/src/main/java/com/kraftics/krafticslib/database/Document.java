@@ -7,95 +7,125 @@ import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Function;
 
-public interface Document {
-    @NotNull
-    Document add(String name, Object o);
+public class Document {
+    private final Map<String, Object> map;
+
+    public Document(Map<String, Object> map) {
+        this.map = map;
+    }
+
+    public Document() {
+        this(new HashMap<>());
+    }
 
     @NotNull
-    Document remove(String name);
+    public Map<String, Object> serialize() {
+        return map;
+    }
 
-    boolean has(String name);
+    @NotNull
+    public Document add(String name, Object o) {
+        map.put(name, o);
+        return this;
+    }
 
-    boolean has(String name, Class<?> clazz);
+    @NotNull
+    public Document remove(String name) {
+        map.remove(name);
+        return this;
+    }
+
+    public boolean has(String name) {
+        return map.containsKey(name);
+    }
+
+    public boolean has(String name, Class<?> clazz) {
+        Object o = get(name);
+        return o != null && clazz.isAssignableFrom(o.getClass());
+    }
 
     @Nullable
-    Object get(String name);
+    public Object get(String name) {
+        return map.get(name);
+    }
 
     @Nullable
-    default <T> T get(String name, Function<Object, T> cast) {
+    public <T> T get(String name, Function<Object, T> cast) {
         Object o = get(name);
         return cast.apply(o);
     }
 
     @Nullable
-    default <T> T get(String name, Class<T> clazz) {
+    public <T> T get(String name, Class<T> clazz) {
         return get(name, o -> o == null || !clazz.isAssignableFrom(o.getClass()) ? null : clazz.cast(o));
     }
 
     @Nullable
-    default String getString(String name) {
+    public String getString(String name) {
         return get(name, o -> o == null ? null : o.toString());
     }
 
     @Nullable
-    default Short getShort(String name) {
+    public Short getShort(String name) {
         return get(name, Short.class);
     }
 
     @Nullable
-    default Integer getInteger(String name) {
+    public Integer getInteger(String name) {
         return get(name, Integer.class);
     }
 
     @Nullable
-    default Long getLong(String name) {
+    public Long getLong(String name) {
         return get(name, Long.class);
     }
 
     @Nullable
-    default Float getFloat(String name) {
+    public Float getFloat(String name) {
         return get(name, Float.class);
     }
 
     @Nullable
-    default Double getDouble(String name) {
+    public Double getDouble(String name) {
         return get(name, Double.class);
     }
 
     @Nullable
-    default BigDecimal getBigDecimal(String name) {
+    public BigDecimal getBigDecimal(String name) {
         return get(name, BigDecimal.class);
     }
 
     @Nullable
-    default Boolean getBoolean(String name) {
+    public Boolean getBoolean(String name) {
         return get(name, Boolean.class);
     }
 
     @Nullable
-    default Byte getByte(String name) {
+    public Byte getByte(String name) {
         return get(name, Byte.class);
     }
 
     @Nullable
-    default Byte[] getBytes(String name) {
+    public Byte[] getBytes(String name) {
         return get(name, Byte[].class);
     }
 
     @Nullable
-    default Date getDate(String name) {
+    public Date getDate(String name) {
         return get(name, Date.class);
     }
 
     @Nullable
-    default Time getTime(String name) {
+    public Time getTime(String name) {
         return get(name, Time.class);
     }
 
     @Nullable
-    default Timestamp getTimestamp(String name) {
+    public Timestamp getTimestamp(String name) {
         return get(name, Timestamp.class);
     }
 

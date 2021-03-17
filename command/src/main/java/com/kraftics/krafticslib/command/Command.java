@@ -4,6 +4,7 @@ import org.apache.commons.lang.Validate;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -71,8 +72,8 @@ public abstract class Command {
         Validate.notNull(name, "Name cannot be null");
 
         this.name = name;
-        this.description = description;
-        this.aliases = aliases;
+        this.description = description == null ? "" : description;
+        this.aliases = aliases == null ? new ArrayList<>() : aliases;
         this.permission = permission;
         this.permissionMessage = permissionMessage;
     }
@@ -111,7 +112,7 @@ public abstract class Command {
      *
      * @return the description
      */
-    @Nullable
+    @NotNull
     public String getDescription() {
         return description;
     }
@@ -123,7 +124,9 @@ public abstract class Command {
      * @return this command
      */
     @NotNull
-    public Command setDescription(String description) {
+    public Command setDescription(@NotNull String description) {
+        Validate.notNull(description, "Description cannot be null");
+
         this.description = description;
         return this;
     }
@@ -133,7 +136,7 @@ public abstract class Command {
      *
      * @return the aliases
      */
-    @Nullable
+    @NotNull
     public List<String> getAliases() {
         return aliases;
     }
@@ -145,7 +148,9 @@ public abstract class Command {
      * @return this command
      */
     @NotNull
-    public Command addAlias(String s) {
+    public Command addAlias(@NotNull String s) {
+        Validate.notNull(s, "Alias cannot be null");
+
         aliases.add(s);
         return this;
     }
@@ -157,7 +162,9 @@ public abstract class Command {
      * @return this command
      */
     @NotNull
-    public Command removeAlias(String s) {
+    public Command removeAlias(@NotNull String s) {
+        Validate.notNull(s, "Alias cannot be null");
+
         aliases.remove(s);
         return this;
     }
@@ -169,7 +176,9 @@ public abstract class Command {
      * @return this command
      */
     @NotNull
-    public Command setAliases(List<String> aliases) {
+    public Command setAliases(@NotNull List<String> aliases) {
+        Validate.notNull(aliases, "Aliases cannot be null");
+
         this.aliases = aliases;
         return this;
     }
