@@ -1,4 +1,7 @@
 dependencies {
     compile project(':command')
     compile project(':database')
+    compile project(':packet')
 }
+
+tasks['jar'].mustRunAfter(project(':packet').tasks['jar'], project(':database').tasks['jar'])

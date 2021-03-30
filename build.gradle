@@ -148,8 +148,10 @@ subprojects {
 
 // Removing the parent build dir
 
-build {
-    doLast {
-        buildDir.deleteDir()
-    }
+tasks['build'].doLast {
+    buildDir.deleteDir()
+}
+
+tasks['jar'].doLast {
+    buildDir.deleteDir()
 }
