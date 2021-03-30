@@ -17,7 +17,7 @@ public final class CacheDatabase implements Database {
     }
 
     @Override
-    public @Nullable Table table(String name) {
+    public @Nullable Table getTable(String name) {
         try {
             return buildTable(name, connection.query("SELECT * FROM `" + name + "`"));
         } catch (SQLException e) {
@@ -68,12 +68,12 @@ public final class CacheDatabase implements Database {
 
     @Override
     public void updateTable(Table table) {
-        if (!hasTable(table.name()) || table.getClass() != CacheTable.class) throw new IllegalArgumentException("Invalid table type");
+        if (!hasTable(table.getName()) || table.getClass() != CacheTable.class) throw new IllegalArgumentException("Invalid table type");
         try {
-            connection.update("DELETE FROM `" + table.name() + '`');
+            connection.update("DELETE FROM `" + table.getName() + '`');
             for (Document document : table.find()) {
                 try {
-                    insert(table.name(), document);
+                    insert(table.getName(), document);
                 } catch (SQLException e) {
                     new DatabaseException("Could not insert document", e).printStackTrace();
                 }
@@ -107,7 +107,7 @@ public final class CacheDatabase implements Database {
         while (set.next()) {
             Document document = new Document();
             for (Column column : columns) {
-                document.add(column.name(), set.getObject(column.name()));
+                document.add(column.getName(), set.getObject(column.getName()));
             }
             documents.add(document);
         }

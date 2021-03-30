@@ -1,5 +1,5 @@
 /**
- * This package contains utilities for packets.
+ * This package contains general classes for packets.
  * It is inspired from TinyProtocol and ProtocolLib.
  *
  * @author Panda885

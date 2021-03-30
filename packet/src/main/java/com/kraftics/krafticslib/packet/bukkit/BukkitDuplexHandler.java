@@ -29,7 +29,7 @@ public class BukkitDuplexHandler extends ChannelDuplexHandler {
             return;
         }
 
-        ObjectBuffer buffer = ObjectBuffer.create(msg);
+        ObjectBuffer buffer = new ObjectBuffer(msg);
         PacketEvent event = new PacketEvent(buffer, packetType, player, channel);
 
         processor.sendPacketReceivingEvent(event);
@@ -49,7 +49,7 @@ public class BukkitDuplexHandler extends ChannelDuplexHandler {
             return;
         }
 
-        ObjectBuffer buffer = ObjectBuffer.create(msg);
+        ObjectBuffer buffer = new ObjectBuffer(msg);
         PacketEvent event = new PacketEvent(buffer, packetType, player, channel);
 
         processor.sendPacketSendingEvent(event);

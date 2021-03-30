@@ -9,6 +9,13 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class is used to register commands.
+ * <p>
+ * This will also register the command to Bukkit's CommandMap.
+ * You can view commands registered by this class using {@link #getCommands()}.
+ * </p>
+ */
 public class CommandDispatcher {
     private final CommandMap map;
     private final List<Command> commands = new ArrayList<>();

@@ -8,6 +8,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Represents a Command, which executes various tasks upon user input
+ */
 public abstract class Command {
     private final String name;
     private String description;

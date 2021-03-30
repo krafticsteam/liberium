@@ -5,8 +5,11 @@ import com.kraftics.krafticslib.packet.reflection.Reflection;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * This class is used to register packet types
+ */
 public class PacketRegistry {
-    public static final Map<Class<?>, PacketType> DEFAULT_REGISTRY = new HashMap<>();
+    private static final Map<Class<?>, PacketType> DEFAULT_REGISTRY = new HashMap<>();
 
     static {
         DEFAULT_REGISTRY.put(Reflection.getNMSClass("PacketPlayOutAbilities"), PacketType.Play.Out.ABILITIES);

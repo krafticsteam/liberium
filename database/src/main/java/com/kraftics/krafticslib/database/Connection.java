@@ -12,6 +12,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * This class represents a wrapped {@link java.sql.Connection SQL connection}
+ */
 public class Connection {
     private static boolean checked;
 

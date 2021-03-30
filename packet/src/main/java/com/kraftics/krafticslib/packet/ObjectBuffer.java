@@ -12,16 +12,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * This class is used to modify fields of a object
+ */
 public class ObjectBuffer {
-    private Object object;
-    private Map<Class<?>, List<Field>> data;
+    private final Object object;
+    private final Map<Class<?>, List<Field>> data;
 
-    private ObjectBuffer() {
-    }
-
-    public static ObjectBuffer create(Object object) {
-        ObjectBuffer buffer = new ObjectBuffer();
-        buffer.object = object;
+    public ObjectBuffer(Object object) {
+        this.object = object;
 
         Map<Class<?>, List<Field>> data = new HashMap<>();
         for (Field field : object.getClass().getDeclaredFields()) {
@@ -31,10 +30,18 @@ public class ObjectBuffer {
             data.put(field.getType(), fields);
         }
 
-        buffer.data = data;
-        return buffer;
+        this.data = data;
     }
 
+    /**
+     * Reads data from a field.
+     *
+     * @param type The type of the field
+     * @param index The index of the field starting from first field of this type (same as ProtocolLib)
+     * @param <T> The type of this field
+     * @return The data
+     * @throws IllegalArgumentException If the field could not be accessed
+     */
     public <T> T read(Class<T> type, int index) throws IllegalArgumentException {
         try {
             Field field = getField(type, index);
@@ -46,30 +53,77 @@ public class ObjectBuffer {
         }
     }
 
+    /**
+     * Reads data from a field and converts it.
+     *
+     * @param converter The converter to convert this field
+     * @param index The index of the field starting from first field of this type
+     * @param <T> The type of this field
+     * @return The data
+     * @throws IllegalArgumentException If the field could not be accessed
+     */
     public <T> T read(ObjectConverter<T> converter, int index) throws IllegalArgumentException {
         return converter.getSpecific(read(converter.getGenericType(), index));
     }
 
+    /**
+     * Reads an item stack
+     *
+     * @param index The index
+     * @return The ItemStack
+     */
     public ItemStack readItemStack(int index) {
         return read(new ItemStackConverter(), index);
     }
 
+    /**
+     * Reads a block data
+     *
+     * @param index The index
+     * @return The BlockData
+     */
     public BlockData readBlockData(int index) {
         return read(new BlockDataConverter(), index);
     }
 
+    /**
+     * Reads a block position
+     *
+     * @param index The index
+     * @return The BlockPosition
+     */
     public BlockPosition readBlockPosition(int index) {
         return read(new BlockPositionConverter(), index);
     }
 
+    /**
+     * Reads a block and converts it to Material
+     *
+     * @param index The index
+     * @return The Material
+     */
     public Material readBlock(int index) {
         return read(new BlockConverter(), index);
     }
 
+    /**
+     * Reads a chat component
+     *
+     * @param index The index
+     * @return The ChatComponent
+     */
     public ChatComponent readChatComponent(int index) {
         return read(new ChatComponentConverter(), index);
     }
 
+    /**
+     * Writes data to a field
+     *
+     * @param type The type of the field
+     * @param index The index of the field starting from first field of this type (same as ProtocolLib)
+     * @param object The object to write
+     * @throws IllegalArgumentException If the field could not be accessed
+     */
     public void write(Class<?> type, int index, Object object) throws IllegalArgumentException {
         try {
             Field field = getField(type, index);
@@ -81,35 +135,88 @@ public class ObjectBuffer {
         }
     }
 
+    /**
+     * Writes data to a field
+     *
+     * @param converter The converter to convert this field
+     * @param index The index of the field starting from first field of this type (same as ProtocolLib)
+     * @param object The object to write
+     * @param <T> The type of the field
+     * @throws IllegalArgumentException If the field could not be accessed
+     */
     public <T> void write(ObjectConverter<T> converter, int index, T object) throws IllegalArgumentException {
         write(converter.getGenericType(), index, converter.getGeneric(object));
     }
 
+    /**
+     * Writes an item stack
+     *
+     * @param index The index
+     * @param itemStack The ItemStack
+     */
     public void writeItemStack(int index, ItemStack itemStack) {
         write(new ItemStackConverter(), index, itemStack);
     }
 
+    /**
+     * Writes a block data
+     *
+     * @param index The index
+     * @param data The BlockData
+     */
     public void writeBlockData(int index, BlockData data) {
         write(new BlockDataConverter(), index, data);
     }
 
+    /**
+     * Writes a block position
+     *
+     * @param index The index
+     * @param position The BlockPosition
+     */
     public void writeBlockPosition(int index, BlockPosition position) {
         write(new BlockPositionConverter(), index, position);
     }
 
+    /**
+     * Writes a block
+     *
+     * @param index The index
+     * @param material The block (Material)
+     */
     public void writeBlock(int index, Material material) {
         write(new BlockConverter(), index, material);
     }
 
+    /**
+     * Writes a chat component
+     *
+     * @param index The index
+     * @param component The ChatComponent
+     */
     public void writeChatComponent(int index, ChatComponent component) {
         write(new ChatComponentConverter(), index, component);
     }
 
+    /**
+     * If you can write to a field
+     *
+     * @param type The type
+     * @param index The index
+     * @return If you can write to a field
+     */
     public boolean canWrite(Class<?> type, int index) {
         Field field = getField(type, index);
         return field != null && field.isAccessible() && !Modifier.isFinal(field.getModifiers());
     }
 
+    /**
+     * If the object has a field
+     *
+     * @param type The type
+     * @param index The index
+     * @return If the object has a field
+     */
     public boolean has(Class<?> type, int index) {
         return getField(type, index) != null;
     }

@@ -23,12 +23,12 @@ public final class CacheTable implements Table {
     }
 
     @Override
-    public @NotNull String name() {
+    public @NotNull String getName() {
         return name;
     }
 
     @Override
-    public @NotNull List<Column> columns() {
+    public @NotNull List<Column> getColumns() {
         return new ArrayList<>(columns);
     }
 
@@ -40,6 +40,18 @@ public final class CacheTable implements Table {
     @Override
     public Table remove(Predicate<Document> predicate) {
         documents.removeIf(predicate);
+        return this;
+    }
+
+    @Override
+    public Table remove(Document document) {
+        documents.remove(document);
+        return this;
+    }
+
+    @Override
+    public Table remove() {
+        documents.clear();
         return this;
     }
 

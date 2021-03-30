@@ -1,5 +1,8 @@
 package com.kraftics.krafticslib.database;
 
+/**
+ * This exception is thrown when a {@link Database} error occurs
+ */
 public class DatabaseException extends RuntimeException {
     public DatabaseException() {
     }
