@@ -1,4 +1,4 @@
-package com.kraftics.krafticslib.command;
+package com.kraftics.krafticslib.command.test;
 
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
@@ -10,27 +10,25 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Set;
+import java.util.StringJoiner;
 import java.util.UUID;
 
 public class FakeCommandSender implements CommandSender {
-    public String name;
-    public boolean op;
-
-    public FakeCommandSender(String name) {
-        this.name = name;
-        this.op = false;
-    }
+    private boolean success = false;
+    private boolean op = false;
 
     @Override
     public void sendMessage(@NotNull String message) {
-        System.out.println("send message: '" + message + "'");
+        System.out.println(message);
     }
 
     @Override
     public void sendMessage(@NotNull String[] messages) {
-        for (String message : messages) {
-            sendMessage(message);
+        StringJoiner joiner = new StringJoiner("\n");
+        for (String msg : messages) {
+            joiner.add(msg);
         }
+        sendMessage(joiner.toString());
     }
 
     @Override
@@ -52,7 +50,7 @@ public class FakeCommandSender implements CommandSender {
     @NotNull
     @Override
     public String getName() {
-        return name;
+        return "TestPlayer123";
     }
 
     @NotNull
@@ -63,22 +61,22 @@ public class FakeCommandSender implements CommandSender {
 
     @Override
     public boolean isPermissionSet(@NotNull String name) {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isPermissionSet(@NotNull Permission perm) {
-        return false;
+        return true;
     }
 
     @Override
     public boolean hasPermission(@NotNull String name) {
-        return false;
+        return true;
     }
 
     @Override
     public boolean hasPermission(@NotNull Permission perm) {
-        return false;
+        return true;
     }
 
     @NotNull
@@ -107,12 +105,12 @@ public class FakeCommandSender implements CommandSender {
 
     @Override
     public void removeAttachment(@NotNull PermissionAttachment attachment) {
-        System.out.println("remove attachment");
+
     }
 
     @Override
     public void recalculatePermissions() {
-        System.out.println("recalculate permissions");
+
     }
 
     @NotNull
@@ -129,5 +127,13 @@ public class FakeCommandSender implements CommandSender {
     @Override
     public void setOp(boolean value) {
         this.op = value;
+    }
+
+    public boolean getSuccess() {
+        return success;
+    }
+
+    public void setSuccess(boolean success) {
+        this.success = success;
     }
 }

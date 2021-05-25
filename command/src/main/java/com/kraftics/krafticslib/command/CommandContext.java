@@ -4,9 +4,7 @@ import org.apache.commons.lang.Validate;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.Map;
 
 /**
  * This class is used when executing a command
@@ -16,59 +14,27 @@ import java.util.List;
 public class CommandContext {
     private final CommandSender sender;
     private final String input;
-
-    private final List<String> arguments;
-    private final List<String> flags;
+    private final Map<String, Object> arguments;
+    private final CommandNode command;
 
     /**
-     * Creates new command context instance,
-     * it's recommended to use {@link #create(CommandSender, String)}
+     * Creates new command context instance
      *
      * @param sender The sender who is executing this command
      * @param input The raw input that the user entered
-     * @param arguments List of all arguments
-     * @param flags List of all flags
+     * @param arguments Map of arguments
+     * @param command The command node
      */
-    public CommandContext(@NotNull CommandSender sender, @NotNull String input, @NotNull List<String> arguments, @NotNull List<String> flags) {
+    public CommandContext(@NotNull CommandSender sender, @NotNull String input, @NotNull Map<String, Object> arguments, @NotNull CommandNode command) {
         Validate.notNull(sender, "Sender cannot be null");
         Validate.notNull(input, "Input cannot be null");
         Validate.notNull(arguments, "Arguments cannot be null");
-        Validate.notNull(flags, "Flags cannot be null");
+        Validate.notNull(command, "Command cannot be null");
 
         this.sender = sender;
         this.input = input;
         this.arguments = arguments;
-        this.flags = flags;
-    }
-
-    /**
-     * Creates new {@link CommandContext} from the raw input
-     *
-     * @param sender The sender who is executing this command
-     * @param message The raw user input
-     * @return The command context
-     */
-    @NotNull
-    public static CommandContext create(@NotNull CommandSender sender, @NotNull String message) {
-        Validate.notNull(sender, "Sender cannot be null");
-
-        String[] split = message.split(" ", -1);
-
-        if (split.length <= 1) return new CommandContext(sender, message, Collections.emptyList(), Collections.emptyList());
-
-        List<String> flags = new ArrayList<>();
-        List<String> args = new ArrayList<>();
-
-        for (int i = 1; i < split.length; i++) {
-            String argument = split[i];
-            if (argument.startsWith("-")) {
-                flags.add(argument.substring(1));
-            } else {
-                args.add(argument);
-            }
-        }
-
-        return new CommandContext(sender, message, args, flags);
+        this.command = command;
     }
 
     /**
@@ -93,13 +59,46 @@ public class CommandContext {
     }
 
     /**
-     * Gets list of all arguments
+     * Gets the command node
+     *
+     * @return the command node
+     */
+    @NotNull
+    public CommandNode getCommand() {
+        return command;
+    }
+
+    /**
+     * Gets map of arguments
      *
      * @return the arguments
      */
-    @NotNull
-    public List<String> getArguments() {
+    public Map<String, Object> getArguments() {
         return arguments;
+    }
+
+    /**
+     * Gets argument object by name
+     *
+     * @param name The name of the argument
+     * @return The argument
+     */
+    public Object getArgument(String name) {
+        return arguments.get(name);
+    }
+
+    /**
+     * Gets argument object by name
+     *
+     * @param type The type of the argument
+     * @param name The name of the argument
+     * @param <T> The type of the argument
+     * @return The argument
+     */
+    public <T> T getArgument(Class<T> type, String name) {
+        Object argument = getArgument(name);
+        if (argument == null) return null;
+        return type.cast(argument);
     }
 
     /**
@@ -109,48 +108,6 @@ public class CommandContext {
      * @return true = contains, false = does not contain
      */
     public boolean hasArgument(String s) {
-        return arguments.contains(s);
-    }
-
-    /**
-     * Gets argument from an index
-     *
-     * @param i the index
-     * @return the argument, null if out of bounds
-     */
-    public String getArgument(int i) {
-        if (i < 0 || i >= arguments.size()) return null;
-        return arguments.get(i);
-    }
-
-    /**
-     * Checks if this command context contains a flag
-     *
-     * @param s The flag content
-     * @return true = contains, false = does not contain
-     */
-    public boolean hasFlag(String s) {
-        return flags.contains(s);
-    }
-
-    /**
-     * Gets flag from an index
-     *
-     * @param i the index
-     * @return the flag, null if out of bounds
-     */
-    public String getFlag(int i) {
-        if (i < 0 || i >= flags.size()) return null;
-        return flags.get(i);
-    }
-
-    /**
-     * Gets list of all flags
-     *
-     * @return the flags
-     */
-    @NotNull
-    public List<String> getFlags() {
-        return flags;
+        return arguments.containsKey(s);
     }
 }
