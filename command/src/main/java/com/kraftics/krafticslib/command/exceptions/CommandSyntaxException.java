@@ -61,11 +61,18 @@ public class CommandSyntaxException extends Exception {
     }
 
     public interface BuiltIn {
-        SimpleCommandExceptionBuilder UNEXPECTED = new SimpleCommandExceptionBuilder("Unexpected error happened");
+        DynamicCommandExceptionBuilder UNEXPECTED = new DynamicCommandExceptionBuilder((e) -> "Unexpected error happened: " + e);
+
+        SimpleCommandExceptionBuilder INVALID_BLOCK = new SimpleCommandExceptionBuilder("Invalid block");
+        SimpleCommandExceptionBuilder INVALID_ITEM = new SimpleCommandExceptionBuilder("Invalid item");
+        SimpleCommandExceptionBuilder INVALID_WORLD = new SimpleCommandExceptionBuilder("Invalid world");
+        SimpleCommandExceptionBuilder INVALID_PLAYER = new SimpleCommandExceptionBuilder("Invalid player");
         SimpleCommandExceptionBuilder INVALID_COMMAND = new SimpleCommandExceptionBuilder("Could not find this command");
         SimpleCommandExceptionBuilder INVALID_ARGUMENT = new SimpleCommandExceptionBuilder("This argument is not valid");
-        Dynamic2CommandExceptionBuilder EXPECTED = new Dynamic2CommandExceptionBuilder((expected, found) -> "Expected " + expected + " but found " + found);
-        SimpleCommandExceptionBuilder EXPECTED_ARGUMENT_SEPERATOR = new SimpleCommandExceptionBuilder("Expected an argument seperator");
         DynamicCommandExceptionBuilder INVALID_ESCAPE = new DynamicCommandExceptionBuilder(c -> "Invalid escape '" + c + "'");
+
+        Dynamic2CommandExceptionBuilder EXPECTED = new Dynamic2CommandExceptionBuilder((expected, found) -> "Expected " + expected + " but found " + found);
+        SimpleCommandExceptionBuilder EXPECTED_ARGUMENT = new SimpleCommandExceptionBuilder("Expected an argument");
+        SimpleCommandExceptionBuilder EXPECTED_ARGUMENT_SEPERATOR = new SimpleCommandExceptionBuilder("Expected an argument seperator");
     }
 }

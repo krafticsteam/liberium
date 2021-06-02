@@ -5,25 +5,16 @@ import com.kraftics.krafticslib.command.exceptions.CommandSyntaxException;
 
 import java.util.List;
 
-public class StringArgument implements Argument<String> {
+public class LongArgument implements Argument<Long> {
     private final String name;
-    private final boolean quotable;
 
-    public StringArgument(String name) {
-        this(name, false);
-    }
-
-    public StringArgument(String name, boolean quotable) {
+    public LongArgument(String name) {
         this.name = name;
-        this.quotable = quotable;
     }
 
     @Override
-    public String parse(StringReader reader) throws CommandSyntaxException {
-        if (quotable) {
-            return reader.readString();
-        }
-        return reader.readUnquotedString();
+    public Long parse(StringReader reader) throws CommandSyntaxException {
+        return reader.readLong();
     }
 
     @Override

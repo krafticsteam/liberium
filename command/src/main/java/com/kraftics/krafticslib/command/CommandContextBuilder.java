@@ -9,17 +9,19 @@ public class CommandContextBuilder {
     private final CommandSender sender;
     private final String input;
     private final Map<String, Object> arguments;
+    private CommandNode parentNode;
     private CommandNode command;
 
-    private CommandContextBuilder(CommandSender sender, String input, Map<String, Object> arguments, CommandNode command) {
+    private CommandContextBuilder(CommandSender sender, String input, Map<String, Object> arguments, CommandNode command, CommandNode parentNode) {
         this.sender = sender;
         this.input = input;
         this.arguments = arguments;
         this.command = command;
+        this.parentNode = parentNode;
     }
 
     public CommandContextBuilder(CommandSender sender, String input) {
-        this(sender, input, new HashMap<>(), null);
+        this(sender, input, new HashMap<>(), null, null);
     }
 
     public CommandContextBuilder withCommand(CommandNode node) {
@@ -32,12 +34,21 @@ public class CommandContextBuilder {
         return this;
     }
 
+    public CommandContextBuilder withParent(CommandNode node) {
+        this.parentNode = node;
+        return this;
+    }
+
+    public CommandNode getParent() {
+        return parentNode;
+    }
+
     public CommandNode getCommand() {
         return command;
     }
 
     public CommandContextBuilder copy() {
-        return new CommandContextBuilder(sender, input, arguments, command);
+        return new CommandContextBuilder(sender, input, arguments, command, parentNode);
     }
 
     public CommandContext build() {

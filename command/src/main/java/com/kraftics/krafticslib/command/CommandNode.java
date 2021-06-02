@@ -13,4 +13,6 @@ public interface CommandNode {
     void addChild(CommandNode node);
 
     void parse(StringReader reader, CommandContextBuilder context) throws CommandSyntaxException;
+
+    List<String> tabComplete(StringReader reader, CommandContextBuilder context) throws CommandSyntaxException;
 }

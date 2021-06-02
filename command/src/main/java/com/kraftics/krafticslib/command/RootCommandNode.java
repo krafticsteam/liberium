@@ -44,6 +44,11 @@ public final class RootCommandNode implements CommandNode {
         throw CommandSyntaxException.BuiltIn.INVALID_COMMAND.build(reader);
     }
 
+    @Override
+    public List<String> tabComplete(StringReader reader, CommandContextBuilder context) throws CommandSyntaxException {
+        return null;
+    }
+
     public String getDescription() {
         return description;
     }

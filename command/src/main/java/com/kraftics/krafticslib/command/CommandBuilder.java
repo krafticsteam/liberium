@@ -40,7 +40,7 @@ public class CommandBuilder {
     public CommandBuilder execute(CommandExecutor executor, List<Argument<?>> list) {
         ArgumentBuilder current = null;
         for (int i = 0; i < list.size(); i++) {
-            Argument<?> argument = list.get(0);
+            Argument<?> argument = list.get(i);
 
             ArgumentBuilder node = getNode(argument, getArguments(current));
             if (node == null) {

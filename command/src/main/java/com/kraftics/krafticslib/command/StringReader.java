@@ -9,7 +9,7 @@ public class StringReader {
     public static final List<String> VALID_BOOLEANS = Arrays.asList("true", "t", "yes", "y", "false", "f", "no", "n");
 
     private int cursor;
-    private String string;
+    private final String string;
 
     public StringReader(String string, int cursor) {
         this.string = string;
@@ -211,6 +211,26 @@ public class StringReader {
 
         cursor = start;
         throw CommandSyntaxException.BuiltIn.EXPECTED.build("a boolean", bool, this);
+    }
+
+    public int getArgumentStart() {
+        int cursor = this.cursor;
+        while (reversePeek(cursor) != ' ') {
+            cursor--;
+        }
+        return cursor;
+    }
+
+    public String readArgument() {
+        int start = cursor;
+        cursor = getArgumentStart();
+        String argument = readUnquotedString();
+        cursor = start;
+        return argument;
+    }
+
+    private char reversePeek(int cursor) {
+        return string.charAt(--cursor);
     }
 
     public static boolean isNumber(char c) {

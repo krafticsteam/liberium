@@ -5,25 +5,16 @@ import com.kraftics.krafticslib.command.exceptions.CommandSyntaxException;
 
 import java.util.List;
 
-public class StringArgument implements Argument<String> {
+public class FloatArgument implements Argument<Float> {
     private final String name;
-    private final boolean quotable;
 
-    public StringArgument(String name) {
-        this(name, false);
-    }
-
-    public StringArgument(String name, boolean quotable) {
+    public FloatArgument(String name) {
         this.name = name;
-        this.quotable = quotable;
     }
 
     @Override
-    public String parse(StringReader reader) throws CommandSyntaxException {
-        if (quotable) {
-            return reader.readString();
-        }
-        return reader.readUnquotedString();
+    public Float parse(StringReader reader) throws CommandSyntaxException {
+        return reader.readFloat();
     }
 
     @Override

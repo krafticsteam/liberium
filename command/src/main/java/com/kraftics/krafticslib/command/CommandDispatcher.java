@@ -14,12 +14,12 @@ import java.util.function.Consumer;
  * This class is used to register commands.
  * <p>
  * This will also register the command to Bukkit's CommandMap.
- * You can view commands registered by this class using {@link #getChildren()}.
+ * You can get commands registered by this class using {@link #getCommands()}.
  * </p>
  */
-public class CommandDispatcher implements CommandNode {
+public class CommandDispatcher {
+    private final RootNode root = new RootNode();
     private final CommandMap map;
-    private final List<RootCommandNode> commands = new ArrayList<>();
     private final String prefix;
 
     /**
@@ -61,14 +61,14 @@ public class CommandDispatcher implements CommandNode {
         Validate.notNull(reader, "Reader cannot be null");
         Validate.notNull(sender, "Sender cannot be null");
 
-        return parseNodes(reader, this, new CommandContextBuilder(sender, reader.getString()));
+        return parseNodes(reader, root, new CommandContextBuilder(sender, reader.getString()));
     }
 
     protected ParseResult parse(String input, @NotNull CommandSender sender, @NotNull RootCommandNode child) {
         Validate.notNull(child, "Command cannot be null");
         Validate.notNull(sender, "Sender cannot be null");
 
-        boolean empty = input == null || input.isEmpty();
+        boolean empty = input == null;
         String s = empty ? child.getName() : child.getName() + " " + input;
         StringReader reader = new StringReader(s);
         CommandContextBuilder context = new CommandContextBuilder(sender, s);
@@ -88,13 +88,15 @@ public class CommandDispatcher implements CommandNode {
             return new ParseResult(reader, context, new HashMap<>());
         }
 
+        context.withParent(child);
         reader.skip();
-        return parseNodes(reader, child,  context);
+        return parseNodes(reader, child, context);
     }
 
     private static ParseResult parseNodes(StringReader reader, CommandNode node, CommandContextBuilder context) {
         Map<CommandNode, CommandSyntaxException> exceptions = new HashMap<>();
         List<ParseResult> potentials = new ArrayList<>();
+        if (!node.getChildren().isEmpty()) context.withParent(node);
 
         for (CommandNode child : node.getChildren()) {
             StringReader readerCopy = new StringReader(reader);
@@ -103,17 +105,18 @@ public class CommandDispatcher implements CommandNode {
             try {
                 child.parse(readerCopy, contextCopy);
 
-                if (readerCopy.canRead() && reader.peek() != ' ') {
+                if (readerCopy.canRead() && readerCopy.peek() != ' ') {
                     throw CommandSyntaxException.BuiltIn.EXPECTED_ARGUMENT_SEPERATOR.build(readerCopy);
                 }
             } catch (CommandSyntaxException e) {
                 exceptions.put(child, e);
+                continue;
             }
 
             contextCopy.withCommand(child);
 
             ParseResult parse;
-            if (readerCopy.canRead(2)) {
+            if (readerCopy.canRead()) {
                 readerCopy.skip();
                 parse = parseNodes(readerCopy, child, contextCopy);
             } else {
@@ -158,7 +161,7 @@ public class CommandDispatcher implements CommandNode {
         consumer.accept(builder);
         RootCommandNode node = builder.build();
 
-        this.commands.add(node);
+        this.root.commands.add(node);
         map.register(prefix, new LibCommand(this, node));
     }
 
@@ -203,10 +206,41 @@ public class CommandDispatcher implements CommandNode {
 
         try {
             CommandContext context = parse.getContext().build();
+            if (context.getCommand().getExecutor() == null) throw CommandSyntaxException.BuiltIn.EXPECTED_ARGUMENT.build(parse.getReader());
             context.getCommand().getExecutor().execute(context);
         } catch (Exception e) {
-            throw CommandSyntaxException.BuiltIn.UNEXPECTED.build();
+            if (e instanceof CommandSyntaxException) {
+                throw e;
+            }
+            e.printStackTrace();
+            throw CommandSyntaxException.BuiltIn.UNEXPECTED.build(e);
         }
+    }
+
+    /**
+     * Just tab completes bruh
+     *
+     * @param parse The parse result
+     * @return List of tab completions
+     */
+    public List<String> tabComplete(ParseResult parse) {
+        if (parse.getReader().getString().split(" ", -1).length != parse.getReader().getRange(0, parse.getReader().getCursor()).split(" ", -1).length) {
+            return new ArrayList<>();
+        }
+
+        CommandNode parent = parse.getContext().getParent();
+        if (parent == null) return new ArrayList<>();
+        List<String> list = new ArrayList<>();
+        for (CommandNode child : parent.getChildren()) {
+            try {
+                List<String> current = child.tabComplete(new StringReader(parse.getReader()), parse.getContext());
+                if (current == null || current.isEmpty()) continue;
+                list.addAll(current);
+            } catch (Exception ignored) {
+
+            }
+        }
+        return list;
     }
 
     /**
@@ -217,12 +251,16 @@ public class CommandDispatcher implements CommandNode {
      */
     @Nullable
     public RootCommandNode getCommand(String name) {
-        for (RootCommandNode command : commands) {
+        for (RootCommandNode command : root.commands) {
             if (command.getName().equals(name)) {
                 return command;
             }
         }
         return null;
+    }
+
+    public List<RootCommandNode> getCommands() {
+        return root.commands;
     }
 
     /**
@@ -235,30 +273,36 @@ public class CommandDispatcher implements CommandNode {
         return prefix;
     }
 
-    @Override
-    public CommandExecutor getExecutor() {
-        return null;
+    public CommandMap getMap() {
+        return map;
     }
 
-    /**
-     * Gets all commands registered in this dispatcher
-     *
-     * @return the commands
-     */
-    @Override
-    public List<CommandNode> getChildren() {
-        return new ArrayList<>(commands);
-    }
+    private static class RootNode implements CommandNode {
+        private final List<RootCommandNode> commands = new ArrayList<>();
 
-    @Override
-    @Deprecated
-    public void addChild(CommandNode node) {
-        throw new UnsupportedOperationException();
-    }
+        @Override
+        public CommandExecutor getExecutor() {
+            return null;
+        }
 
-    @Override
-    @Deprecated
-    public void parse(StringReader reader, CommandContextBuilder context) throws CommandSyntaxException {
-        throw new UnsupportedOperationException();
+        @Override
+        public List<CommandNode> getChildren() {
+            return new ArrayList<>(commands);
+        }
+
+        @Override
+        public void addChild(CommandNode node) {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public void parse(StringReader reader, CommandContextBuilder context) throws CommandSyntaxException {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public List<String> tabComplete(StringReader reader, CommandContextBuilder context) {
+            throw new UnsupportedOperationException();
+        }
     }
 }

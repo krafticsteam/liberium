@@ -38,6 +38,11 @@ public class ArgumentCommandNode implements CommandNode {
         context.withArgument(argument.getName(), argument.parse(reader));
     }
 
+    @Override
+    public List<String> tabComplete(StringReader reader, CommandContextBuilder context) throws CommandSyntaxException {
+        return argument.tabComplete(reader);
+    }
+
     public Argument<?> getArgument() {
         return argument;
     }
