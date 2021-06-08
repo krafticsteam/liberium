@@ -28,7 +28,12 @@ public class CommandSyntaxException extends Exception {
     @Override
     public String getMessage() {
         String context = getContext();
-        return context == null ? message : message + " at position " + cursor + ": " + context;
+        return context == null ? message : message + " at position " + cursor + ": " + context + "<--[HERE]";
+    }
+
+    public String getColoredMessage() {
+        String context = getContext();
+        return "\u00a7c" + (context == null ? message : message + " at position " + cursor + ":\n\u00a77" + context + "\u00a7c\u00a7l<--[HERE]");
     }
 
     public String getContext() {
@@ -43,8 +48,6 @@ public class CommandSyntaxException extends Exception {
         }
 
         builder.append(input, Math.max(0, cursor - MAX_CONTEXT_LENGTH), cursor);
-        builder.append("<--[HERE]");
-
         return builder.toString();
     }
 

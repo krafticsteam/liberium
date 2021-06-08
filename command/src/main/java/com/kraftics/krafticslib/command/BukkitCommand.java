@@ -35,7 +35,7 @@ public class BukkitCommand extends Command {
             ParseResult parse = dispatcher.parse(input, sender, command);
             dispatcher.execute(parse);
         } catch (CommandSyntaxException e) {
-            sender.sendMessage("\u00a7c" +  e.getMessage());
+            sender.sendMessage(e.getColoredMessage());
         }
         return true;
     }
