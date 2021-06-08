@@ -72,7 +72,7 @@ public class CommandSyntaxException extends Exception {
         DynamicCommandExceptionBuilder INVALID_ESCAPE = new DynamicCommandExceptionBuilder(c -> "Invalid escape '" + c + "'");
 
         Dynamic2CommandExceptionBuilder EXPECTED = new Dynamic2CommandExceptionBuilder((expected, found) -> "Expected " + expected + " but found " + found);
-        SimpleCommandExceptionBuilder EXPECTED_ARGUMENT = new SimpleCommandExceptionBuilder("Expected an argument");
+        SimpleCommandExceptionBuilder EXPECTED_ARGUMENT = new SimpleCommandExceptionBuilder("Invalid or incomplete command");
         SimpleCommandExceptionBuilder EXPECTED_ARGUMENT_SEPERATOR = new SimpleCommandExceptionBuilder("Expected an argument seperator");
     }
 }

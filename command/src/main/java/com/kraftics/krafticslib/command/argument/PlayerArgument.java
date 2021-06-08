@@ -32,7 +32,7 @@ public class PlayerArgument implements Argument<Player> {
     @Override
     public List<String> tabComplete(StringReader reader) throws CommandSyntaxException {
         List<String> list = new ArrayList<>();
-        String prefix = reader.readArgument();
+        String prefix = reader.getArgument();
         for (Player player : server.getOnlinePlayers()) {
             String name = player.getName();
             if (name.startsWith(prefix)) {

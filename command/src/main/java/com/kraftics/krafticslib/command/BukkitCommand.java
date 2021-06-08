@@ -9,11 +9,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.StringJoiner;
 
-public class LibCommand extends Command {
+public class BukkitCommand extends Command {
     private final CommandDispatcher dispatcher;
     private final RootCommandNode command;
 
-    protected LibCommand(CommandDispatcher dispatcher, RootCommandNode command) {
+    protected BukkitCommand(CommandDispatcher dispatcher, RootCommandNode command) {
         super(command.getName(), command.getDescription(), "/" + command.getName(), Arrays.asList(command.getAliases()));
 
         this.dispatcher = dispatcher;

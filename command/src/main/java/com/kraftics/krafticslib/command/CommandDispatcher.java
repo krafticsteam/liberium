@@ -97,6 +97,7 @@ public class CommandDispatcher {
         Map<CommandNode, CommandSyntaxException> exceptions = new HashMap<>();
         List<ParseResult> potentials = new ArrayList<>();
         if (!node.getChildren().isEmpty()) context.withParent(node);
+        else context.withParent(null);
 
         for (CommandNode child : node.getChildren()) {
             StringReader readerCopy = new StringReader(reader);
@@ -162,7 +163,7 @@ public class CommandDispatcher {
         RootCommandNode node = builder.build();
 
         this.root.commands.add(node);
-        map.register(prefix, new LibCommand(this, node));
+        map.register(prefix, new BukkitCommand(this, node));
     }
 
     /**

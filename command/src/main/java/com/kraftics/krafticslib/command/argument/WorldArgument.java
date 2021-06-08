@@ -32,7 +32,7 @@ public class WorldArgument implements Argument<World> {
     @Override
     public List<String> tabComplete(StringReader reader) throws CommandSyntaxException {
         List<String> list = new ArrayList<>();
-        String prefix = reader.readArgument();
+        String prefix = reader.getArgument();
         for (World world : server.getWorlds()) {
             String name = world.getName();
             if (name.startsWith(prefix)) {

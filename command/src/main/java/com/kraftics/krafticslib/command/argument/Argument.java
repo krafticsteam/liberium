@@ -16,7 +16,7 @@ public interface Argument<T> {
 
     static List<String> contextOnly(List<?> original, StringReader reader) {
         List<String> result = new ArrayList<>();
-        String prefix = reader.readArgument();
+        String prefix = reader.getArgument();
         for (Object o : original) {
             String s = o.toString();
             if (s.startsWith(prefix)) {

@@ -221,7 +221,7 @@ public class StringReader {
         return cursor;
     }
 
-    public String readArgument() {
+    public String getArgument() {
         int start = cursor;
         cursor = getArgumentStart();
         String argument = readUnquotedString();

@@ -7,7 +7,6 @@ Make your spigot plugin coding easier
 
 [![Spigot](https://img.shields.io/badge/spigot-1.16.5-orange?style=flat-square)](https://www.spigotmc.org/resources/krafticslib.87566/)
 [![Build](https://img.shields.io/jenkins/build?jobUrl=https%3A%2F%2Fkraftics.com%3A8443%2Fjob%2FKrafticsTeam%2Fjob%2FKrafticsLib%2Fjob%2Fmaster%2F&style=flat-square)](https://kraftics.com:8443/blue/organizations/jenkins/KrafticsTeam%2FKrafticsLib/branches)
-[![Code Quality](https://img.shields.io/codacy/grade/044caacce18f4352953380ecdf0e868b?style=flat-square)](https://app.codacy.com/gh/KrafticsTeam/KrafticsLib/dashboard)
 [![Release](https://img.shields.io/github/v/release/KrafticsTeam/KrafticsLib?style=flat-square)](https://github.com/KrafticsTeam/KrafticsLib/releases/latest)
 [![Servers](https://img.shields.io/bstats/servers/9916?style=flat-square)](https://bstats.org/plugin/bukkit/KrafticsLib/9916)
 </div>

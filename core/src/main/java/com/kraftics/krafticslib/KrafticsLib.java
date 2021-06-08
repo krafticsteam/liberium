@@ -13,7 +13,7 @@ import java.util.Set;
  * @author Panda885
  */
 public class KrafticsLib {
-    private static Set<KrafticsLibAPI> apis = new HashSet<>();
+    private static final Set<KrafticsLibAPI> apis = new HashSet<>();
 
     /**
      * Creates new {@link KrafticsLibAPI} for bukkit
