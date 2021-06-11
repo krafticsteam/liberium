@@ -4,4 +4,10 @@ dependencies {
     compile project(':packet')
 }
 
+javadoc {
+    dependsOn project(':command').javadoc
+    dependsOn project(':database').javadoc
+    dependsOn project(':packet').javadoc
+}
+
 tasks['jar'].mustRunAfter(project(':packet').tasks['jar'], project(':database').tasks['jar'])
