@@ -117,6 +117,16 @@ public class ObjectBuffer {
     }
 
     /**
+     * Reads a minecraft key
+     *
+     * @param index The index
+     * @return The MinecraftKey
+     */
+    public MinecraftKey readMinecraftKey(int index) {
+        return read(new MinecraftKeyConverter(), index);
+    }
+
+    /**
      * Writes data to a field
      *
      * @param type The type of the field
@@ -196,6 +206,16 @@ public class ObjectBuffer {
      */
     public void writeChatComponent(int index, ChatComponent component) {
         write(new ChatComponentConverter(), index, component);
+    }
+
+    /**
+     * Writes a minecraft key
+     *
+     * @param index The index
+     * @param component The MinecraftKey
+     */
+    public void writeMinecraftKey(int index, MinecraftKey component) {
+        write(new MinecraftKeyConverter(), index, component);
     }
 
     /**

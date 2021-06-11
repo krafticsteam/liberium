@@ -9,8 +9,9 @@ public class Column {
 
     /**
      * Creates new instance.
+     *
      * <p>
-     * <strong>Note: </strong> The type is different when creating a table and querying a table.
+     * The type is different when creating a table and querying a table.
      * When creating it should be full type (for example: <i>INT NOT NULL PRIMARY KEY</i>), when querying it will be just the type (for example: <i>INT</i>)
      * </p>
      *

@@ -20,7 +20,7 @@ public interface Table {
     String getName();
 
     /**
-     * @return Columns this table has <i>(see constructor javadoc)</i>
+     * @return List of columns in this table <i>{@link Column#Column(String, String) (see constructor javadoc)}</i>
      */
     @NotNull
     List<Column> getColumns();

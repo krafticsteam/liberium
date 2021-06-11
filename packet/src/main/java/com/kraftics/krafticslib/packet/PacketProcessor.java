@@ -80,11 +80,6 @@ public interface PacketProcessor {
     boolean isClosed();
 
     /**
-     * @return The packet registry
-     */
-    PacketRegistry getRegistry();
-
-    /**
      * @return The channel injector
      */
     ChannelInjector getChannelInjector();

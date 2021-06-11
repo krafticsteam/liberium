@@ -2,6 +2,7 @@ package com.kraftics.krafticslib.packet.bukkit;
 
 import com.kraftics.krafticslib.packet.ObjectBuffer;
 import com.kraftics.krafticslib.packet.PacketEvent;
+import com.kraftics.krafticslib.packet.PacketRegistry;
 import com.kraftics.krafticslib.packet.PacketType;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelDuplexHandler;
@@ -23,7 +24,7 @@ public class BukkitDuplexHandler extends ChannelDuplexHandler {
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         Channel channel = ctx.channel();
 
-        PacketType packetType = processor.getRegistry().get(msg);
+        PacketType packetType = PacketRegistry.get(msg);
         if (packetType == null) {
             super.channelRead(ctx, msg);
             return;
@@ -43,7 +44,7 @@ public class BukkitDuplexHandler extends ChannelDuplexHandler {
     public void write(ChannelHandlerContext ctx, Object msg, ChannelPromise promise) throws Exception {
         Channel channel = ctx.channel();
 
-        PacketType packetType = processor.getRegistry().get(msg);
+        PacketType packetType = PacketRegistry.get(msg);
         if (packetType == null) {
             super.write(ctx, msg, promise);
             return;

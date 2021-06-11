@@ -20,7 +20,6 @@ import java.util.List;
 public class BukkitPacketProcessor implements PacketProcessor {
     private final Plugin plugin;
     private final BukkitChannelInjector channelInjector;
-    private final PacketRegistry registry;
 
     private final LoginListener listener;
     private final List<PacketListener> listeners;
@@ -35,7 +34,6 @@ public class BukkitPacketProcessor implements PacketProcessor {
     public BukkitPacketProcessor(Plugin plugin) {
         this.plugin = plugin;
         this.channelInjector = new BukkitChannelInjector("kl-" + plugin.getName(), this);
-        this.registry = new PacketRegistry(true);
 
         this.listener = new LoginListener();
         this.listeners = new ArrayList<>();
@@ -106,11 +104,6 @@ public class BukkitPacketProcessor implements PacketProcessor {
     @Override
     public boolean isClosed() {
         return closed;
-    }
-
-    @Override
-    public PacketRegistry getRegistry() {
-        return registry;
     }
 
     @Override
