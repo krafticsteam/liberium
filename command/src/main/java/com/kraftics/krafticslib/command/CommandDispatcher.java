@@ -13,7 +13,7 @@ import java.util.function.Consumer;
 /**
  * This class is used to register commands.
  * <p>
- * This will also register the command to Bukkit's CommandMap.
+ * This will also register all commands into Bukkit's CommandMap.
  * You can get commands registered by this class using {@link #getCommands()}.
  * </p>
  */

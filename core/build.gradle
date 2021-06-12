@@ -10,4 +10,4 @@ javadoc {
     dependsOn project(':packet').javadoc
 }
 
-tasks['jar'].mustRunAfter(project(':packet').tasks['jar'], project(':database').tasks['jar'])
+tasks['jar'].mustRunAfter(project(':packet').tasks['jar'], project(':command').tasks['jar'], project(':database').tasks['jar'])

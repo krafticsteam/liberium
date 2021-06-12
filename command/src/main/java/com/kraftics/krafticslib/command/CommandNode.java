@@ -4,6 +4,9 @@ import com.kraftics.krafticslib.command.exceptions.CommandSyntaxException;
 
 import java.util.List;
 
+/**
+ * Class representing a command node
+ */
 public interface CommandNode {
 
     CommandExecutor getExecutor();

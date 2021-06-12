@@ -7,23 +7,31 @@ import java.util.List;
 
 public class StringArgument implements Argument<String> {
     private final String name;
-    private final boolean quotable;
+    private final Type type;
 
     public StringArgument(String name) {
-        this(name, false);
+        this(name, Type.STRING);
     }
 
-    public StringArgument(String name, boolean quotable) {
+    public StringArgument(String name, Type type) {
         this.name = name;
-        this.quotable = quotable;
+        this.type = type;
     }
 
     @Override
     public String parse(StringReader reader) throws CommandSyntaxException {
-        if (quotable) {
-            return reader.readString();
+        switch (type) {
+            case UNTIL_END:
+                String remaining = reader.getRemaining();
+                reader.setCursor(reader.getString().length());
+                return remaining;
+            case UNQUOTED:
+                return reader.readUnquotedString();
+            case QUOTED:
+                return reader.readQuotedString();
+            default:
+                return reader.readString();
         }
-        return reader.readUnquotedString();
     }
 
     @Override
@@ -34,5 +42,12 @@ public class StringArgument implements Argument<String> {
     @Override
     public String getName() {
         return name;
+    }
+
+    public enum Type {
+        STRING,
+        UNQUOTED,
+        QUOTED,
+        UNTIL_END
     }
 }
