@@ -7,11 +7,10 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public class BooleanArgument implements Argument<Boolean> {
-    private final String name;
+public class BooleanArgument extends Argument<Boolean> {
 
     public BooleanArgument(String name) {
-        this.name = name;
+        super(name);
     }
 
     @Override
@@ -29,10 +28,5 @@ public class BooleanArgument implements Argument<Boolean> {
             return Collections.singletonList("false");
         }
         return null;
-    }
-
-    @Override
-    public String getName() {
-        return name;
     }
 }

@@ -5,8 +5,7 @@ import com.kraftics.krafticslib.command.exceptions.CommandSyntaxException;
 
 import java.util.List;
 
-public class StringArgument implements Argument<String> {
-    private final String name;
+public class StringArgument extends Argument<String> {
     private final Type type;
 
     public StringArgument(String name) {
@@ -14,7 +13,7 @@ public class StringArgument implements Argument<String> {
     }
 
     public StringArgument(String name, Type type) {
-        this.name = name;
+        super(name);
         this.type = type;
     }
 
@@ -37,11 +36,6 @@ public class StringArgument implements Argument<String> {
     @Override
     public List<String> tabComplete(StringReader reader) throws CommandSyntaxException {
         return null;
-    }
-
-    @Override
-    public String getName() {
-        return name;
     }
 
     public enum Type {

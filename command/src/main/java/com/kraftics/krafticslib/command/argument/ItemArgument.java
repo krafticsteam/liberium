@@ -8,9 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class ItemArgument implements Argument<Material> {
+public class ItemArgument extends Argument<Material> {
     private static final List<String> TAB_COMPLETE = new ArrayList<>();
-    private final String name;
 
     static {
         for (Material material : Material.values()) {
@@ -21,7 +20,7 @@ public class ItemArgument implements Argument<Material> {
     }
 
     public ItemArgument(String name) {
-        this.name = name;
+        super(name);
     }
 
     @Override
@@ -34,10 +33,5 @@ public class ItemArgument implements Argument<Material> {
     @Override
     public List<String> tabComplete(StringReader reader) throws CommandSyntaxException {
         return Argument.contextOnly(TAB_COMPLETE, reader);
-    }
-
-    @Override
-    public String getName() {
-        return name;
     }
 }

@@ -9,17 +9,16 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PlayerArgument implements Argument<Player> {
-    private final String name;
+public class PlayerArgument extends Argument<Player> {
     private final Server server;
-
-    public PlayerArgument(String name, Server server) {
-        this.name = name;
-        this.server = server;
-    }
 
     public PlayerArgument(String name) {
         this(name, Bukkit.getServer());
+    }
+
+    public PlayerArgument(String name, Server server) {
+        super(name);
+        this.server = server;
     }
 
     @Override
@@ -40,10 +39,5 @@ public class PlayerArgument implements Argument<Player> {
             }
         }
         return list;
-    }
-
-    @Override
-    public String getName() {
-        return name;
     }
 }

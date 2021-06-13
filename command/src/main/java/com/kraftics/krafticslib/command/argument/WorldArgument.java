@@ -9,17 +9,16 @@ import org.bukkit.World;
 import java.util.ArrayList;
 import java.util.List;
 
-public class WorldArgument implements Argument<World> {
-    private final String name;
+public class WorldArgument extends Argument<World> {
     private final Server server;
-
-    public WorldArgument(String name, Server server) {
-        this.name = name;
-        this.server = server;
-    }
 
     public WorldArgument(String name) {
         this(name, Bukkit.getServer());
+    }
+
+    public WorldArgument(String name, Server server) {
+        super(name);
+        this.server = server;
     }
 
     @Override
@@ -40,10 +39,5 @@ public class WorldArgument implements Argument<World> {
             }
         }
         return list;
-    }
-
-    @Override
-    public String getName() {
-        return name;
     }
 }

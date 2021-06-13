@@ -6,15 +6,22 @@ import com.kraftics.krafticslib.command.exceptions.CommandSyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
-public interface Argument<T> {
+public abstract class Argument<T> {
+    private final String name;
 
-    T parse(StringReader reader) throws CommandSyntaxException;
+    public Argument(String name) {
+        this.name = name;
+    }
+    
+    public String getName() {
+        return name;
+    }
 
-    List<String> tabComplete(StringReader reader) throws CommandSyntaxException;
+    public abstract T parse(StringReader reader) throws CommandSyntaxException;
 
-    String getName();
+    public abstract List<String> tabComplete(StringReader reader) throws CommandSyntaxException;
 
-    static List<String> contextOnly(List<?> original, StringReader reader) {
+    public static List<String> contextOnly(List<?> original, StringReader reader) {
         List<String> result = new ArrayList<>();
         String prefix = reader.getArgument();
         for (Object o : original) {

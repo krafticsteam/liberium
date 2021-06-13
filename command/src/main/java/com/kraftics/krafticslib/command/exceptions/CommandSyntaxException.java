@@ -64,6 +64,9 @@ public class CommandSyntaxException extends Exception {
     }
 
     public interface BuiltIn {
+        Dynamic2CommandExceptionBuilder LESS_THAN = new Dynamic2CommandExceptionBuilder((o, value) -> o + " must not be less than " + value);
+        Dynamic2CommandExceptionBuilder MORE_THAN = new Dynamic2CommandExceptionBuilder((o, value) -> o + " must not be more than " + value);
+
         DynamicCommandExceptionBuilder UNEXPECTED = new DynamicCommandExceptionBuilder((e) -> "Unexpected error happened: " + e);
 
         SimpleCommandExceptionBuilder INVALID_BLOCK = new SimpleCommandExceptionBuilder("Invalid block");
