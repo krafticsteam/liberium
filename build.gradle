@@ -6,11 +6,11 @@ plugins {
 
 // Constants
 ext {
-    project_name = 'KrafticsLib'
+    project_name = 'Liberium'
     project_version_suffix = System.properties['versionsuf'] != null ? System.properties['versionsuf'].toString() : ""
     project_version = (System.properties['version'] != null ? System.properties['version'].toString() : "1.1.0") + project_version_suffix
     project_description = 'Spigot library to make plugin coding fun and easier'
-    project_url = 'https://kraftics.com/krafticslib'
+    project_url = 'https://kraftics.com/liberium'
     project_jdk = '1.8'
 
     project_group = 'com.kraftics'
@@ -73,7 +73,7 @@ allprojects {
 }
 
 subprojects {
-    archivesBaseName = "krafticslib-$project.name"
+    archivesBaseName = "liberium-$project.name"
 
     // Maven central publishing
 
@@ -86,9 +86,9 @@ subprojects {
                 version = project_version
 
                 pom {
-                    name = 'KrafticsLib'
+                    name = 'Liberium'
                     description = project_description
-                    url = 'https://github.com/KrafticsTeam/KrafticsLib'
+                    url = 'https://github.com/KrafticsTeam/Liberium'
 
                     organization {
                         name = 'KrafticsTeam'
@@ -98,15 +98,15 @@ subprojects {
                     licenses {
                         license {
                             name = 'MIT'
-                            url = 'https://github.com/KrafticsTeam/KrafticsLib/blob/master/LICENSE'
+                            url = 'https://github.com/KrafticsTeam/Liberium/blob/master/LICENSE'
                             distribution = 'repo'
                         }
                     }
 
                     scm {
-                        url = 'https://github.com/KrafticsTeam/KrafticsLib'
-                        connection = 'scm:git:git://github.com/KrafticsTeam/KrafticsLib.git'
-                        developerConnection = 'scm:git:ssh://git@github.com:KrafticsTeam/KrafticsLib.git'
+                        url = 'https://github.com/KrafticsTeam/Liberium'
+                        connection = 'scm:git:git://github.com/KrafticsTeam/Liberium.git'
+                        developerConnection = 'scm:git:ssh://git@github.com:KrafticsTeam/Liberium.git'
                     }
 
                     developers {
