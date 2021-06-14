@@ -101,7 +101,7 @@ public class CommandBuilder {
 
     private static ArgumentBuilder getNode(Argument<?> argument, List<ArgumentBuilder> childs) {
         for (ArgumentBuilder node : childs) {
-            if (node.argument.getName().equals(argument.getName())) {
+            if (node.argument == argument) {
                 return node;
             }
         }
