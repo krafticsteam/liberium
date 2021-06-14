@@ -26,7 +26,7 @@ or use one of these build tools (replace `(latest_version)` with latest version)
 ```xml
 <dependency>
   <groupId>com.kraftics</groupId>
-  <artifactId>krafticslib-core</artifactId>
+  <artifactId>liberium-core</artifactId>
   <version>(latest_version)</version>
   <scope>provided</scope>
 </dependency>
@@ -34,7 +34,7 @@ or use one of these build tools (replace `(latest_version)` with latest version)
 
 ### Gradle
 ```gradle
-compileOnly 'com.kraftics:krafticslib-core:(latest_version)'
+compileOnly 'com.kraftics:liberium-core:(latest_version)'
 ```
 
 More info about how to continue is in the [wiki](https://github.com/KrafticsTeam/Liberium/wiki)
