@@ -1,5 +1,6 @@
 package com.kraftics.liberium.packet;
 
+import com.kraftics.liberium.packet.reflection.ConstructorInvoker;
 import com.kraftics.liberium.packet.reflection.Reflection;
 
 import java.util.HashMap;
@@ -10,6 +11,7 @@ import java.util.Map;
  */
 public class PacketRegistry {
     private static final Map<Class<?>, PacketType> REGISTRY = new HashMap<>();
+    private static final Map<PacketType, Class<?>> REVERSE_REGISTRY = new HashMap<>();
 
     static {
         //<editor-fold desc="PacketOut" defaultstate="collapsed">
@@ -155,6 +157,7 @@ public class PacketRegistry {
 
     public static void register(Class<?> clazz, PacketType packet) {
         REGISTRY.put(clazz, packet);
+        REVERSE_REGISTRY.put(packet, clazz);
     }
 
     public static void register(String clazz, PacketType packet) {
@@ -167,5 +170,15 @@ public class PacketRegistry {
 
     public static PacketType get(Class<?> o) {
         return REGISTRY.get(o);
+    }
+
+    public static Object getNew(PacketType type) {
+        Class<?> clazz = get(type);
+        ConstructorInvoker<?> constructor = Reflection.getConstructor(clazz);
+        return constructor.invoke();
+    }
+
+    public static Class<?> get(PacketType type) {
+        return REVERSE_REGISTRY.get(type);
     }
 }

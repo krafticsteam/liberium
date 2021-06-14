@@ -19,11 +19,16 @@ public class ObjectBuffer {
     private final Object object;
     private final Map<Class<?>, List<Field>> data;
 
+    public ObjectBuffer(PacketType type) {
+        this(PacketRegistry.getNew(type));
+    }
+
     public ObjectBuffer(Object object) {
         this.object = object;
 
         Map<Class<?>, List<Field>> data = new HashMap<>();
         for (Field field : object.getClass().getDeclaredFields()) {
+            field.setAccessible(true);
             List<Field> fields = data.get(field.getType());
             if (fields == null) fields = new ArrayList<>();
             fields.add(field);

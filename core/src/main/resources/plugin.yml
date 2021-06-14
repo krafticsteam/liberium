@@ -1,8 +1,8 @@
-name: 'KrafticsLib'
+name: 'Liberium'
 version: '1.0.0'
-main: 'com.kraftics.krafticslib.KrafticsLibPlugin'
+main: 'com.kraftics.liberium.LiberiumPlugin'
 
-description: 'Spigot library to make plugin coding fun and easier'
+description: 'Develop spigot plugins with ease.'
 load: 'STARTUP'
 author: 'Kraftics Team'
-website: 'https://kraftics.com/krafticslib'
+website: 'https://kraftics.com/liberium'
