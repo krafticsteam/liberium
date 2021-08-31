@@ -9,11 +9,13 @@ public class ArgumentCommandNode implements CommandNode {
     private final CommandExecutor executor;
     private final List<CommandNode> children;
     private final Argument<?> argument;
+    private final boolean addContext;
 
     public ArgumentCommandNode(CommandExecutor executor, List<CommandNode> children, Argument<?> argument) {
         this.executor = executor;
         this.children = children;
         this.argument = argument;
+        addContext = !(argument instanceof LiteralArgument);
     }
 
     @Override
@@ -35,7 +37,11 @@ public class ArgumentCommandNode implements CommandNode {
 
     @Override
     public void parse(StringReader reader, CommandContextBuilder context) throws CommandSyntaxException {
-        context.withArgument(argument.getName(), argument.parse(reader));
+        if (addContext) {
+            context.withArgument(argument.getName(), argument.parse(reader));
+        } else {
+            argument.parse(reader);
+        }
     }
 
     @Override

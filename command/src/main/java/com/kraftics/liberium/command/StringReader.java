@@ -208,6 +208,7 @@ public class StringReader {
 
         char read = read();
         if (read != '\'' && read != '"') {
+            cursor--;
             throw CommandSyntaxException.BuiltIn.EXPECTED.build("start of a quoted string", read, this);
         }
 
@@ -244,7 +245,7 @@ public class StringReader {
      */
     public int readInteger() throws CommandSyntaxException {
         int start = cursor;
-        while (canRead() && isNumber(peek())) {
+        while (canRead()) {
             skip();
         }
         String number = string.substring(start, cursor);
@@ -264,7 +265,7 @@ public class StringReader {
      */
     public long readLong() throws CommandSyntaxException {
         int start = cursor;
-        while (canRead() && isNumber(peek())) {
+        while (canRead()) {
             skip();
         }
         String number = string.substring(start, cursor);
@@ -284,7 +285,7 @@ public class StringReader {
      */
     public short readShort() throws CommandSyntaxException {
         int start = cursor;
-        while (canRead() && isNumber(peek())) {
+        while (canRead()) {
             skip();
         }
         String number = string.substring(start, cursor);
@@ -304,7 +305,7 @@ public class StringReader {
      */
     public float readFloat() throws CommandSyntaxException {
         int start = cursor;
-        while (canRead() && isDecimal(peek())) {
+        while (canRead()) {
             skip();
         }
         String number = string.substring(start, cursor);
@@ -324,7 +325,7 @@ public class StringReader {
      */
     public double readDouble() throws CommandSyntaxException {
         int start = cursor;
-        while (canRead() && isDecimal(peek())) {
+        while (canRead()) {
             skip();
         }
         String number = string.substring(start, cursor);
@@ -390,13 +391,5 @@ public class StringReader {
 
     private char reversePeek(int cursor) {
         return string.charAt(--cursor);
-    }
-
-    public static boolean isNumber(char c) {
-        return c >= '0' && c <= '9' || c == '-';
-    }
-
-    public static boolean isDecimal(char c) {
-        return c >= '0' && c <= '9' || c == '.' || c == '-';
     }
 }

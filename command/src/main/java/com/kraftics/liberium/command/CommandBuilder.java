@@ -81,17 +81,17 @@ public class CommandBuilder {
      * @return this command builder
      */
     public CommandBuilder execute(CommandExecutor executor, List<Argument<?>> list) {
-        ArgumentBuilder current = null;
+        List<ArgumentBuilder> current = arguments;
         for (int i = 0; i < list.size(); i++) {
             Argument<?> argument = list.get(i);
 
-            ArgumentBuilder node = getNode(argument, getArguments(current));
+            ArgumentBuilder node = getNode(argument, current);
             if (node == null) {
                 node = new ArgumentBuilder(argument);
-                getArguments(current).add(node);
+                current.add(node);
             }
 
-            current = node;
+            current = node.arguments;
             if (i == list.size() - 1) {
                 node.executor = executor;
             }
@@ -101,15 +101,11 @@ public class CommandBuilder {
 
     private static ArgumentBuilder getNode(Argument<?> argument, List<ArgumentBuilder> childs) {
         for (ArgumentBuilder node : childs) {
-            if (node.argument == argument) {
+            if (node.argument.getName().equals(argument.getName())) {
                 return node;
             }
         }
         return null;
-    }
-
-    private List<ArgumentBuilder> getArguments(ArgumentBuilder current) {
-        return current == null ? arguments : current.arguments;
     }
 
     /**
