@@ -4,7 +4,6 @@ plugins {
     id 'signing'
 }
 
-// Constants
 ext {
     project_name = 'Liberium'
     project_group = 'com.kraftics'
@@ -14,7 +13,7 @@ ext {
     project_url = 'https://kraftics.com/liberium'
     project_jdk = '11'
 
-    isRelease = !project_version.toString().contains('snapshot')
+    isRelease = !project_version.toString().contains('beta')
 }
 
 allprojects {
@@ -48,18 +47,14 @@ allprojects {
 
         ignoreFailures true
     }
+}
 
-    configurations {
-        api {
-            canBeResolved = true
-        }
-    }
+subprojects {
+    archivesBaseName = "liberium-$project.name"
 
-    jar {
-        onlyIf { !sourceSets.main.allSource.files.isEmpty() }
-        from {
-            configurations.api.collect { it.isDirectory() ? it : zipTree(it) }
-        }
+    java {
+        withSourcesJar()
+        withJavadocJar()
     }
 
     tasks.withType(Javadoc) {
@@ -70,16 +65,6 @@ allprojects {
         options.encoding = 'UTF-8'
     }
 
-    java {
-        withSourcesJar()
-        withJavadocJar()
-    }
-}
-
-subprojects {
-    archivesBaseName = "liberium-$project.name"
-
-    // Maven central publishing
     publishing {
         publications {
             mavenJava(MavenPublication) {
@@ -148,4 +133,8 @@ subprojects {
             sign publishing.publications.mavenJava
         }
     }
+}
+
+jar {
+    onlyIf { false }
 }
