@@ -1,8 +1,9 @@
 package com.kraftics.liberium.module;
 
-import com.kraftics.liberium.module.main.MainModule;
+import com.kraftics.liberium.main.MainModule;
 import org.apache.commons.lang.Validate;
 import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Constructor;
@@ -21,8 +22,7 @@ public class ModuleRegistry {
     }
 
     @Nullable
-    @Contract("null -> fail; !null -> _")
-    public static Module createInstance(Class<? extends Module> module) {
+    public static Module createInstance(@NotNull Class<? extends Module> module) {
         Validate.notNull(module, "Module cannot be null");
 
         Supplier<Module> supplier = registry.get(module);
@@ -30,8 +30,7 @@ public class ModuleRegistry {
         return supplier.get();
     }
 
-    @Contract("null -> fail; !null -> !null")
-    public static Module fromDefault(Class<? extends Module> module) {
+    public static Module fromDefault(@NotNull Class<? extends Module> module) {
         Validate.notNull(module, "Module cannot be null");
 
         try {
@@ -42,20 +41,25 @@ public class ModuleRegistry {
         }
     }
 
-    @Contract("null -> fail; !null -> _")
-    public static boolean isRegistered(Class<? extends Module> module) {
+    public static boolean isRegistered(@NotNull Class<? extends Module> module) {
         Validate.notNull(module, "Module cannot be null");
 
         return registry.containsKey(module);
     }
 
-    @Contract("null, !null -> fail; !null, null -> fail")
-    public static void register(Class<? extends Module> module, Supplier<Module> supplier) {
+    @Nullable
+    public static Supplier<Module> get(@NotNull Class<? extends Module> module) {
         Validate.notNull(module, "Module cannot be null");
-        Validate.notNull(supplier, "Supplier cannot be null");
+
+        return registry.get(module);
+    }
+
+    public static void register(@NotNull Class<? extends Module> module, @NotNull Supplier<Module> factory) {
+        Validate.notNull(module, "Module cannot be null");
+        Validate.notNull(factory, "Factory cannot be null");
         Validate.isTrue(!isRegistered(module), "This module is already registered");
 
-        registry.put(module, supplier);
+        registry.put(module, factory);
     }
 
     public static Set<Class<? extends Module>> getClasses() {
