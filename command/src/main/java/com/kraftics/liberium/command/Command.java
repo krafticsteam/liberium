@@ -1,6 +1,7 @@
 package com.kraftics.liberium.command;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -12,5 +13,11 @@ import java.lang.annotation.Target;
 public @interface Command {
 
     @NotNull
-    String value();
+    String name();
+
+    @NotNull
+    String description()    default "";
+
+    @NotNull
+    String[] aliases()      default {};
 }
