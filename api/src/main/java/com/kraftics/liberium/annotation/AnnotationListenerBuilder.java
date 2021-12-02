@@ -1,5 +1,7 @@
 package com.kraftics.liberium.annotation;
 
+import com.kraftics.liberium.module.Module;
+
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -10,16 +12,18 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class AnnotationListenerBuilder<A extends Annotation> {
+    private final Module module;
     private final Class<A> annotation;
     private final AnnotationProcessor processor;
 
-    public AnnotationListenerBuilder(Class<A> annotation, AnnotationProcessor processor) {
+    public AnnotationListenerBuilder(Module module, Class<A> annotation, AnnotationProcessor processor) {
+        this.module = module;
         this.annotation = annotation;
         this.processor = processor;
     }
 
     public AnnotationListenerBuilder<A> onClass(AnnotationListener<A, Class> listener) {
-        processor.registerListener(annotation, Class.class, listener);
+        processor.registerListener(module, annotation, Class.class, listener);
         return this;
     }
 
@@ -32,7 +36,7 @@ public class AnnotationListenerBuilder<A extends Annotation> {
     }
 
     public AnnotationListenerBuilder<A> onField(AnnotationListener<A, Field> listener) {
-        processor.registerListener(annotation, Field.class, listener);
+        processor.registerListener(module, annotation, Field.class, listener);
         return this;
     }
 
@@ -66,8 +70,19 @@ public class AnnotationListenerBuilder<A extends Annotation> {
         });
     }
 
+    public AnnotationListenerBuilder<A> onField(Object modify) {
+        return onField((a, f, o) -> {
+            try {
+                f.setAccessible(true);
+                f.set(o, modify);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
     public AnnotationListenerBuilder<A> onMethod(AnnotationListener<A, Method> listener) {
-        processor.registerListener(annotation, Method.class, listener);
+        processor.registerListener(module, annotation, Method.class, listener);
         return this;
     }
 
@@ -102,7 +117,7 @@ public class AnnotationListenerBuilder<A extends Annotation> {
     }
 
     public AnnotationListenerBuilder<A> onConstructor(AnnotationListener<A, Constructor> listener) {
-        processor.registerListener(annotation, Constructor.class, listener);
+        processor.registerListener(module, annotation, Constructor.class, listener);
         return this;
     }
 

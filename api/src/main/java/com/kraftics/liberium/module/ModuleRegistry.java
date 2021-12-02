@@ -12,7 +12,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Supplier;
 
-// TODO: Add documentation
 public class ModuleRegistry {
     private static final Map<Class<? extends Module>, Supplier<Module>> registry = new HashMap<>();
 

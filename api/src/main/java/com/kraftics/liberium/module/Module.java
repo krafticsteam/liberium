@@ -21,11 +21,13 @@ public abstract class Module {
 
     public void enable() {
         onEnable();
+        this.plugin.getAnnotationProcessor().enableModule(this);
         this.enabled = true;
     }
 
     public void disable() {
         onDisable();
+        this.plugin.getAnnotationProcessor().disableModule(this);
         this.enabled = false;
     }
 
@@ -38,7 +40,7 @@ public abstract class Module {
     }
 
     public <A extends Annotation> AnnotationListenerBuilder<A> registerAnnotation(Class<A> annotation) {
-        return new AnnotationListenerBuilder<>(annotation, plugin.getAnnotationProcessor());
+        return new AnnotationListenerBuilder<>(this, annotation, plugin.getAnnotationProcessor());
     }
 
     public boolean isInitialized() {

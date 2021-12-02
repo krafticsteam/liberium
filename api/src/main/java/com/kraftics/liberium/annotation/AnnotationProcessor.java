@@ -1,5 +1,7 @@
 package com.kraftics.liberium.annotation;
 
+import com.kraftics.liberium.module.Module;
+
 import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedElement;
 import java.util.List;
@@ -14,6 +16,11 @@ public interface AnnotationProcessor {
     }
     void runEvents(Annotation annotation, AnnotatedElement element, Object object);
 
+    List<AnnotationListener<?, ?>> getListeners(Module module);
     List<AnnotationListener<?, ?>> getListeners(Annotation annotation, AnnotatedElement element);
-    <A extends Annotation, E extends AnnotatedElement> void registerListener(Class<A> annotation, Class<E> element, AnnotationListener<A, E> listener);
+    List<AnnotationListener<?, ?>> getEnabledListeners(Annotation annotation, AnnotatedElement element);
+    <A extends Annotation, E extends AnnotatedElement> void registerListener(Module module, Class<A> annotation, Class<E> element, AnnotationListener<A, E> listener);
+    void disableModule(Module module);
+    void enableModule(Module module);
+    boolean isModuleEnabled(Module module);
 }
