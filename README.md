@@ -6,7 +6,6 @@ Develop spigot plugins with ease.
 </p>
 
 [![Spigot](https://img.shields.io/badge/spigot-1.16.5-orange?style=flat-square)](https://www.spigotmc.org/resources/liberium.87566/)
-[![Build](https://img.shields.io/jenkins/build?jobUrl=https%3A%2F%2Fkraftics.com%3A8443%2Fjob%2FKrafticsTeam%2Fjob%2FLiberium%2Fjob%2Fmaster%2F&style=flat-square)](https://kraftics.com:8443/blue/organizations/jenkins/KrafticsTeam%2FLiberium/branches)
 [![Release](https://img.shields.io/github/v/release/KrafticsTeam/Liberium?style=flat-square)](https://github.com/KrafticsTeam/Liberium/releases/latest)
 [![Servers](https://img.shields.io/bstats/servers/9916?style=flat-square)](https://bstats.org/plugin/bukkit/Liberium/9916)
 </div>
