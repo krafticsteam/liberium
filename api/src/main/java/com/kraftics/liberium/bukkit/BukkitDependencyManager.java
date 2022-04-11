@@ -8,6 +8,7 @@ import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 public class BukkitDependencyManager implements DependencyManager {
@@ -23,7 +24,7 @@ public class BukkitDependencyManager implements DependencyManager {
     @NotNull
     @Override
     public Object createDependency(Class<?> type) throws DependencyException {
-        InstanceContainer container = getContainer(type);
+        InstanceContainer container = getContainerOrDefault(type);
         Object instance = container.getInstance(type);
         if (instance != null) return instance;
         instance = instantier.instantiate(type);
@@ -33,12 +34,12 @@ public class BukkitDependencyManager implements DependencyManager {
 
     @Override
     public Object getDependency(Class<?> type) {
-        return getContainer(type).getInstance(type);
+        return getContainerOrDefault(type).getInstance(type);
     }
 
     @Override
     public boolean hasDependency(Class<?> type) {
-        return getContainer(type).hasInstance(type);
+        return getContainerOrDefault(type).hasInstance(type);
     }
 
     /*
@@ -69,8 +70,14 @@ public class BukkitDependencyManager implements DependencyManager {
 
     @NotNull
     @Override
-    public InstanceContainer getContainer(Class<?> type) {
-        return containers.stream().filter(container -> container.supports(type)).findFirst().orElse(defaultContainer);
+    public Optional<InstanceContainer> getContainer(Class<?> type) {
+        return containers.stream().filter(container -> container.supports(type)).findFirst();
+    }
+
+    @NotNull
+    @Override
+    public InstanceContainer getContainerOrDefault(Class<?> type) {
+        return getContainer(type).orElse(defaultContainer);
     }
 
     @NotNull

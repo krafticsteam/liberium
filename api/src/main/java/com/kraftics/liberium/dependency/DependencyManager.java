@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 public interface DependencyManager {
@@ -25,7 +26,10 @@ public interface DependencyManager {
     Stream<InstanceContainer> getContainers();
 
     @NotNull
-    InstanceContainer getContainer(Class<?> type);
+    Optional<InstanceContainer> getContainer(Class<?> type);
+
+    @NotNull
+    InstanceContainer getContainerOrDefault(Class<?> type);
 
     @NotNull
     DependencyInstantier getInstantier();

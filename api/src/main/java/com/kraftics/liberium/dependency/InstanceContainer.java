@@ -13,5 +13,7 @@ public interface InstanceContainer {
 
     boolean supports(Class<?> type);
 
-    void configureProcess(DependencyProcessor<?> processor);
+    default void configureInstatiation(DependencyInstantier.InstantiationBuilder builder) {
+
+    }
 }

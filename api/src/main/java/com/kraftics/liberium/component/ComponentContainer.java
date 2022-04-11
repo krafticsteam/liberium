@@ -1,6 +1,5 @@
 package com.kraftics.liberium.component;
 
-import com.kraftics.liberium.dependency.DependencyProcessor;
 import com.kraftics.liberium.dependency.InstanceContainer;
 import com.kraftics.liberium.main.OnInit;
 
@@ -30,8 +29,4 @@ public class ComponentContainer implements InstanceContainer {
         return type.isAnnotationPresent(OnInit.class);
     }
 
-    @Override
-    public void configureProcess(DependencyProcessor<?> processor) {
-
-    }
 }

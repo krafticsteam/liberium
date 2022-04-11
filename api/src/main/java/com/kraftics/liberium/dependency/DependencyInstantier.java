@@ -5,10 +5,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.function.Consumer;
 
 public class DependencyInstantier {
     private final DependencyManager manager;
@@ -21,9 +19,9 @@ public class DependencyInstantier {
 
     /*
      * TODO: Scan in packages
-     * TODO: Add warning/error messages
+     * TODO: Add and log warning/error messages
      */
-    public void prepareInit() {
+    public void sortDependencies() {
         LinkedList<Class<?>> sorted = new LinkedList<>();
         for (Class<?> clazz : dependencies) {
             try {
@@ -53,15 +51,23 @@ public class DependencyInstantier {
      * TODO: Add instantiation events
      */
     @NotNull
-    public Object instantiate(Class<?> clazz) throws DependencyException {
-        InstanceContainer container = manager.getContainer(clazz);
+    public Object instantiate(@NotNull Class<?> clazz) throws DependencyException {
+        InstanceContainer container = manager.getContainer(clazz).orElseThrow(() -> new DependencyException("Valid container not found for class: " + clazz));
         if (container.hasInstance(clazz)) throw new DependencyException("Instance already exists");
-        Constructor<?> constructor = getValidConstructor(clazz).orElseThrow(() -> new DependencyException("Valid constructor not found for class: " + clazz));
-        return instantiateConstructor(constructor);
+
+        InstantiationBuilder builder = new InstantiationBuilder();
+        container.configureInstatiation(builder);
+
+        Object o = builder.getInstantiator() == null ?
+                instantiateConstructor(getValidConstructor(clazz).orElseThrow(() -> new DependencyException("Valid constructor not found for class: " + clazz))) :
+                builder.getInstantiator().instantiate(clazz);
+
+        builder.runAfter(o);
+        return o;
     }
 
     @NotNull
-    public Object instantiateConstructor(Constructor<?> constructor) throws DependencyException {
+    public Object instantiateConstructor(@NotNull Constructor<?> constructor) throws DependencyException {
         try {
             return constructor.newInstance(Arrays.stream(constructor.getParameterTypes()).map(manager::getDependency).toArray());
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
@@ -69,20 +75,72 @@ public class DependencyInstantier {
         }
     }
 
+    /*
+     * TODO: Sort by amount of parameters
+     */
     @NotNull
-    public Optional<Constructor<?>> getValidConstructor(Class<?> clazz) {
+    public Optional<Constructor<?>> getValidConstructor(@NotNull Class<?> clazz) {
         return Arrays.stream(clazz.getConstructors()).filter(this::isConstructorValid).findFirst();
     }
 
     /*
      * TODO: Annotation for optional parameters
      */
-    public boolean isConstructorValid(Constructor<?> constructor) {
+    public boolean isConstructorValid(@NotNull Constructor<?> constructor) {
         for (Class<?> parameter : constructor.getParameterTypes()) {
             if (!manager.hasDependency(parameter)) {
                 return false;
             }
         }
         return true;
+    }
+
+    public static class InstantiationBuilder {
+        private final Set<Consumer<Object>> afterConsumers = new HashSet<>();
+        private Instantiator instantiator = null;
+        private boolean processAnnotations = true;
+
+        @NotNull
+        public InstantiationBuilder processAnnotation(boolean processAnnotations) {
+            this.processAnnotations = processAnnotations;
+            return this;
+        }
+
+        @NotNull
+        public InstantiationBuilder after(@NotNull Consumer<Object> consumer) {
+            afterConsumers.add(consumer);
+            return this;
+        }
+
+        @NotNull
+        public InstantiationBuilder instantiator(@Nullable Instantiator instantiator) {
+            this.instantiator = instantiator;
+            return this;
+        }
+
+        @NotNull
+        public Set<Consumer<Object>> getAfterConsumers() {
+            return Set.copyOf(afterConsumers);
+        }
+
+        @Nullable
+        public Instantiator getInstantiator() {
+            return instantiator;
+        }
+
+        public boolean getProcessAnnotations() {
+            return processAnnotations;
+        }
+
+        private void runAfter(Object o) {
+            afterConsumers.forEach(consumer -> consumer.accept(o));
+        }
+    }
+
+    @FunctionalInterface
+    public interface Instantiator {
+
+        @NotNull
+        Object instantiate(@NotNull Class<?> clazz) throws DependencyException;
     }
 }

@@ -26,8 +26,4 @@ public class DefaultInstanceContainer implements InstanceContainer {
         return true;
     }
 
-    @Override
-    public void configureProcess(DependencyProcessor<?> processor) {
-
-    }
 }
