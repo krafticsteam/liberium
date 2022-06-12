@@ -8,7 +8,7 @@ plugins {
 ext {
     project_name = 'Liberium'
     project_version_suffix = System.properties['versionsuf'] != null ? System.properties['versionsuf'].toString() : ""
-    project_version = (System.properties['version'] != null ? System.properties['version'].toString() : "1.1.0") + project_version_suffix
+    project_version = "1.1.1" + project_version_suffix
     project_description = 'Spigot library to make plugin coding fun and easier'
     project_url = 'https://kraftics.com/liberium'
     project_jdk = '1.8'

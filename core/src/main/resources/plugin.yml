@@ -1,5 +1,5 @@
 name: 'Liberium'
-version: '1.0.0'
+version: '1.1.1'
 main: 'com.kraftics.liberium.LiberiumPlugin'
 
 description: 'Develop spigot plugins with ease.'
