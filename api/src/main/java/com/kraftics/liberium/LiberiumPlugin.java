@@ -20,6 +20,8 @@ public abstract class LiberiumPlugin extends JavaPlugin {
     private final List<Object> components = new ArrayList<>();
 
     public LiberiumPlugin() {
+        super();
+
         useModule(MainModule.class);
 
         for (Class<? extends Module> module : ModuleRegistry.getClasses()) {
