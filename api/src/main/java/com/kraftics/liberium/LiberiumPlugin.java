@@ -7,10 +7,8 @@ public abstract class LiberiumPlugin extends JavaPlugin {
     public LiberiumPlugin() {
         super();
 
-        onInit();
+        onInitialize();
     }
 
-    public void onInit() {
-
-    }
+    public abstract void onInitialize();
 }
