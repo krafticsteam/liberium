@@ -17,7 +17,6 @@ public abstract class LiberiumPlugin extends JavaPlugin {
     protected final AnnotationProcessor annotationProcessor = new WrapperAnnotationProcessor();
 
     private final List<Module> modules = new ArrayList<>();
-    private final List<Object> components = new ArrayList<>();
 
     public LiberiumPlugin() {
         super();
@@ -30,10 +29,6 @@ public abstract class LiberiumPlugin extends JavaPlugin {
         }
 
         onInit();
-
-        for (Module module : modules) {
-            module.init(this);
-        }
     }
 
     public void onInit() {
@@ -127,14 +122,6 @@ public abstract class LiberiumPlugin extends JavaPlugin {
         return null;
     }
 
-    public final void registerComponent(@NotNull Object component) {
-        Validate.notNull(component, "Component cannot be null");
-
-        components.add(component);
-        modules.forEach(module -> module.onComponentRegistry(component));
-        annotationProcessor.runEvents(component);
-    }
-
     public AnnotationProcessor getAnnotationProcessor() {
         return annotationProcessor;
     }
@@ -142,10 +129,5 @@ public abstract class LiberiumPlugin extends JavaPlugin {
     @NotNull
     public final List<Module> getModules() {
         return new ArrayList<>(modules);
-    }
-
-    @NotNull
-    public final List<Object> getComponents() {
-        return new ArrayList<>(components);
     }
 }
