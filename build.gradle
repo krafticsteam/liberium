@@ -8,7 +8,7 @@ ext {
     project_name = 'Liberium'
     project_group = 'com.kraftics'
     project_version_build = System.properties.getProperty("buildnum") as Integer
-    project_version = "2.0.0-beta" + (project_version_build == null ? "" : "+" + project_version_build.toString())
+    project_version = "1.1.1+v2" + (project_version_build == null ? "" : "." + project_version_build.toString())
     project_description = 'Spigot library to make plugin coding fun and easier'
     project_url = 'https://kraftics.com/liberium'
     project_jdk = '11'

@@ -1,5 +1,5 @@
 name: 'Liberium'
-version: '2.0.0-beta'
+version: '${version}'
 main: 'com.kraftics.liberium.LiberiumJavaPlugin'
 
 description: 'Develop spigot plugins with ease.'
