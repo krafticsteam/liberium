@@ -9,4 +9,6 @@ public interface NetMinecraftServer {
     CommandMap getCommandMap();
 
     CommandDispatcher<Object> getServerDispatcher();
+
+    CommandNodeConverter getCommandNodeConverter();
 }
