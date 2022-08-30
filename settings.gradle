@@ -1,3 +1,4 @@
 rootProject.name = 'Liberium'
 
 include 'plugin', 'packet', 'database', 'api'
+include 'nms:common'
