@@ -22,7 +22,7 @@ jobs:
       - name: build
         uses: gradle/gradle-build-action@v2
         with:
-          arguments: assemble -Dversionsuf=+${{ github.run_attempt }}
+          arguments: assemble -Dversionsuf=+${{ github.run_number }}
       - uses: actions/upload-artifact@v3
         with:
           name: build
@@ -43,4 +43,4 @@ jobs:
       - name: test
         uses: gradle/gradle-build-action@v2
         with:
-          arguments: check -Dversionsuf=+${{ github.run_attempt }}
+          arguments: check -Dversionsuf=+${{ github.run_number }}
