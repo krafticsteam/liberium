@@ -15,6 +15,10 @@ jobs:
         with:
           distribution: temurin
           java-version: 11
+      - uses: actions/cache@v3
+        with:
+          path: '*/build'
+          key: build-${{ github.sha }}
       - name: build
         uses: gradle/gradle-build-action@v2
         with:
@@ -28,6 +32,10 @@ jobs:
         with:
           distribution: temurin
           java-version: 11
+      - uses: actions/cache@v3
+        with:
+          path: '*/build'
+          key: build-${{ github.sha }}
       - name: test
         uses: gradle/gradle-build-action@v2
         with:
