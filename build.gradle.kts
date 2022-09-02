@@ -34,7 +34,7 @@ allprojects {
     }
 
     dependencies {
-        compile("org.jetbrains:annotations:23.0.0")
+        implementation("org.jetbrains:annotations:23.0.0")
         compileOnly("org.spigotmc:spigot-api:1.16.5-R0.1-SNAPSHOT")
 
         testImplementation("org.spigotmc:spigot-api:1.16.5-R0.1-SNAPSHOT")

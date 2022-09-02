@@ -1,7 +1,7 @@
 dependencies {
-    compile(project(":command"))
-    compile(project(":database"))
-    compile(project(":packet"))
+    api(project(":command"))
+    api(project(":database"))
+    api(project(":packet"))
 }
 
 tasks.withType<Javadoc> {
