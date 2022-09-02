@@ -6,9 +6,8 @@ plugins {
 
 ext {
     project_name = 'Liberium'
-    project_group = 'com.kraftics'
-    project_version_build = System.properties.getProperty("buildnum") as Integer
-    project_version = "1.1.1+v2" + (project_version_build == null ? "" : "." + project_version_build.toString())
+    project_version_suffix = System.properties['versionsuf'] != null ? System.properties['versionsuf'].toString() : ""
+    project_version = "1.1.1" + project_version_suffix
     project_description = 'Spigot library to make plugin coding fun and easier'
     project_url = 'https://kraftics.com/liberium'
     project_jdk = '11'
@@ -34,13 +33,12 @@ allprojects {
     }
 
     dependencies {
-        compileOnly 'org.spigotmc:spigot-api:1.17.1-R0.1-SNAPSHOT'
+        compile 'org.jetbrains:annotations:23.0.0'
+        compileOnly 'org.spigotmc:spigot-api:1.16.5-R0.1-SNAPSHOT'
 
-        implementation 'org.jetbrains:annotations:23.0.0'
-
-        testImplementation 'org.spigotmc:spigot-api:1.17.1-R0.1-SNAPSHOT'
+        testImplementation 'org.spigotmc:spigot-api:1.16.5-R0.1-SNAPSHOT'
         testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
-        testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
+        testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
     }
 
     test {
