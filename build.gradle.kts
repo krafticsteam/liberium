@@ -71,7 +71,7 @@ allprojects {
 }
 
 subprojects {
-    base.archivesBaseName = "liberium-$project.name"
+    base.archivesBaseName = "liberium-$name"
 
     // Maven central publishing
 
