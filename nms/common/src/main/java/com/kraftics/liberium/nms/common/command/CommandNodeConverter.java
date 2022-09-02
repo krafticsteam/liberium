@@ -32,21 +32,24 @@ public class CommandNodeConverter {
         if (node == null) {
             return null;
         } else if (node instanceof LiteralCommandNode) {
-            return new LiteralCommandNode<>(((LiteralCommandNode<CommandSender>) node).getLiteral(), convertExecutor(node.getCommand()), convertRequirement(node.getRequirement()),
-                    convert(node.getRedirect()), null, node.isFork());
+            return addChildren(new LiteralCommandNode<>(((LiteralCommandNode<CommandSender>) node).getLiteral(), convertExecutor(node.getCommand()), convertRequirement(node.getRequirement()),
+                    convert(node.getRedirect()), null, node.isFork()), node);
         } else if (node instanceof ArgumentCommandNode) {
             ArgumentCommandNode<CommandSender, ?> argument = (ArgumentCommandNode<CommandSender, ?>) node;
-            return new ArgumentCommandNode<>(node.getName(), argument.getType(), convertExecutor(node.getCommand()), convertRequirement(node.getRequirement()),
-                    convert(node.getRedirect()), null, node.isFork(), convertSuggestions(argument.getCustomSuggestions(), node.getCommand()));
+            return addChildren(new ArgumentCommandNode<>(node.getName(), argument.getType(), convertExecutor(node.getCommand()), convertRequirement(node.getRequirement()),
+                    convert(node.getRedirect()), null, node.isFork(), convertSuggestions(argument.getCustomSuggestions(), node.getCommand())), node);
         } else if (node instanceof RootCommandNode) {
-            RootCommandNode<CommandListenerWrapper> result = new RootCommandNode<>();
-            for (CommandNode<CommandSender> child : node.getChildren()) {
-                result.addChild(convert(child));
-            }
-            return result;
+            return addChildren(new RootCommandNode<>(), node);
         }
         // TODO: Add warning or throw an exception
         return null;
+    }
+
+    protected static CommandNode<CommandListenerWrapper> addChildren(CommandNode<CommandListenerWrapper> node, CommandNode<CommandSender> original) {
+        for (CommandNode<CommandSender> child : original.getChildren()) {
+            node.addChild(convert(child));
+        }
+        return node;
     }
 
     public static Command<CommandListenerWrapper> convertExecutor(Command<CommandSender> executor) {
