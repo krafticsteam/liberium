@@ -1,5 +1,8 @@
-.gradle
+# IntelliJ
 .idea
+
+# Gradle
+.gradle
 build
 */build
 gradle.properties

@@ -4,18 +4,16 @@ plugins {
     id 'signing'
 }
 
-// Constants
 ext {
     project_name = 'Liberium'
-    project_version_suffix = System.properties['versionsuf'] != null ? System.properties['versionsuf'].toString() : ""
-    project_version = (System.properties['version'] != null ? System.properties['version'].toString() : "1.1.0") + project_version_suffix
+    project_group = 'com.kraftics'
+    project_version_build = System.properties.getProperty("buildnum") as Integer
+    project_version = "1.1.1+v2" + (project_version_build == null ? "" : "." + project_version_build.toString())
     project_description = 'Spigot library to make plugin coding fun and easier'
     project_url = 'https://kraftics.com/liberium'
-    project_jdk = '1.8'
+    project_jdk = '11'
 
-    project_group = 'com.kraftics'
-
-    isRelease = !project_version.toString().contains('snapshot')
+    isRelease = !project_version.toString().contains('beta')
 }
 
 allprojects {
@@ -36,12 +34,13 @@ allprojects {
     }
 
     dependencies {
-        compile 'org.jetbrains:annotations:16.0.2'
-        compileOnly 'org.spigotmc:spigot-api:1.16.5-R0.1-SNAPSHOT'
+        compileOnly 'org.spigotmc:spigot-api:1.17.1-R0.1-SNAPSHOT'
 
-        testImplementation 'org.spigotmc:spigot-api:1.16.5-R0.1-SNAPSHOT'
-        testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
-        testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
+        implementation 'org.jetbrains:annotations:23.0.0'
+
+        testImplementation 'org.spigotmc:spigot-api:1.17.1-R0.1-SNAPSHOT'
+        testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
+        testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
     }
 
     test {
@@ -49,13 +48,14 @@ allprojects {
 
         ignoreFailures true
     }
+}
 
-    // Configuring jars
+subprojects {
+    archivesBaseName = "liberium-$project.name"
 
-    jar {
-        from {
-            configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
-        }
+    java {
+        withSourcesJar()
+        withJavadocJar()
     }
 
     tasks.withType(Javadoc) {
@@ -66,27 +66,16 @@ allprojects {
         options.encoding = 'UTF-8'
     }
 
-    java {
-        withSourcesJar()
-        withJavadocJar()
-    }
-}
-
-subprojects {
-    archivesBaseName = "liberium-$project.name"
-
-    // Maven central publishing
-
     publishing {
         publications {
             mavenJava(MavenPublication) {
                 from components.java
                 artifactId = archivesBaseName
-                groupId = 'com.kraftics'
+                groupId = project_group
                 version = project_version
 
                 pom {
-                    name = 'Liberium'
+                    name = project_name
                     description = project_description
                     url = 'https://github.com/KrafticsTeam/Liberium'
 
@@ -141,17 +130,12 @@ subprojects {
 
     if (isRelease) {
         signing {
+            useGpgCmd()
             sign publishing.publications.mavenJava
         }
     }
 }
 
-// Removing the parent build dir
-
-tasks['build'].doLast {
-    buildDir.deleteDir()
-}
-
-tasks['jar'].doLast {
-    buildDir.deleteDir()
+jar {
+    onlyIf { false }
 }
