@@ -2,31 +2,23 @@ plugins {
     `java-library`
     `maven-publish`
     signing
+
 }
 
-// Constants
-val project_name = "Liberium"
-val project_version_suffix = if (System.getProperty("versionsuf") != null) System.getProperty("versionsuf") else ""
-val project_version = "1.1.1$project_version_suffix"
-val project_description = "Spigot library to make plugin coding fun and easier"
-val project_url = "https://kraftics.com/liberium"
-val project_jdk = "1.8"
+val isRelease = !version.toString().contains("alpha") && !version.toString().contains("beta")
 
-val project_group = "com.kraftics"
-
-val isRelease = !project_version.contains("snapshot")
+// Include build number in version
+val build = System.getenv("BUILD")?.toString()
+if (build != null) {
+    version = "$version+$build"
+}
 
 allprojects {
     apply(plugin = "java-library")
-    apply(plugin = "maven-publish")
-    apply(plugin = "signing")
 
-    group = project_group
-    version = project_version
-    description = project_description
-
-//    sourceCompatibility = project_jdk
-//    targetCompatibility = project_jdk
+    group = rootProject.group
+    version = rootProject.version
+    description = rootProject.description
 
     repositories {
         mavenCentral()
@@ -48,14 +40,6 @@ allprojects {
         ignoreFailures = true
     }
 
-    // Configuring jars
-
-//    jar {
-//        from {
-//            configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
-//        }
-//    }
-//
     tasks.withType<Javadoc> {
         options.encoding = "UTF-8"
     }
@@ -71,23 +55,27 @@ allprojects {
 }
 
 subprojects {
-    base.archivesBaseName = "liberium-$name"
+    apply(plugin = "maven-publish")
+    apply(plugin = "signing")
 
-    // Maven central publishing
+    val baseName = "${rootProject.name}-$name"
+
+    tasks.withType<Jar> {
+        archiveBaseName.set(baseName)
+    }
 
     publishing {
         publications {
-            create<MavenPublication>("mavenJava") {
+            create<MavenPublication>("maven") {
                 from(components["java"])
 
-                artifactId = base.archivesBaseName
-                groupId = "com.kraftics"
-                version = project_version
+                artifactId = baseName
+                groupId = project.group.toString()
+                version = project.version.toString()
 
                 pom {
-                    name.set("Liberium")
-                    description.set(project_description)
-                    url.set("https://github.com/KrafticsTeam/Liberium")
+                    description.set(project.description)
+                    url.set("https://github.com/krafticsteam/liberium")
 
                     organization {
                         name.set("KrafticsTeam")
@@ -97,20 +85,21 @@ subprojects {
                     licenses {
                         license {
                             name.set("MIT")
-                            url.set("https://github.com/KrafticsTeam/Liberium/blob/master/LICENSE")
+                            url.set("https://github.com/krafticsteam/liberium/blob/master/LICENSE")
                             distribution.set("repo")
                         }
                     }
 
                     scm {
-                        url.set("https://github.com/KrafticsTeam/Liberium")
-                        connection.set("scm:git:git://github.com/KrafticsTeam/Liberium.git")
-                        developerConnection.set("scm:git:ssh://git@github.com:KrafticsTeam/Liberium.git")
+                        url.set("https://github.com/krafticsteam/liberium")
+                        connection.set("scm:git:git://github.com/krafticsteam/liberium.git")
+                        developerConnection.set("scm:git:ssh://git@github.com:krafticsteam/liberium.git")
                     }
 
                     developers {
                         developer {
-                            name.set("KrafticsTeam")
+                            url.set("https://panda885.github.io")
+                            name.set("Panda885")
                         }
                     }
                 }
@@ -119,10 +108,10 @@ subprojects {
 
         repositories {
             maven {
-                if (isRelease) {
-                    url = uri("https://oss.sonatype.org/service/local/staging/deploy/maven2")
+                url = if (isRelease) {
+                    uri("https://oss.sonatype.org/service/local/staging/deploy/maven2")
                 } else {
-                    url = uri("https://oss.sonatype.org/content/repositories/snapshots/")
+                    uri("https://oss.sonatype.org/content/repositories/snapshots/")
                 }
 
                 val sonatypeUsername = findProperty("sonatypeUsername")?.toString()
@@ -140,17 +129,7 @@ subprojects {
 
     if (isRelease) {
         signing {
-            sign(publishing.publications["mavenJava"])
+            sign(publishing.publications["maven"])
         }
     }
-}
-
-// Removing the parent build dir
-
-tasks.getByName("build").doLast {
-    buildDir.deleteRecursively()
-}
-
-tasks.getByName("jar").doLast {
-    buildDir.deleteRecursively()
 }
