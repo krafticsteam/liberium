@@ -3,6 +3,7 @@ plugins {
     `maven-publish`
     signing
 
+    id("com.github.johnrengelman.shadow") version "7.1.2"
 }
 
 val isRelease = !version.toString().contains("alpha") && !version.toString().contains("beta")
@@ -15,6 +16,7 @@ if (build != null) {
 
 allprojects {
     apply(plugin = "java-library")
+    apply(plugin = "com.github.johnrengelman.shadow")
 
     group = rootProject.group
     version = rootProject.version
@@ -46,6 +48,11 @@ allprojects {
 
     tasks.withType<JavaCompile> {
         options.encoding = "UTF-8"
+    }
+
+    // Add shadowJar to assemble task
+    tasks.getByName("assemble") {
+        dependsOn("shadowJar")
     }
 
     java {
