@@ -7,8 +7,6 @@ plugins {
     id("com.github.johnrengelman.shadow") version "7.1.2"
 }
 
-val isRelease = !version.toString().contains("alpha") && !version.toString().contains("beta")
-
 // Include build number in version
 val build = System.getenv("BUILD")?.toString()
 if (build != null) {
@@ -115,7 +113,7 @@ subprojects {
         }
     }
 
-    if (isRelease) {
+    if (!version.toString().endsWith("-SNAPSHOT")) {
         signing {
             useInMemoryPgpKeys(System.getenv("SONATYPE_PGP_KEY"), System.getenv("SONATYPE_PGP_PASSWORD"))
 
