@@ -19,7 +19,6 @@ allprojects {
 
     group = rootProject.group
     version = rootProject.version
-    description = rootProject.description
 
     repositories {
         mavenCentral()
