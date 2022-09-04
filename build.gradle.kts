@@ -121,14 +121,9 @@ subprojects {
                     uri("https://oss.sonatype.org/content/repositories/snapshots/")
                 }
 
-                val sonatypeUsername = findProperty("sonatypeUsername")?.toString()
-                val sonatypePassword = findProperty("sonatypePassword")?.toString()
-
-                if (sonatypeUsername != null && sonatypePassword != null) {
-                    credentials {
-                        username = sonatypeUsername
-                        password = sonatypePassword
-                    }
+                credentials {
+                    username = System.getenv("SONATYPE_USERNAME")
+                    password = System.getenv("SONATYPE_PASSWORD")
                 }
             }
         }
@@ -136,6 +131,8 @@ subprojects {
 
     if (isRelease) {
         signing {
+            useInMemoryPgpKeys(System.getenv("SONATYPE_PGP_KEY"), System.getenv("SONATYPE_PGP_PASSWORD"))
+
             sign(publishing.publications["maven"])
         }
     }
