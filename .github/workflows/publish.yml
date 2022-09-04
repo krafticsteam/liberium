@@ -32,3 +32,12 @@ jobs:
         with:
           artifacts: '*/build/libs/*.jar'
           prerelease: ${{ contains(github.ref_name, 'beta') || contains(github.ref_name, 'alpha') }}
+      - name: maven-publish
+        uses: gradle/gradle-build-action@v2
+        env:
+          SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
+          SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
+          SONATYPE_PGP_KEY: ${{ secrets.SONATYPE_PGP_KEY }}
+          SONATYPE_PGP_PASSWORD: ${{ secrets.SONATYPE_PGP_PASSWORD }}
+        with:
+          arguments: publishToSonatype closeSonatypeStagingRepository # TODO: Change this to closeAndRelease after the first testing
