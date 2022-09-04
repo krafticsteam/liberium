@@ -21,8 +21,10 @@ jobs:
           key: build-${{ github.sha }}
       - name: build
         uses: gradle/gradle-build-action@v2
+        env:
+          BUILD: ${{ github.run_number }}
         with:
-          arguments: assemble -Dversionsuf=+${{ github.run_number }}
+          arguments: assemble
       - uses: actions/upload-artifact@v3
         with:
           name: build
@@ -42,5 +44,7 @@ jobs:
           key: build-${{ github.sha }}
       - name: test
         uses: gradle/gradle-build-action@v2
+        env:
+          BUILD: ${{ github.run_number }}
         with:
-          arguments: check -Dversionsuf=+${{ github.run_number }}
+          arguments: check
