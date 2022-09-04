@@ -1,8 +1,0 @@
-name: 'Liberium'
-version: '${version}'
-main: 'com.kraftics.liberium.LiberiumPlugin'
-
-description: 'Develop spigot plugins with ease.'
-load: 'STARTUP'
-author: 'Kraftics Team'
-website: 'https://kraftics.com/liberium'
