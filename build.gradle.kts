@@ -65,7 +65,7 @@ subprojects {
 
     val baseName = "${rootProject.name}-$name"
 
-    tasks.jar {
+    tasks.withType<Jar> {
         archiveBaseName.set(baseName)
     }
 
