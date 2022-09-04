@@ -40,4 +40,4 @@ jobs:
           SONATYPE_PGP_KEY: ${{ secrets.SONATYPE_PGP_KEY }}
           SONATYPE_PGP_PASSWORD: ${{ secrets.SONATYPE_PGP_PASSWORD }}
         with:
-          arguments: publish
+          arguments: publishToSonatype closeSonatypeStagingRepository # TODO: Change this to closeAndRelease after the first testing

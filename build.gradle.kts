@@ -3,6 +3,7 @@ plugins {
     `maven-publish`
     signing
 
+    id("io.github.gradle-nexus.publish-plugin") version "1.1.0"
     id("com.github.johnrengelman.shadow") version "7.1.2"
 }
 
@@ -112,21 +113,6 @@ subprojects {
                 }
             }
         }
-
-        repositories {
-            maven {
-                url = if (isRelease) {
-                    uri("https://oss.sonatype.org/service/local/staging/deploy/maven2")
-                } else {
-                    uri("https://oss.sonatype.org/content/repositories/snapshots/")
-                }
-
-                credentials {
-                    username = System.getenv("SONATYPE_USERNAME")
-                    password = System.getenv("SONATYPE_PASSWORD")
-                }
-            }
-        }
     }
 
     if (isRelease) {
@@ -134,6 +120,15 @@ subprojects {
             useInMemoryPgpKeys(System.getenv("SONATYPE_PGP_KEY"), System.getenv("SONATYPE_PGP_PASSWORD"))
 
             sign(publishing.publications["maven"])
+        }
+    }
+}
+
+nexusPublishing {
+    repositories {
+        sonatype {
+            username.set(System.getenv("SONATYPE_USERNAME"))
+            password.set(System.getenv("SONATYPE_PASSWORD"))
         }
     }
 }
