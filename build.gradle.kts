@@ -35,22 +35,22 @@ allprojects {
         testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
     }
 
-    tasks.getByName<Test>("test") {
+    tasks.test {
         useJUnitPlatform()
 
         ignoreFailures = true
     }
 
-    tasks.withType<Javadoc> {
+    tasks.javadoc {
         options.encoding = "UTF-8"
     }
 
-    tasks.withType<JavaCompile> {
+    tasks.compileJava {
         options.encoding = "UTF-8"
     }
 
     // Add shadowJar to assemble task
-    tasks.getByName("assemble") {
+    tasks.assemble {
         dependsOn("shadowJar")
     }
 
@@ -66,7 +66,7 @@ subprojects {
 
     val baseName = "${rootProject.name}-$name"
 
-    tasks.withType<Jar> {
+    tasks.jar {
         archiveBaseName.set(baseName)
     }
 
