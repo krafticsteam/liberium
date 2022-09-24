@@ -25,7 +25,7 @@ public class NetMinecraftServerCommon implements NetMinecraftServer {
 
     @Override
     public CommandMap getCommandMap() {
-        return null;
+        return server.server.getCommandMap();
     }
 
     @Override
