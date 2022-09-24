@@ -7,10 +7,12 @@ plugins {
     id("com.github.johnrengelman.shadow") version "7.1.2"
 }
 
+version = "$version+v2"
+
 // Include build number in version
 val build = System.getenv("BUILD")?.toString()
 if (build != null) {
-    version = "$version+$build"
+    version = "$version.$build"
 }
 
 allprojects {
@@ -32,6 +34,12 @@ allprojects {
         testImplementation("org.spigotmc:spigot-api:1.16.5-R0.1-SNAPSHOT")
         testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.2")
         testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
+    }
+
+    java {
+        toolchain {
+            languageVersion.set(JavaLanguageVersion.of(17))
+        }
     }
 
     tasks.test {
