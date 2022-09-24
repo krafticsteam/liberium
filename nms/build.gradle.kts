@@ -1,7 +1,7 @@
 subprojects {
     repositories {
         maven("https://libraries.minecraft.net")
-        mavenLocal()
+        maven("https://repo.codemc.io/repository/nms/")
     }
 
     dependencies {
