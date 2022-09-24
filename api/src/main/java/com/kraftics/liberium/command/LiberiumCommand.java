@@ -6,14 +6,13 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collections;
 import java.util.StringJoiner;
 
 public class LiberiumCommand extends Command {
     private final CommandDispatcher<CommandSender> dispatcher;
 
     protected LiberiumCommand(@NotNull LiberiumCommandNode node, @NotNull CommandDispatcher<CommandSender> dispatcher) {
-        super(node.getName(), node.getDescription(), node.getUsageText(), Collections.emptyList()); // TODO: Better usage text
+        super(node.getName(), node.getDescription(), node.getUsageText(), node.getAliases()); // TODO: Better usage text
         this.dispatcher = dispatcher;
     }
 
