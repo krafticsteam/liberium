@@ -51,7 +51,7 @@ public class CommandManager {
             if (e.getInput() != null && e.getCursor() >= 0) {
                 messageBuilder.append("\n").append(ChatColor.GRAY);
                 int cursor = Math.min(e.getInput().length(), e.getCursor());
-                if (cursor < 10) {
+                if (cursor > 10) {
                     messageBuilder.append("...");
                 }
                 messageBuilder.append(e.getInput(), Math.max(0, cursor - 10), cursor);
