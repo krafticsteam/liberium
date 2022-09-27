@@ -2,6 +2,8 @@ package com.kraftics.liberium.command;
 
 import com.kraftics.liberium.LiberiumPlugin;
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.arguments.ArgumentType;
+import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -15,6 +17,16 @@ public class CommandManager {
 
     public CommandManager(LiberiumPlugin plugin) {
         this.registrator = new DeferredCommandRegistrator(plugin.getNetMinecraftServer(), plugin, dispatcher);
+    }
+
+    @NotNull
+    public static CommandArgumentBuilder command(String name) {
+        return CommandArgumentBuilder.command(name);
+    }
+
+    @NotNull
+    public static <T> RequiredArgumentBuilder<CommandSender, T> argument(String name, ArgumentType<T> type) {
+        return RequiredArgumentBuilder.argument(name, type);
     }
 
     public int executeOrThrow(String command, CommandSender source) throws CommandSyntaxException {
