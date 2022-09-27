@@ -3,8 +3,11 @@ package com.kraftics.liberium.command;
 import com.kraftics.liberium.LiberiumPlugin;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.ArgumentType;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.brigadier.tree.CommandNode;
+import com.mojang.brigadier.tree.RootCommandNode;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
@@ -22,6 +25,11 @@ public class CommandManager {
     @NotNull
     public static CommandArgumentBuilder command(String name) {
         return CommandArgumentBuilder.command(name);
+    }
+
+    @NotNull
+    public static LiteralArgumentBuilder<CommandSender> literal(String name) {
+        return LiteralArgumentBuilder.literal(name);
     }
 
     @NotNull
