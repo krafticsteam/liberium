@@ -16,7 +16,7 @@ public class CommandManager {
     private final CommandRegistrator registrator;
 
     public CommandManager(LiberiumPlugin plugin) {
-        this.registrator = new DeferredCommandRegistrator(plugin.getNetMinecraftServer(), plugin, dispatcher);
+        this.registrator = new DeferredCommandRegistrator(plugin.getNetMinecraftServer(), plugin, this);
     }
 
     @NotNull
