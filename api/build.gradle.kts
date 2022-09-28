@@ -1,7 +1,3 @@
-repositories {
-    maven("https://libraries.minecraft.net")
-}
-
 dependencies {
-    compileOnly("com.mojang:brigadier:1.0.18")
+    compileOnlyApi("com.mojang:brigadier:1.0.18")
 }
