@@ -1,6 +1,6 @@
 dependencies {
-    api(project(":api"))
-    api(project(":database"))
+    api(project(":liberium-api"))
+    api(project(":liberium-database"))
 //    api(project(":packet"))
 }
 

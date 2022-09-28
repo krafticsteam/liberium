@@ -5,6 +5,6 @@ subprojects {
 
     dependencies {
         compileOnly("org.spigotmc:spigot:1.19-R0.1-SNAPSHOT")
-        implementation(project(":api"))
+        implementation(project(":liberium-api"))
     }
 }

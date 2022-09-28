@@ -72,18 +72,12 @@ subprojects {
     apply(plugin = "maven-publish")
     apply(plugin = "signing")
 
-    val baseName = "${rootProject.name}-$name"
-
-    tasks.withType<Jar> {
-        archiveBaseName.set(baseName)
-    }
-
     publishing {
         publications {
             create<MavenPublication>("maven") {
                 from(components["java"])
 
-                artifactId = baseName
+                artifactId = project.name
                 groupId = project.group.toString()
                 version = project.version.toString()
 

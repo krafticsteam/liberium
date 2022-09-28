@@ -7,7 +7,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
 public abstract class LiberiumPlugin extends JavaPlugin {
-    private final NetMinecraftServer netMinecraftServer = NetMinecraftServerProvider.get(getServer());
+    private final NetMinecraftServer netMinecraftServer = createNms();
     private final CommandManager commandManager = new CommandManager(this);
 
     public LiberiumPlugin() {
@@ -17,6 +17,8 @@ public abstract class LiberiumPlugin extends JavaPlugin {
     }
 
     public abstract void onInitialize();
+
+    public abstract NetMinecraftServer createNms();
 
     @NotNull
     public NetMinecraftServer getNetMinecraftServer() {

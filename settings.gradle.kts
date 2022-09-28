@@ -1,8 +1,8 @@
 rootProject.name = "liberium"
 
-include("api")
-include("plugin")
-include("packet")
-include("database")
+include("liberium-api")
+include("liberium-plugin")
+include("liberium-packet")
+include("liberium-database")
 
-include("nms:common")
+include("liberium-nms:liberium-nms-common")
