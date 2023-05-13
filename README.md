@@ -10,6 +10,13 @@ Develop spigot plugins with ease.
 [![Servers](https://img.shields.io/bstats/servers/9916?style=flat-square)](https://bstats.org/plugin/bukkit/Liberium/9916)
 </div>
 
+## ⚠️ Discontinued - no longer maintatined ⚠️
+
+This project is no longer maintained.
+
+I ([@panda885](https://github.com/panda885)), the author and maintainer of this plugin, am no longer interested in creating plugins for Minecraft and therefore have no motivation to maintain this plugin.
+If you are interested in this plugin and would like to develop it further, feel free to can contact me.
+
 ## Installation
 
 1.  Download Liberium from [release page](https://github.com/KrafticsTeam/Liberium/releases)
